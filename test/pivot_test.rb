@@ -22,33 +22,44 @@ class PivotTest < Test::Unit::TestCase
     end
 
     should "pivot Array values individually using a nil key for empty Arrays" do
-      list = []
-      list << [1, 2, 3]
-      list << ["a", "b", "c"]
-      list << ["apple", "airplane", "banana"]
-      list << ["apple", 2, 3] 
-      list << ["airplane", 2, 3] 
-      result = @pivoter.pivot(list) do |entry|
-        value = entry.select {|item| item =~ /^a/i}
-        # value will be one of the following: [], ["a"], ["apple", "airplane"]
-        # these values will act as the keys in pivoted hash
-        # with the empty array mapping to nil
-        # and ["apple", "airplane"] acting as two separate keys
-        value
-      end
+      users = []
+      users << {:name => "Frank", :roles => []}
+      users << {:name => "Joe", :roles => []}
+      users << {:name => "John", :roles => []}
+      users << {:name => "Sally", :roles => []}
 
-      puts result.inspect
+      # assign some roles to the users
+
+      # Frank gets Read
+      users[0][:roles] << "Read"
+     
+      # Joe gets Write
+      users[1][:roles] << "Write" 
+
+      # John gets Read & Write
+      users[2][:roles] << "Read" 
+      users[2][:roles] << "Write"
+
+      # Sally gets no roles
+
+      result = @pivoter.pivot(users) do |user|
+        user[:roles]
+      end
 
       # this is what the resulting hash should look like:
       hash = {
-        nil=>[[1, 2, 3]], 
-        "a"=>[["a", "b", "c"]], 
-        "apple"=>[["apple", "airplane", "banana"], ["apple", 2, 3]], 
-        "airplane"=>[["apple", "airplane", "banana"], ["airplane", 2, 3]]
+        nil => [
+          {:name=>"Sally", :roles=>[]}], 
+        "Read" => [
+          {:name=>"Frank", :roles=>["Read"]}, 
+          {:name=>"John", :roles=>["Read", "Write"]}], 
+        "Write" => [
+          {:name=>"Joe", :roles=>["Write"]}, 
+          {:name=>"John", :roles=>["Read", "Write"]}]
       }
-
+      
       assert_equal hash, result
     end
-  end
 
+  end
 end

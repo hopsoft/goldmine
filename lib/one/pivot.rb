@@ -1,16 +1,19 @@
+# Namespace module for One on One Marketing.
 module One
+
+  # Class that can be used for mining data from lists of objects.
   class Pivot
     attr_accessor :multi_pivot_delimiter
     @multi_pivot_delimiter = "[PIVOT]"
 
-    # Pivots a list of Objects grouping them into a sorted Hash.
+    # Pivots a list of Objects grouping them into an organized Hash.
     #
     # @example Pivot a list of numbers
     #   list = [1,2,3,4,5,6,7,8,9]
     #   result = pivot(list) {|num| num <=5 }
     #   result.inspect # => {false=>[6, 7, 8, 9], true=>[1, 2, 3, 4, 5]}
     #
-    # @param [Array<Object>] list The list to pivot or sort
+    # @param [Array<Object>] list The list to pivot
     # @returns [Hash] The pivoted results
     def pivot(list)
       pivoted = {}
