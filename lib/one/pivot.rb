@@ -1,5 +1,5 @@
 module One
-  module Pivot
+  class Pivot
     attr_accessor :multi_pivot_delimiter
     @multi_pivot_delimiter = "[PIVOT]"
 

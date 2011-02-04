@@ -1,15 +1,11 @@
 require File.expand_path(File.join(File.dirname(__FILE__), 'test_helper'))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'one', 'pivot'))
 
-class Pivoter
-  include One::Pivot
-end
-
 class PivotTest < Test::Unit::TestCase
 
   context "A class that mixes in One::Pivot" do
     setup do 
-      @pivoter = Pivoter.new
+      @pivoter = One::Pivot.new
     end
 
     should "support a multi_pivot_delimiter" do
@@ -25,7 +21,34 @@ class PivotTest < Test::Unit::TestCase
       assert_equal [1,2,3,4,5], result[true] 
     end
 
+    should "pivot Array values individually using a nil key for empty Arrays" do
+      list = []
+      list << [1, 2, 3]
+      list << ["a", "b", "c"]
+      list << ["apple", "airplane", "banana"]
+      list << ["apple", 2, 3] 
+      list << ["airplane", 2, 3] 
+      result = @pivoter.pivot(list) do |entry|
+        value = entry.select {|item| item =~ /^a/i}
+        # value will be one of the following: [], ["a"], ["apple", "airplane"]
+        # these values will act as the keys in pivoted hash
+        # with the empty array mapping to nil
+        # and ["apple", "airplane"] acting as two separate keys
+        value
+      end
 
+      puts result.inspect
+
+      # this is what the resulting hash should look like:
+      hash = {
+        nil=>[[1, 2, 3]], 
+        "a"=>[["a", "b", "c"]], 
+        "apple"=>[["apple", "airplane", "banana"], ["apple", 2, 3]], 
+        "airplane"=>[["apple", "airplane", "banana"], ["airplane", 2, 3]]
+      }
+
+      assert_equal hash, result
+    end
   end
 
 end
