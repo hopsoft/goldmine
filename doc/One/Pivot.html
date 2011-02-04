@@ -136,7 +136,7 @@ Returns the value of attribute multi_pivot_delimiter.
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Pivot) <strong>initialize</strong> </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Pivot) <strong>initialize</strong>(options = {}) </a>
     
 
     
@@ -216,7 +216,7 @@ Pivots a list of Objects grouping them into an organized Hash.
     <div class="method_details first">
   <p class="signature first" id="initialize-instance_method">
   
-    - (<tt><span class='object_link'><a href="" title="One::Pivot (class)">Pivot</a></span></tt>) <strong>initialize</strong> 
+    - (<tt><span class='object_link'><a href="" title="One::Pivot (class)">Pivot</a></span></tt>) <strong>initialize</strong>(options = {}) 
   
 
   
@@ -244,8 +244,8 @@ A new instance of Pivot
     <td>
       <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 8</span>
 
-<span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span>
-  <span class='@multi_pivot_delimiter ivar id'>@multi_pivot_delimiter</span> <span class='assign token'>=</span> <span class='string val'>&quot;[PIVOT]&quot;</span>
+<span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
+  <span class='@multi_pivot_delimiter ivar id'>@multi_pivot_delimiter</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:multi_pivot_delimiter</span><span class='rbrack token'>]</span> <span class='orop op'>||</span> <span class='string val'>&quot;[PIVOT]&quot;</span>
 <span class='end end kw'>end</span>
 </pre>
     </td>
@@ -325,7 +325,40 @@ Runs multiple pivots against a list of Obects.
   </div>
 </div>
 <div class="tags">
-  <h3>Parameters:</h3>
+  
+  <div class="examples">
+    <h3>Examples:</h3>
+    
+      <h4><div class='inline'><p>
+Multi-pivot a list of numbers
+</p>
+</div></h4>
+      <pre class="example code"><span class='list identifier id'>list</span> <span class='assign token'>=</span> <span class='lbrack token'>[</span><span class='integer val'>1</span><span class='comma token'>,</span><span class='integer val'>2</span><span class='comma token'>,</span><span class='integer val'>3</span><span class='comma token'>,</span><span class='integer val'>4</span><span class='comma token'>,</span><span class='integer val'>5</span><span class='comma token'>,</span><span class='integer val'>6</span><span class='comma token'>,</span><span class='integer val'>7</span><span class='comma token'>,</span><span class='integer val'>8</span><span class='comma token'>,</span><span class='integer val'>9</span><span class='rbrack token'>]</span>
+<span class='pivots identifier id'>pivots</span> <span class='assign token'>=</span> <span class='lbrack token'>[</span><span class='rbrack token'>]</span>
+
+<span class='pivots identifier id'>pivots</span> <span class='lshft op'>&lt;&lt;</span> <span class='lambda identifier id'>lambda</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='i identifier id'>i</span><span class='bitor op'>|</span>
+  <span class='key identifier id'>key</span> <span class='assign token'>=</span> <span class='string val'>&quot;less than or equal to 5&quot;</span> <span class='if if_mod kw'>if</span> <span class='i identifier id'>i</span> <span class='leq op'>&lt;=</span> <span class='integer val'>5</span>
+  <span class='key identifier id'>key</span> <span class='opasgn op'>||=</span> <span class='string val'>&quot;greater than 5&quot;</span>
+<span class='end end kw'>end</span>
+
+<span class='pivots identifier id'>pivots</span> <span class='lshft op'>&lt;&lt;</span> <span class='lambda identifier id'>lambda</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='i identifier id'>i</span><span class='bitor op'>|</span>
+  <span class='key identifier id'>key</span> <span class='assign token'>=</span> <span class='string val'>&quot;greater than or equal to 3&quot;</span> <span class='if if_mod kw'>if</span> <span class='i identifier id'>i</span> <span class='geq op'>&gt;=</span> <span class='integer val'>3</span>
+  <span class='key identifier id'>key</span> <span class='opasgn op'>||=</span> <span class='string val'>&quot;less than 3&quot;</span>
+<span class='end end kw'>end</span>
+
+<span class='pivoter identifier id'>pivoter</span> <span class='assign token'>=</span> <span class='One constant id'>One</span><span class='colon2 op'>::</span><span class='Pivot constant id'>Pivot</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='symbol val'>:multi_pivot_delimiter</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>&quot; &amp; &quot;</span><span class='rparen token'>)</span>
+<span class='result identifier id'>result</span> <span class='assign token'>=</span> <span class='pivoter identifier id'>pivoter</span><span class='dot token'>.</span><span class='multi_pivot identifier id'>multi_pivot</span><span class='lparen token'>(</span><span class='list identifier id'>list</span><span class='comma token'>,</span> <span class='mult op'>*</span><span class='pivots identifier id'>pivots</span><span class='rparen token'>)</span> 
+
+<span class='comment val'># the result will be a Hash with the following structure:</span>
+<span class='lbrace token'>{</span>
+  <span class='string val'>&quot;less than or equal to 5 &amp; greater than or equal to 3&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='lbrack token'>[</span><span class='integer val'>3</span><span class='comma token'>,</span> <span class='integer val'>4</span><span class='comma token'>,</span> <span class='integer val'>5</span><span class='rbrack token'>]</span><span class='comma token'>,</span> 
+  <span class='string val'>&quot;less than or equal to 5 &amp; less than 3&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='lbrack token'>[</span><span class='integer val'>1</span><span class='comma token'>,</span> <span class='integer val'>2</span><span class='rbrack token'>]</span><span class='comma token'>,</span> 
+  <span class='string val'>&quot;greater than 5 &amp; greater than or equal to 3&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='lbrack token'>[</span><span class='integer val'>6</span><span class='comma token'>,</span> <span class='integer val'>7</span><span class='comma token'>,</span> <span class='integer val'>8</span><span class='comma token'>,</span> <span class='integer val'>9</span><span class='rbrack token'>]</span>
+<span class='rbrace token'>}</span>
+</pre>
+    
+  </div>
+<h3>Parameters:</h3>
 <ul class="param">
   
     <li>
@@ -370,35 +403,35 @@ An argument list that accepts N number of pivot procs
       <pre class="lines">
 
 
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
 77
-78</pre>
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 53</span>
+      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 77</span>
 
 <span class='def def kw'>def</span> <span class='multi_pivot identifier id'>multi_pivot</span><span class='lparen token'>(</span><span class='list identifier id'>list</span><span class='comma token'>,</span> <span class='mult op'>*</span><span class='pivots identifier id'>pivots</span><span class='rparen token'>)</span>
   <span class='pivoted identifier id'>pivoted</span> <span class='assign token'>=</span> <span class='nil nil kw'>nil</span>
@@ -612,7 +645,7 @@ results
 </div>
     
     <div id="footer">
-  Generated on Fri Feb  4 12:04:56 2011 by 
+  Generated on Fri Feb  4 15:04:53 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.4 (ruby-1.8.7).
 </div>

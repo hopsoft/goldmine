@@ -5,8 +5,8 @@ module One
   class Pivot
     attr_accessor :multi_pivot_delimiter
 
-    def initialize
-      @multi_pivot_delimiter = "[PIVOT]"
+    def initialize(options={})
+      @multi_pivot_delimiter = options[:multi_pivot_delimiter] || "[PIVOT]"
     end
 
     # Pivots a list of Objects grouping them into an organized Hash.
@@ -20,7 +20,7 @@ module One
     # @yield [item] The pivot block/proc to invoke for each item in the list
     # @yieldparam [Object] item The item in the list
     # @yieldreturn [Object] The value returned from the pivot block acts as the key in the pivot results
-    # @returns [Hash] The pivoted The pivoted results
+    # @returns [Hash] The pivoted results
     def pivot(list)
       pivoted = {}
       list.each do |item|
@@ -46,6 +46,30 @@ module One
     end    
 
     # Runs multiple pivots against a list of Obects.
+    #
+    # @example Multi-pivot a list of numbers
+    #   list = [1,2,3,4,5,6,7,8,9]
+    #   pivots = []
+    #
+    #   pivots << lambda do |i|
+    #     key = "less than or equal to 5" if i <= 5
+    #     key ||= "greater than 5"
+    #   end
+    #
+    #   pivots << lambda do |i|
+    #     key = "greater than or equal to 3" if i >= 3
+    #     key ||= "less than 3"
+    #   end
+    #    
+    #   pivoter = One::Pivot.new(:multi_pivot_delimiter => " & ")
+    #   result = pivoter.multi_pivot(list, *pivots) 
+    #   
+    #   # the result will be a Hash with the following structure:
+    #   {
+    #     "less than or equal to 5 & greater than or equal to 3" => [3, 4, 5], 
+    #     "less than or equal to 5 & less than 3" => [1, 2], 
+    #     "greater than 5 & greater than or equal to 3" => [6, 7, 8, 9]
+    #   }
     #
     # @param [Array<Object>] list The list to run the pivots against
     # @param [Array<Proc>] pivots An argument list that accepts N number of pivot procs

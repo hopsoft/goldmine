@@ -48,10 +48,7 @@ class PivotTest < Test::Unit::TestCase
       end
 
       should "pivot Array values individually using a nil key for empty Arrays" do
-
-        result = @pivoter.pivot(@users) do |user|
-          user[:roles]
-        end
+        result = @pivoter.pivot(@users) {|user| user[:roles]}
 
         # this is what the resulting hash should look like:
         hash = {
@@ -89,7 +86,7 @@ class PivotTest < Test::Unit::TestCase
               
         assert_equal hash, result
       end
-    end
 
+    end
   end
 end
