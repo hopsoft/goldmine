@@ -10,8 +10,13 @@ class PivotTest < Test::Unit::TestCase
 
     should "support a multi_pivot_delimiter" do
       assert @pivoter.respond_to?(:multi_pivot_delimiter)
-      @pivoter.multi_pivot_delimiter = "[PIVOT]"
-      assert_equal "[PIVOT]", @pivoter.multi_pivot_delimiter 
+      assert_not_nil @pivoter.multi_pivot_delimiter
+      
+      @pivoter.multi_pivot_delimiter = "[TEST]"
+      assert_equal "[TEST]", @pivoter.multi_pivot_delimiter 
+
+      @pivoter = One::Pivot.new(:multi_pivot_delimiter => "[TEST]")
+      assert_equal "[TEST]", @pivoter.multi_pivot_delimiter 
     end
 
     should "pivot a simple array properly" do
@@ -19,6 +24,33 @@ class PivotTest < Test::Unit::TestCase
       result = @pivoter.pivot(list) {|item| item <= 5}
       assert_equal [6,7,8,9], result[false]
       assert_equal [1,2,3,4,5], result[true] 
+    end
+
+    should "multi pivot a simple array properly" do 
+      list = [1,2,3,4,5,6,7,8,9]
+      pivots = []
+    
+      pivots << lambda do |i|
+        key = "less than or equal to 5" if i <= 5
+        key ||= "greater than 5"
+      end
+    
+      pivots << lambda do |i|
+        key = "greater than or equal to 3" if i >= 3
+        key ||= "less than 3"
+      end
+        
+      pivoter = One::Pivot.new(:multi_pivot_delimiter => " & ")
+      result = pivoter.multi_pivot(list, *pivots) 
+       
+      # the result will be a Hash with the following structure:
+      hash = {
+        "less than or equal to 5 & greater than or equal to 3" => [3, 4, 5], 
+        "less than or equal to 5 & less than 3" => [1, 2], 
+        "greater than 5 & greater than or equal to 3" => [6, 7, 8, 9]
+      } 
+
+      assert_equal hash, result
     end
 
     context "working on complex data structures" do
