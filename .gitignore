@@ -2,3 +2,4 @@
 .rvmrc
 *.swp
 .yardoc
+.DS_Store
