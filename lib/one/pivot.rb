@@ -18,14 +18,15 @@ module One
         value = yield(item)
   
         if value.is_a?(Array)
-          has_value = false
-          value.each do |val|
-            has_value = true
-            pivoted[val] ||= []
-            pivoted[val] << item 
+          if value.empty?
+            pivoted[nil] ||= []
+            pivoted[nil] << item 
+          else
+            value.each do |val|
+              pivoted[val] ||= []
+              pivoted[val] << item 
+            end
           end
-          pivoted[nil] ||= []
-          pivoted[nil] << item unless has_value
         else
           pivoted[value] ||= []
           pivoted[value] << item 
