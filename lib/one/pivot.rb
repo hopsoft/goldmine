@@ -20,7 +20,7 @@ module One
     # @yield [item] The pivot block/proc to invoke for each item in the list
     # @yieldparam [Object] item The item in the list
     # @yieldreturn [Object] The value returned from the pivot block acts as the key in the pivot results
-    # @returns [Hash] The pivoted results
+    # @return [Hash] The pivoted results
     def pivot(list)
       pivoted = {}
       list.each do |item|
@@ -73,7 +73,7 @@ module One
     #
     # @param [Array<Object>] list The list to run the pivots against
     # @param [Array<Proc>] pivots An argument list that accepts N number of pivot procs
-    # @returns [Hash] The pivoted results
+    # @return [Hash] The pivoted results
     def multi_pivot(list, *pivots)
       pivoted = nil
       pass = 0
