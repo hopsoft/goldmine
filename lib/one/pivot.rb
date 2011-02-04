@@ -17,9 +17,9 @@ module One
     #   result.inspect # => {false=>[6, 7, 8, 9], true=>[1, 2, 3, 4, 5]}
     #
     # @param [Array<Object>] list The list to pivot
-    # @yield [item] The pivot block/proc to invoke for each item in the list
-    # @yieldparam [Object] item The item in the list
-    # @yieldreturn [Object] The value returned from the pivot block acts as the key in the pivot results
+    # @yield [item] A pivot block/proc should be passed and will be invoked for each item in the list 
+    # @yieldparam [Object] item An item in the list
+    # @yieldreturn [Object] The value returned from the pivot block/proc will serve as the key in the pivot results
     # @return [Hash] The pivoted results
     def pivot(list)
       pivoted = {}
@@ -45,7 +45,7 @@ module One
       pivoted
     end    
 
-    # Runs multiple pivots against a list of Obects.
+    # Runs multiple pivots against a list of Objects.
     #
     # @example Multi-pivot a list of numbers
     #   list = [1,2,3,4,5,6,7,8,9]

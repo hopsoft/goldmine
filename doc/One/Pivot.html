@@ -176,7 +176,7 @@ A new instance of Pivot.
 
   
     <span class="summary_desc"><div class='inline'><p>
-Runs multiple pivots against a list of Obects.
+Runs multiple pivots against a list of Objects.
 </p>
 </div></span>
   
@@ -318,7 +318,7 @@ Returns the value of attribute multi_pivot_delimiter
 </p><div class="docstring">
   <div class="discussion">
     <p>
-Runs multiple pivots against a list of Obects.
+Runs multiple pivots against a list of Objects.
 </p>
 
 
@@ -548,7 +548,8 @@ The list to pivot
       
         &mdash;
         <div class='inline'><p>
-The pivot block/proc to invoke for each item in the list
+A pivot block/proc should be passed and will be invoked for each item in
+the list
 </p>
 </div>
       
@@ -569,7 +570,7 @@ The pivot block/proc to invoke for each item in the list
       
         &mdash;
         <div class='inline'><p>
-The item in the list
+An item in the list
 </p>
 </div>
       
@@ -588,8 +589,8 @@ The item in the list
       
         &mdash;
         <div class='inline'><p>
-The value returned from the pivot block acts as the key in the pivot
-results
+The value returned from the pivot block/proc will serve as the key in the
+pivot results
 </p>
 </div>
       
@@ -683,7 +684,7 @@ The pivoted results
 </div>
     
     <div id="footer">
-  Generated on Fri Feb  4 15:15:23 2011 by 
+  Generated on Fri Feb  4 15:23:35 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.4 (ruby-1.8.7).
 </div>
