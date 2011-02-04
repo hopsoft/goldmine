@@ -3,7 +3,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'one', '
 
 class PivotTest < Test::Unit::TestCase
 
-  context "A class that mixes in One::Pivot" do
+  context "A One::Pivot instance" do
     setup do 
       @pivoter = One::Pivot.new
     end
@@ -21,44 +21,74 @@ class PivotTest < Test::Unit::TestCase
       assert_equal [1,2,3,4,5], result[true] 
     end
 
-    should "pivot Array values individually using a nil key for empty Arrays" do
-      users = []
-      users << {:name => "Frank", :roles => []}
-      users << {:name => "Joe", :roles => []}
-      users << {:name => "John", :roles => []}
-      users << {:name => "Sally", :roles => []}
+    context "working on complex data structures" do
 
-      # assign some roles to the users
+      setup do
+        users = []
+        users << {:name => "Frank", :gender => "M", :roles => []}
+        users << {:name => "Joe", :gender => "M", :roles => []}
+        users << {:name => "John", :gender => "M", :roles => []}
+        users << {:name => "Sally", :gender => "F", :roles => []}
 
-      # Frank gets Read
-      users[0][:roles] << "Read"
-     
-      # Joe gets Write
-      users[1][:roles] << "Write" 
+        # assign some roles to the users
 
-      # John gets Read & Write
-      users[2][:roles] << "Read" 
-      users[2][:roles] << "Write"
+        # Frank gets Read
+        users[0][:roles] << "Read"
+       
+        # Joe gets Write
+        users[1][:roles] << "Write" 
 
-      # Sally gets no roles
+        # John gets Read & Write
+        users[2][:roles] << "Read" 
+        users[2][:roles] << "Write"
 
-      result = @pivoter.pivot(users) do |user|
-        user[:roles]
+        # Sally gets no roles
+       
+        @users = users
       end
 
-      # this is what the resulting hash should look like:
-      hash = {
-        nil => [
-          {:name=>"Sally", :roles=>[]}], 
-        "Read" => [
-          {:name=>"Frank", :roles=>["Read"]}, 
-          {:name=>"John", :roles=>["Read", "Write"]}], 
-        "Write" => [
-          {:name=>"Joe", :roles=>["Write"]}, 
-          {:name=>"John", :roles=>["Read", "Write"]}]
-      }
-      
-      assert_equal hash, result
+      should "pivot Array values individually using a nil key for empty Arrays" do
+
+        result = @pivoter.pivot(@users) do |user|
+          user[:roles]
+        end
+
+        # this is what the resulting hash should look like:
+        hash = {
+          nil => [
+            {:name=>"Sally", :gender => "F", :roles=>[]}], 
+          "Read" => [
+            {:name=>"Frank", :gender => "M", :roles=>["Read"]}, 
+            {:name=>"John", :gender => "M", :roles=>["Read", "Write"]}], 
+          "Write" => [
+            {:name=>"Joe", :gender => "M", :roles=>["Write"]}, 
+            {:name=>"John", :gender => "M", :roles=>["Read", "Write"]}]
+        }
+        
+        assert_equal hash, result
+      end
+
+      should "stack pivots with multi_pivot" do
+        pivots = []
+        pivots << lambda {|user| user[:gender]}
+        pivots << lambda {|user| user[:roles]}
+        
+        result = @pivoter.multi_pivot(@users, *pivots)
+
+        # this is what the resulting hash should look like
+        hash = {
+          "M[PIVOT]Write" => [
+            {:name=>"Joe", :gender=>"M", :roles=>["Write"]}, 
+            {:name=>"John", :gender=>"M", :roles=>["Read", "Write"]}], 
+          "M[PIVOT]Read" => [
+            {:name=>"Frank", :gender=>"M", :roles=>["Read"]}, 
+            {:name=>"John", :gender=>"M", :roles=>["Read", "Write"]}], 
+          "F[PIVOT]nil" => [
+            {:name=>"Sally", :gender=>"F", :roles=>[]}]
+        }
+              
+        assert_equal hash, result
+      end
     end
 
   end
