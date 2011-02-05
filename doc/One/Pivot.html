@@ -349,7 +349,7 @@ Multi-pivot a list of numbers
 <span class='pivoter identifier id'>pivoter</span> <span class='assign token'>=</span> <span class='One constant id'>One</span><span class='colon2 op'>::</span><span class='Pivot constant id'>Pivot</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='symbol val'>:multi_pivot_delimiter</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>&quot; &amp; &quot;</span><span class='rparen token'>)</span>
 <span class='result identifier id'>result</span> <span class='assign token'>=</span> <span class='pivoter identifier id'>pivoter</span><span class='dot token'>.</span><span class='multi_pivot identifier id'>multi_pivot</span><span class='lparen token'>(</span><span class='list identifier id'>list</span><span class='comma token'>,</span> <span class='mult op'>*</span><span class='pivots identifier id'>pivots</span><span class='rparen token'>)</span> 
 
-<span class='comment val'># the result will be a Hash with the following structure:</span>
+<span class='comment val'># the result will be a Hash with the following structure</span>
 <span class='lbrace token'>{</span>
   <span class='string val'>&quot;less than or equal to 5 &amp; greater than or equal to 3&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='lbrack token'>[</span><span class='integer val'>3</span><span class='comma token'>,</span> <span class='integer val'>4</span><span class='comma token'>,</span> <span class='integer val'>5</span><span class='rbrack token'>]</span><span class='comma token'>,</span> 
   <span class='string val'>&quot;less than or equal to 5 &amp; less than 3&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='lbrack token'>[</span><span class='integer val'>1</span><span class='comma token'>,</span> <span class='integer val'>2</span><span class='rbrack token'>]</span><span class='comma token'>,</span> 
@@ -422,11 +422,6 @@ The pivoted results
       <pre class="lines">
 
 
-77
-78
-79
-80
-81
 82
 83
 84
@@ -447,10 +442,15 @@ The pivoted results
 99
 100
 101
-102</pre>
+102
+103
+104
+105
+106
+107</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 77</span>
+      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 82</span>
 
 <span class='def def kw'>def</span> <span class='multi_pivot identifier id'>multi_pivot</span><span class='lparen token'>(</span><span class='list identifier id'>list</span><span class='comma token'>,</span> <span class='mult op'>*</span><span class='pivots identifier id'>pivots</span><span class='rparen token'>)</span>
   <span class='pivoted identifier id'>pivoted</span> <span class='assign token'>=</span> <span class='nil nil kw'>nil</span>
@@ -506,12 +506,18 @@ Pivots a list of Objects grouping them into an organized Hash.
     <h3>Examples:</h3>
     
       <h4><div class='inline'><p>
-Pivot a list of numbers
+Pivot a list of numbers into 2 groups, those less than or equal to 5 and
+those greater than 5
 </p>
 </div></h4>
       <pre class="example code"><span class='list identifier id'>list</span> <span class='assign token'>=</span> <span class='lbrack token'>[</span><span class='integer val'>1</span><span class='comma token'>,</span><span class='integer val'>2</span><span class='comma token'>,</span><span class='integer val'>3</span><span class='comma token'>,</span><span class='integer val'>4</span><span class='comma token'>,</span><span class='integer val'>5</span><span class='comma token'>,</span><span class='integer val'>6</span><span class='comma token'>,</span><span class='integer val'>7</span><span class='comma token'>,</span><span class='integer val'>8</span><span class='comma token'>,</span><span class='integer val'>9</span><span class='rbrack token'>]</span>
 <span class='result identifier id'>result</span> <span class='assign token'>=</span> <span class='pivot identifier id'>pivot</span><span class='lparen token'>(</span><span class='list identifier id'>list</span><span class='rparen token'>)</span> <span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='num identifier id'>num</span><span class='bitor op'>|</span> <span class='num identifier id'>num</span> <span class='leq op'>&lt;=</span><span class='integer val'>5</span> <span class='rbrace token'>}</span>
-<span class='result identifier id'>result</span><span class='dot token'>.</span><span class='inspect identifier id'>inspect</span> <span class='comment val'># =&gt; {false=&gt;[6, 7, 8, 9], true=&gt;[1, 2, 3, 4, 5]}</span>
+
+<span class='comment val'># the result will be a Hash with the following structure</span>
+<span class='lbrace token'>{</span>
+  <span class='true true kw'>true</span><span class='assign token'>=</span><span class='gt op'>&gt;</span><span class='lbrack token'>[</span><span class='integer val'>1</span><span class='comma token'>,</span> <span class='integer val'>2</span><span class='comma token'>,</span> <span class='integer val'>3</span><span class='comma token'>,</span> <span class='integer val'>4</span><span class='comma token'>,</span> <span class='integer val'>5</span><span class='rbrack token'>]</span><span class='comma token'>,</span>
+  <span class='false false kw'>false</span><span class='assign token'>=</span><span class='gt op'>&gt;</span><span class='lbrack token'>[</span><span class='integer val'>6</span><span class='comma token'>,</span> <span class='integer val'>7</span><span class='comma token'>,</span> <span class='integer val'>8</span><span class='comma token'>,</span> <span class='integer val'>9</span><span class='rbrack token'>]</span> 
+<span class='rbrace token'>}</span>
 </pre>
     
   </div>
@@ -548,8 +554,7 @@ The list to pivot
       
         &mdash;
         <div class='inline'><p>
-A pivot block/proc should be passed and will be invoked for each item in
-the list
+The block/proc used to invoke pivot will yield for each item in the list
 </p>
 </div>
       
@@ -623,11 +628,6 @@ The pivoted results
       <pre class="lines">
 
 
-24
-25
-26
-27
-28
 29
 30
 31
@@ -645,10 +645,15 @@ The pivoted results
 43
 44
 45
-46</pre>
+46
+47
+48
+49
+50
+51</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 24</span>
+      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 29</span>
 
 <span class='def def kw'>def</span> <span class='pivot identifier id'>pivot</span><span class='lparen token'>(</span><span class='list identifier id'>list</span><span class='rparen token'>)</span>
   <span class='pivoted identifier id'>pivoted</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
@@ -684,7 +689,7 @@ The pivoted results
 </div>
     
     <div id="footer">
-  Generated on Fri Feb  4 15:23:35 2011 by 
+  Generated on Fri Feb  4 22:34:00 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.4 (ruby-1.8.7).
 </div>

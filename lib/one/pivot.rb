@@ -11,13 +11,18 @@ module One
 
     # Pivots a list of Objects grouping them into an organized Hash.
     #
-    # @example Pivot a list of numbers
+    # @example Pivot a list of numbers into 2 groups, those less than or equal to 5 and those greater than 5
     #   list = [1,2,3,4,5,6,7,8,9]
     #   result = pivot(list) {|num| num <=5 }
-    #   result.inspect # => {false=>[6, 7, 8, 9], true=>[1, 2, 3, 4, 5]}
+    #
+    #   # the result will be a Hash with the following structure
+    #   {
+    #     true=>[1, 2, 3, 4, 5],
+    #     false=>[6, 7, 8, 9] 
+    #   }
     #
     # @param [Array<Object>] list The list to pivot
-    # @yield [item] A pivot block/proc should be passed and will be invoked for each item in the list 
+    # @yield [item] The block/proc used to invoke pivot will yield for each item in the list 
     # @yieldparam [Object] item An item in the list
     # @yieldreturn [Object] The value returned from the pivot block/proc will serve as the key in the pivot results
     # @return [Hash] The pivoted results
@@ -64,7 +69,7 @@ module One
     #   pivoter = One::Pivot.new(:multi_pivot_delimiter => " & ")
     #   result = pivoter.multi_pivot(list, *pivots) 
     #   
-    #   # the result will be a Hash with the following structure:
+    #   # the result will be a Hash with the following structure
     #   {
     #     "less than or equal to 5 & greater than or equal to 3" => [3, 4, 5], 
     #     "less than or equal to 5 & less than 3" => [1, 2], 
