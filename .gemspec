@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |spec|
   spec.name = 'one-pivot'
-  spec.version = '0.1.0'
+  spec.version = '0.9.0'
   spec.license = 'MIT'
   spec.homepage = 'https://github.com/one-on-one/pivot'
   spec.summary = 'Pivot provides basic pivoting functionality for sorting an Array of objects.'
