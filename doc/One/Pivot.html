@@ -244,10 +244,9 @@ A new instance of Pivot
     <td>
       <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 8</span>
 
-<span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='options identifier id'>options</span><span class='assign token'>=</span><span class='lbrace token'>{</span><span class='rbrace token'>}</span><span class='rparen token'>)</span>
-  <span class='@multi_pivot_delimiter ivar id'>@multi_pivot_delimiter</span> <span class='assign token'>=</span> <span class='options identifier id'>options</span><span class='lbrack token'>[</span><span class='symbol val'>:multi_pivot_delimiter</span><span class='rbrack token'>]</span> <span class='orop op'>||</span> <span class='string val'>&quot;[PIVOT]&quot;</span>
-<span class='end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id options'>options</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='ivar'>@multi_pivot_delimiter</span> <span class='op'>=</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:multi_pivot_delimiter</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[PIVOT]</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -292,10 +291,9 @@ Returns the value of attribute multi_pivot_delimiter
     <td>
       <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 6</span>
 
-<span class='def def kw'>def</span> <span class='multi_pivot_delimiter identifier id'>multi_pivot_delimiter</span>
-  <span class='@multi_pivot_delimiter ivar id'>@multi_pivot_delimiter</span>
-<span class='end end kw'>end</span>
-</pre>
+<span class='kw'>def</span> <span class='id multi_pivot_delimiter'>multi_pivot_delimiter</span>
+  <span class='ivar'>@multi_pivot_delimiter</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -333,29 +331,28 @@ Runs multiple pivots against a list of Objects.
 Multi-pivot a list of numbers
 </p>
 </div></h4>
-      <pre class="example code"><span class='list identifier id'>list</span> <span class='assign token'>=</span> <span class='lbrack token'>[</span><span class='integer val'>1</span><span class='comma token'>,</span><span class='integer val'>2</span><span class='comma token'>,</span><span class='integer val'>3</span><span class='comma token'>,</span><span class='integer val'>4</span><span class='comma token'>,</span><span class='integer val'>5</span><span class='comma token'>,</span><span class='integer val'>6</span><span class='comma token'>,</span><span class='integer val'>7</span><span class='comma token'>,</span><span class='integer val'>8</span><span class='comma token'>,</span><span class='integer val'>9</span><span class='rbrack token'>]</span>
-<span class='pivots identifier id'>pivots</span> <span class='assign token'>=</span> <span class='lbrack token'>[</span><span class='rbrack token'>]</span>
+      <pre class="example code"><span class='id list'>list</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span><span class='int'>2</span><span class='comma'>,</span><span class='int'>3</span><span class='comma'>,</span><span class='int'>4</span><span class='comma'>,</span><span class='int'>5</span><span class='comma'>,</span><span class='int'>6</span><span class='comma'>,</span><span class='int'>7</span><span class='comma'>,</span><span class='int'>8</span><span class='comma'>,</span><span class='int'>9</span><span class='rbracket'>]</span>
+<span class='id pivots'>pivots</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
 
-<span class='pivots identifier id'>pivots</span> <span class='lshft op'>&lt;&lt;</span> <span class='lambda identifier id'>lambda</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='i identifier id'>i</span><span class='bitor op'>|</span>
-  <span class='key identifier id'>key</span> <span class='assign token'>=</span> <span class='string val'>&quot;less than or equal to 5&quot;</span> <span class='if if_mod kw'>if</span> <span class='i identifier id'>i</span> <span class='leq op'>&lt;=</span> <span class='integer val'>5</span>
-  <span class='key identifier id'>key</span> <span class='opasgn op'>||=</span> <span class='string val'>&quot;greater than 5&quot;</span>
-<span class='end end kw'>end</span>
+<span class='id pivots'>pivots</span> <span class='op'>&lt;&lt;</span> <span class='id lambda'>lambda</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id i'>i</span><span class='op'>|</span>
+  <span class='id key'>key</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>less than or equal to 5</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id i'>i</span> <span class='op'>&lt;=</span> <span class='int'>5</span>
+  <span class='id key'>key</span> <span class='op'>||=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>greater than 5</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span>
 
-<span class='pivots identifier id'>pivots</span> <span class='lshft op'>&lt;&lt;</span> <span class='lambda identifier id'>lambda</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='i identifier id'>i</span><span class='bitor op'>|</span>
-  <span class='key identifier id'>key</span> <span class='assign token'>=</span> <span class='string val'>&quot;greater than or equal to 3&quot;</span> <span class='if if_mod kw'>if</span> <span class='i identifier id'>i</span> <span class='geq op'>&gt;=</span> <span class='integer val'>3</span>
-  <span class='key identifier id'>key</span> <span class='opasgn op'>||=</span> <span class='string val'>&quot;less than 3&quot;</span>
-<span class='end end kw'>end</span>
+<span class='id pivots'>pivots</span> <span class='op'>&lt;&lt;</span> <span class='id lambda'>lambda</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id i'>i</span><span class='op'>|</span>
+  <span class='id key'>key</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>greater than or equal to 3</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id i'>i</span> <span class='op'>&gt;=</span> <span class='int'>3</span>
+  <span class='id key'>key</span> <span class='op'>||=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>less than 3</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span>
 
-<span class='pivoter identifier id'>pivoter</span> <span class='assign token'>=</span> <span class='One constant id'>One</span><span class='colon2 op'>::</span><span class='Pivot constant id'>Pivot</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='symbol val'>:multi_pivot_delimiter</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='string val'>&quot; &amp; &quot;</span><span class='rparen token'>)</span>
-<span class='result identifier id'>result</span> <span class='assign token'>=</span> <span class='pivoter identifier id'>pivoter</span><span class='dot token'>.</span><span class='multi_pivot identifier id'>multi_pivot</span><span class='lparen token'>(</span><span class='list identifier id'>list</span><span class='comma token'>,</span> <span class='mult op'>*</span><span class='pivots identifier id'>pivots</span><span class='rparen token'>)</span> 
+<span class='id pivoter'>pivoter</span> <span class='op'>=</span> <span class='const'>One</span><span class='op'>::</span><span class='const'>Pivot</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='symbol'>:multi_pivot_delimiter</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> &amp; </span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='id result'>result</span> <span class='op'>=</span> <span class='id pivoter'>pivoter</span><span class='period'>.</span><span class='id multi_pivot'>multi_pivot</span><span class='lparen'>(</span><span class='id list'>list</span><span class='comma'>,</span> <span class='op'>*</span><span class='id pivots'>pivots</span><span class='rparen'>)</span> 
 
-<span class='comment val'># the result will be a Hash with the following structure</span>
-<span class='lbrace token'>{</span>
-  <span class='string val'>&quot;less than or equal to 5 &amp; greater than or equal to 3&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='lbrack token'>[</span><span class='integer val'>3</span><span class='comma token'>,</span> <span class='integer val'>4</span><span class='comma token'>,</span> <span class='integer val'>5</span><span class='rbrack token'>]</span><span class='comma token'>,</span> 
-  <span class='string val'>&quot;less than or equal to 5 &amp; less than 3&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='lbrack token'>[</span><span class='integer val'>1</span><span class='comma token'>,</span> <span class='integer val'>2</span><span class='rbrack token'>]</span><span class='comma token'>,</span> 
-  <span class='string val'>&quot;greater than 5 &amp; greater than or equal to 3&quot;</span> <span class='assign token'>=</span><span class='gt op'>&gt;</span> <span class='lbrack token'>[</span><span class='integer val'>6</span><span class='comma token'>,</span> <span class='integer val'>7</span><span class='comma token'>,</span> <span class='integer val'>8</span><span class='comma token'>,</span> <span class='integer val'>9</span><span class='rbrack token'>]</span>
-<span class='rbrace token'>}</span>
-</pre>
+<span class='comment'># the result will be a Hash with the following structure
+</span><span class='lbrace'>{</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>less than or equal to 5 &amp; greater than or equal to 3</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='int'>3</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span><span class='comma'>,</span> 
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>less than or equal to 5 &amp; less than 3</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='rbracket'>]</span><span class='comma'>,</span> 
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>greater than 5 &amp; greater than or equal to 3</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='int'>6</span><span class='comma'>,</span> <span class='int'>7</span><span class='comma'>,</span> <span class='int'>8</span><span class='comma'>,</span> <span class='int'>9</span><span class='rbracket'>]</span>
+<span class='rbrace'>}</span></pre>
     
   </div>
 <h3>Parameters:</h3>
@@ -452,33 +449,32 @@ The pivoted results
     <td>
       <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 82</span>
 
-<span class='def def kw'>def</span> <span class='multi_pivot identifier id'>multi_pivot</span><span class='lparen token'>(</span><span class='list identifier id'>list</span><span class='comma token'>,</span> <span class='mult op'>*</span><span class='pivots identifier id'>pivots</span><span class='rparen token'>)</span>
-  <span class='pivoted identifier id'>pivoted</span> <span class='assign token'>=</span> <span class='nil nil kw'>nil</span>
-  <span class='pass identifier id'>pass</span> <span class='assign token'>=</span> <span class='integer val'>0</span>
+<span class='kw'>def</span> <span class='id multi_pivot'>multi_pivot</span><span class='lparen'>(</span><span class='id list'>list</span><span class='comma'>,</span> <span class='op'>*</span><span class='id pivots'>pivots</span><span class='rparen'>)</span>
+  <span class='id pivoted'>pivoted</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='id pass'>pass</span> <span class='op'>=</span> <span class='int'>0</span>
 
-  <span class='while while kw'>while</span> <span class='pivots identifier id'>pivots</span><span class='dot token'>.</span><span class='length identifier id'>length</span> <span class='gt op'>&gt;</span> <span class='integer val'>0</span>
-    <span class='p identifier id'>p</span> <span class='assign token'>=</span> <span class='pivots identifier id'>pivots</span><span class='dot token'>.</span><span class='shift identifier id'>shift</span>
+  <span class='kw'>while</span> <span class='id pivots'>pivots</span><span class='period'>.</span><span class='id length'>length</span> <span class='op'>&gt;</span> <span class='int'>0</span>
+    <span class='id p'>p</span> <span class='op'>=</span> <span class='id pivots'>pivots</span><span class='period'>.</span><span class='id shift'>shift</span>
 
-    <span class='if if kw'>if</span> <span class='pass identifier id'>pass</span> <span class='eq op'>==</span> <span class='integer val'>0</span>
-      <span class='pivoted identifier id'>pivoted</span> <span class='assign token'>=</span> <span class='pivot identifier id'>pivot</span><span class='lparen token'>(</span><span class='list identifier id'>list</span><span class='comma token'>,</span> <span class='bitand op'>&amp;</span><span class='p identifier id'>p</span><span class='rparen token'>)</span>
-    <span class='else else kw'>else</span>
-      <span class='new_pivoted identifier id'>new_pivoted</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
-      <span class='pivoted identifier id'>pivoted</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='old_key identifier id'>old_key</span><span class='comma token'>,</span> <span class='old_list identifier id'>old_list</span><span class='bitor op'>|</span>
-        <span class='tmp_pivoted identifier id'>tmp_pivoted</span> <span class='assign token'>=</span> <span class='pivot identifier id'>pivot</span><span class='lparen token'>(</span><span class='old_list identifier id'>old_list</span><span class='comma token'>,</span> <span class='bitand op'>&amp;</span><span class='p identifier id'>p</span><span class='rparen token'>)</span>
-        <span class='tmp_pivoted identifier id'>tmp_pivoted</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='key identifier id'>key</span><span class='comma token'>,</span> <span class='list identifier id'>list</span><span class='bitor op'>|</span>
-          <span class='new_key identifier id'>new_key</span> <span class='assign token'>=</span> <span class='dstring node'>&quot;#{safe_key(old_key)}#{multi_pivot_delimiter}#{safe_key(key)}&quot;</span>
-          <span class='new_pivoted identifier id'>new_pivoted</span><span class='lbrack token'>[</span><span class='new_key identifier id'>new_key</span><span class='rbrack token'>]</span> <span class='assign token'>=</span> <span class='list identifier id'>list</span>
-        <span class='end end kw'>end</span>
-      <span class='end end kw'>end</span>
-      <span class='pivoted identifier id'>pivoted</span> <span class='assign token'>=</span> <span class='new_pivoted identifier id'>new_pivoted</span>
-    <span class='end end kw'>end</span>
+    <span class='kw'>if</span> <span class='id pass'>pass</span> <span class='op'>==</span> <span class='int'>0</span>
+      <span class='id pivoted'>pivoted</span> <span class='op'>=</span> <span class='id pivot'>pivot</span><span class='lparen'>(</span><span class='id list'>list</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id p'>p</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='id new_pivoted'>new_pivoted</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+      <span class='id pivoted'>pivoted</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id old_key'>old_key</span><span class='comma'>,</span> <span class='id old_list'>old_list</span><span class='op'>|</span>
+        <span class='id tmp_pivoted'>tmp_pivoted</span> <span class='op'>=</span> <span class='id pivot'>pivot</span><span class='lparen'>(</span><span class='id old_list'>old_list</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id p'>p</span><span class='rparen'>)</span>
+        <span class='id tmp_pivoted'>tmp_pivoted</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id key'>key</span><span class='comma'>,</span> <span class='id list'>list</span><span class='op'>|</span>
+          <span class='id new_key'>new_key</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id safe_key'>safe_key</span><span class='lparen'>(</span><span class='id old_key'>old_key</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='embexpr_beg'>#{</span><span class='id multi_pivot_delimiter'>multi_pivot_delimiter</span><span class='rbrace'>}</span><span class='embexpr_beg'>#{</span><span class='id safe_key'>safe_key</span><span class='lparen'>(</span><span class='id key'>key</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+          <span class='id new_pivoted'>new_pivoted</span><span class='lbracket'>[</span><span class='id new_key'>new_key</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id list'>list</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+      <span class='id pivoted'>pivoted</span> <span class='op'>=</span> <span class='id new_pivoted'>new_pivoted</span>
+    <span class='kw'>end</span>
 
-    <span class='pass identifier id'>pass</span> <span class='opasgn op'>+=</span> <span class='integer val'>1</span>
-  <span class='end end kw'>end</span>
+    <span class='id pass'>pass</span> <span class='op'>+=</span> <span class='int'>1</span>
+  <span class='kw'>end</span>
 
-  <span class='pivoted identifier id'>pivoted</span>
-<span class='end end kw'>end</span>
-</pre>
+  <span class='id pivoted'>pivoted</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -510,15 +506,14 @@ Pivot a list of numbers into 2 groups, those less than or equal to 5 and
 those greater than 5
 </p>
 </div></h4>
-      <pre class="example code"><span class='list identifier id'>list</span> <span class='assign token'>=</span> <span class='lbrack token'>[</span><span class='integer val'>1</span><span class='comma token'>,</span><span class='integer val'>2</span><span class='comma token'>,</span><span class='integer val'>3</span><span class='comma token'>,</span><span class='integer val'>4</span><span class='comma token'>,</span><span class='integer val'>5</span><span class='comma token'>,</span><span class='integer val'>6</span><span class='comma token'>,</span><span class='integer val'>7</span><span class='comma token'>,</span><span class='integer val'>8</span><span class='comma token'>,</span><span class='integer val'>9</span><span class='rbrack token'>]</span>
-<span class='result identifier id'>result</span> <span class='assign token'>=</span> <span class='pivot identifier id'>pivot</span><span class='lparen token'>(</span><span class='list identifier id'>list</span><span class='rparen token'>)</span> <span class='lbrace token'>{</span><span class='bitor op'>|</span><span class='num identifier id'>num</span><span class='bitor op'>|</span> <span class='num identifier id'>num</span> <span class='leq op'>&lt;=</span><span class='integer val'>5</span> <span class='rbrace token'>}</span>
+      <pre class="example code"><span class='id list'>list</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span><span class='int'>2</span><span class='comma'>,</span><span class='int'>3</span><span class='comma'>,</span><span class='int'>4</span><span class='comma'>,</span><span class='int'>5</span><span class='comma'>,</span><span class='int'>6</span><span class='comma'>,</span><span class='int'>7</span><span class='comma'>,</span><span class='int'>8</span><span class='comma'>,</span><span class='int'>9</span><span class='rbracket'>]</span>
+<span class='id result'>result</span> <span class='op'>=</span> <span class='id pivot'>pivot</span><span class='lparen'>(</span><span class='id list'>list</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id num'>num</span><span class='op'>|</span> <span class='id num'>num</span> <span class='op'>&lt;=</span><span class='int'>5</span> <span class='rbrace'>}</span>
 
-<span class='comment val'># the result will be a Hash with the following structure</span>
-<span class='lbrace token'>{</span>
-  <span class='true true kw'>true</span><span class='assign token'>=</span><span class='gt op'>&gt;</span><span class='lbrack token'>[</span><span class='integer val'>1</span><span class='comma token'>,</span> <span class='integer val'>2</span><span class='comma token'>,</span> <span class='integer val'>3</span><span class='comma token'>,</span> <span class='integer val'>4</span><span class='comma token'>,</span> <span class='integer val'>5</span><span class='rbrack token'>]</span><span class='comma token'>,</span>
-  <span class='false false kw'>false</span><span class='assign token'>=</span><span class='gt op'>&gt;</span><span class='lbrack token'>[</span><span class='integer val'>6</span><span class='comma token'>,</span> <span class='integer val'>7</span><span class='comma token'>,</span> <span class='integer val'>8</span><span class='comma token'>,</span> <span class='integer val'>9</span><span class='rbrack token'>]</span> 
-<span class='rbrace token'>}</span>
-</pre>
+<span class='comment'># the result will be a Hash with the following structure
+</span><span class='lbrace'>{</span>
+  <span class='kw'>true</span><span class='op'>=&gt;</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='kw'>false</span><span class='op'>=&gt;</span><span class='lbracket'>[</span><span class='int'>6</span><span class='comma'>,</span> <span class='int'>7</span><span class='comma'>,</span> <span class='int'>8</span><span class='comma'>,</span> <span class='int'>9</span><span class='rbracket'>]</span> 
+<span class='rbrace'>}</span></pre>
     
   </div>
 <h3>Parameters:</h3>
@@ -655,30 +650,29 @@ The pivoted results
     <td>
       <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 29</span>
 
-<span class='def def kw'>def</span> <span class='pivot identifier id'>pivot</span><span class='lparen token'>(</span><span class='list identifier id'>list</span><span class='rparen token'>)</span>
-  <span class='pivoted identifier id'>pivoted</span> <span class='assign token'>=</span> <span class='lbrace token'>{</span><span class='rbrace token'>}</span>
-  <span class='list identifier id'>list</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='item identifier id'>item</span><span class='bitor op'>|</span>
-    <span class='value identifier id'>value</span> <span class='assign token'>=</span> <span class='yield yield kw'>yield</span><span class='lparen token'>(</span><span class='item identifier id'>item</span><span class='rparen token'>)</span>
+<span class='kw'>def</span> <span class='id pivot'>pivot</span><span class='lparen'>(</span><span class='id list'>list</span><span class='rparen'>)</span>
+  <span class='id pivoted'>pivoted</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='id list'>list</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id item'>item</span><span class='op'>|</span>
+    <span class='id value'>value</span> <span class='op'>=</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id item'>item</span><span class='rparen'>)</span>
   
-    <span class='if if kw'>if</span> <span class='value identifier id'>value</span><span class='dot token'>.</span><span class='is_a? fid id'>is_a?</span><span class='lparen token'>(</span><span class='Array constant id'>Array</span><span class='rparen token'>)</span>
-      <span class='if if kw'>if</span> <span class='value identifier id'>value</span><span class='dot token'>.</span><span class='empty? fid id'>empty?</span>
-        <span class='pivoted identifier id'>pivoted</span><span class='lbrack token'>[</span><span class='nil nil kw'>nil</span><span class='rbrack token'>]</span> <span class='opasgn op'>||=</span> <span class='lbrack token'>[</span><span class='rbrack token'>]</span>
-        <span class='pivoted identifier id'>pivoted</span><span class='lbrack token'>[</span><span class='nil nil kw'>nil</span><span class='rbrack token'>]</span> <span class='lshft op'>&lt;&lt;</span> <span class='item identifier id'>item</span> 
-      <span class='else else kw'>else</span>
-        <span class='value identifier id'>value</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='val identifier id'>val</span><span class='bitor op'>|</span>
-          <span class='pivoted identifier id'>pivoted</span><span class='lbrack token'>[</span><span class='val identifier id'>val</span><span class='rbrack token'>]</span> <span class='opasgn op'>||=</span> <span class='lbrack token'>[</span><span class='rbrack token'>]</span>
-          <span class='pivoted identifier id'>pivoted</span><span class='lbrack token'>[</span><span class='val identifier id'>val</span><span class='rbrack token'>]</span> <span class='lshft op'>&lt;&lt;</span> <span class='item identifier id'>item</span> 
-        <span class='end end kw'>end</span>
-      <span class='end end kw'>end</span>
-    <span class='else else kw'>else</span>
-      <span class='pivoted identifier id'>pivoted</span><span class='lbrack token'>[</span><span class='value identifier id'>value</span><span class='rbrack token'>]</span> <span class='opasgn op'>||=</span> <span class='lbrack token'>[</span><span class='rbrack token'>]</span>
-      <span class='pivoted identifier id'>pivoted</span><span class='lbrack token'>[</span><span class='value identifier id'>value</span><span class='rbrack token'>]</span> <span class='lshft op'>&lt;&lt;</span> <span class='item identifier id'>item</span> 
-    <span class='end end kw'>end</span>
-  <span class='end end kw'>end</span>
+    <span class='kw'>if</span> <span class='id value'>value</span><span class='period'>.</span><span class='id is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
+      <span class='kw'>if</span> <span class='id value'>value</span><span class='period'>.</span><span class='id empty?'>empty?</span>
+        <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='kw'>nil</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+        <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='kw'>nil</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id item'>item</span> 
+      <span class='kw'>else</span>
+        <span class='id value'>value</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id val'>val</span><span class='op'>|</span>
+          <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='id val'>val</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+          <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='id val'>val</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id item'>item</span> 
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+    <span class='kw'>else</span>
+      <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='id value'>value</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+      <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='id value'>value</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id item'>item</span> 
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
 
-  <span class='pivoted identifier id'>pivoted</span>
-<span class='end end kw'>end</span>
-</pre>
+  <span class='id pivoted'>pivoted</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -689,9 +683,9 @@ The pivoted results
 </div>
     
     <div id="footer">
-  Generated on Fri Feb  4 22:34:00 2011 by 
+  Generated on Mon Feb  7 19:01:57 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.6.4 (ruby-1.8.7).
+  0.6.4 (ruby-1.9.2).
 </div>
 
   </body>

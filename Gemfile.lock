@@ -9,6 +9,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bluecloth
+  bluecloth (= 2.0.10)
   shoulda (= 2.11.3)
-  yard
+  yard (= 0.6.4)
