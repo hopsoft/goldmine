@@ -17,7 +17,7 @@ class PivotTest < Test::Unit::TestCase
       end
     end
 
-    should "store its name and pivot proc correctly" do 
+    should "store the identifier and pivot proc correctly" do 
       block = lambda {|item| item.class.name }
       instance = One::Pivot.new(:test, &block)
       assert_equal :test, instance.identifier      
