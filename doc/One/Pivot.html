@@ -82,7 +82,8 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     <p>
-Class that can be used for mining data from lists of objects.
+Simple class to hold meta information about a pivot. This class was created
+to support invoking One::Pivot#multi_pivot with identifiers for each pivot.
 </p>
 
 
@@ -98,14 +99,14 @@ Class that can be used for mining data from lists of objects.
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#multi_pivot_delimiter-instance_method" title="#multi_pivot_delimiter (instance method)">- (Object) <strong>multi_pivot_delimiter</strong> </a>
+      <a href="#identifier-instance_method" title="#identifier (instance method)">- (Object) <strong>identifier</strong> </a>
     
 
     
   </span>
   
   
-    
+    <span class="note title readonly">readonly</span>
     
   
   
@@ -115,7 +116,34 @@ Class that can be used for mining data from lists of objects.
 
   
     <span class="summary_desc"><div class='inline'><p>
-Returns the value of attribute multi_pivot_delimiter.
+Returns the value of attribute identifier.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pivot_proc-instance_method" title="#pivot_proc (instance method)">- (Object) <strong>pivot_proc</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute pivot_proc.
 </p>
 </div></span>
   
@@ -136,7 +164,7 @@ Returns the value of attribute multi_pivot_delimiter.
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Pivot) <strong>initialize</strong>(options = {}) </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Pivot) <strong>initialize</strong>(identifier) {|item| ... }</a>
     
 
     
@@ -152,55 +180,7 @@ Returns the value of attribute multi_pivot_delimiter.
 
   
     <span class="summary_desc"><div class='inline'><p>
-A new instance of Pivot.
-</p>
-</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#multi_pivot-instance_method" title="#multi_pivot (instance method)">- (Hash) <strong>multi_pivot</strong>(list, *pivots) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>
-Runs multiple pivots against a list of Objects.
-</p>
-</div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#pivot-instance_method" title="#pivot (instance method)">- (Hash) <strong>pivot</strong>(list) {|item| ... }</a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>
-Pivots a list of Objects grouping them into an organized Hash.
+Constructor.
 </p>
 </div></span>
   
@@ -216,328 +196,21 @@ Pivots a list of Objects grouping them into an organized Hash.
     <div class="method_details first">
   <p class="signature first" id="initialize-instance_method">
   
-    - (<tt><span class='object_link'><a href="" title="One::Pivot (class)">Pivot</a></span></tt>) <strong>initialize</strong>(options = {}) 
+    - (<tt><span class='object_link'><a href="" title="One::Pivot (class)">Pivot</a></span></tt>) <strong>initialize</strong>(identifier) {|item| ... }
   
 
   
 </p><div class="docstring">
   <div class="discussion">
     <p>
-A new instance of Pivot
+Constructor. param [String, Symbol] identifier The name of the pivot
 </p>
 
 
   </div>
 </div>
 <div class="tags">
-  
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-8
-9
-10</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 8</span>
-
-<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id options'>options</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
-  <span class='ivar'>@multi_pivot_delimiter</span> <span class='op'>=</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:multi_pivot_delimiter</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[PIVOT]</span><span class='tstring_end'>&quot;</span></span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-  
-</div>
-
-  <div id="instance_attr_details" class="attr_details">
-    <h2>Instance Attribute Details</h2>
-    
-      
-      <span id="multi_pivot_delimiter=-instance_method"></span>
-      <span id="multi_pivot_delimiter-instance_method"></span>
-      <div class="method_details first">
-  <p class="signature first" id="multi_pivot_delimiter-instance_method">
-  
-    - (<tt>Object</tt>) <strong>multi_pivot_delimiter</strong> 
-  
-
-  
-</p><div class="docstring">
-  <div class="discussion">
-    <p>
-Returns the value of attribute multi_pivot_delimiter
-</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-6
-7
-8</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 6</span>
-
-<span class='kw'>def</span> <span class='id multi_pivot_delimiter'>multi_pivot_delimiter</span>
-  <span class='ivar'>@multi_pivot_delimiter</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-  </div>
-
-
-  <div id="instance_method_details" class="method_details_list">
-    <h2>Instance Method Details</h2>
-    
-    
-      <div class="method_details first">
-  <p class="signature first" id="multi_pivot-instance_method">
-  
-    - (<tt>Hash</tt>) <strong>multi_pivot</strong>(list, *pivots) 
-  
-
-  
-</p><div class="docstring">
-  <div class="discussion">
-    <p>
-Runs multiple pivots against a list of Objects.
-</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-  <div class="examples">
-    <h3>Examples:</h3>
-    
-      <h4><div class='inline'><p>
-Multi-pivot a list of numbers
-</p>
-</div></h4>
-      <pre class="example code"><span class='id list'>list</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span><span class='int'>2</span><span class='comma'>,</span><span class='int'>3</span><span class='comma'>,</span><span class='int'>4</span><span class='comma'>,</span><span class='int'>5</span><span class='comma'>,</span><span class='int'>6</span><span class='comma'>,</span><span class='int'>7</span><span class='comma'>,</span><span class='int'>8</span><span class='comma'>,</span><span class='int'>9</span><span class='rbracket'>]</span>
-<span class='id pivots'>pivots</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-
-<span class='id pivots'>pivots</span> <span class='op'>&lt;&lt;</span> <span class='id lambda'>lambda</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id i'>i</span><span class='op'>|</span>
-  <span class='id key'>key</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>less than or equal to 5</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id i'>i</span> <span class='op'>&lt;=</span> <span class='int'>5</span>
-  <span class='id key'>key</span> <span class='op'>||=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>greater than 5</span><span class='tstring_end'>&quot;</span></span>
-<span class='kw'>end</span>
-
-<span class='id pivots'>pivots</span> <span class='op'>&lt;&lt;</span> <span class='id lambda'>lambda</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id i'>i</span><span class='op'>|</span>
-  <span class='id key'>key</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>greater than or equal to 3</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id i'>i</span> <span class='op'>&gt;=</span> <span class='int'>3</span>
-  <span class='id key'>key</span> <span class='op'>||=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>less than 3</span><span class='tstring_end'>&quot;</span></span>
-<span class='kw'>end</span>
-
-<span class='id pivoter'>pivoter</span> <span class='op'>=</span> <span class='const'>One</span><span class='op'>::</span><span class='const'>Pivot</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='symbol'>:multi_pivot_delimiter</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> &amp; </span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-<span class='id result'>result</span> <span class='op'>=</span> <span class='id pivoter'>pivoter</span><span class='period'>.</span><span class='id multi_pivot'>multi_pivot</span><span class='lparen'>(</span><span class='id list'>list</span><span class='comma'>,</span> <span class='op'>*</span><span class='id pivots'>pivots</span><span class='rparen'>)</span> 
-
-<span class='comment'># the result will be a Hash with the following structure
-</span><span class='lbrace'>{</span>
-  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>less than or equal to 5 &amp; greater than or equal to 3</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='int'>3</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span><span class='comma'>,</span> 
-  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>less than or equal to 5 &amp; less than 3</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='rbracket'>]</span><span class='comma'>,</span> 
-  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>greater than 5 &amp; greater than or equal to 3</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='int'>6</span><span class='comma'>,</span> <span class='int'>7</span><span class='comma'>,</span> <span class='int'>8</span><span class='comma'>,</span> <span class='int'>9</span><span class='rbracket'>]</span>
-<span class='rbrace'>}</span></pre>
-    
-  </div>
-<h3>Parameters:</h3>
-<ul class="param">
-  
-    <li>
-      
-        <span class='type'>(<tt>Array&lt;Object&gt;</tt>)</span>
-      
-      
-        <span class='name'>list</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-The list to run the pivots against
-</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='type'>(<tt>Array&lt;Proc&gt;</tt>)</span>
-      
-      
-        <span class='name'>pivots</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-An argument list that accepts N number of pivot procs
-</p>
-</div>
-      
-    </li>
-  
-</ul>
-<h3>Returns:</h3>
-<ul class="return">
-  
-    <li>
-      
-        <span class='type'>(<tt>Hash</tt>)</span>
-      
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-The pivoted results
-</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 82</span>
-
-<span class='kw'>def</span> <span class='id multi_pivot'>multi_pivot</span><span class='lparen'>(</span><span class='id list'>list</span><span class='comma'>,</span> <span class='op'>*</span><span class='id pivots'>pivots</span><span class='rparen'>)</span>
-  <span class='id pivoted'>pivoted</span> <span class='op'>=</span> <span class='kw'>nil</span>
-  <span class='id pass'>pass</span> <span class='op'>=</span> <span class='int'>0</span>
-
-  <span class='kw'>while</span> <span class='id pivots'>pivots</span><span class='period'>.</span><span class='id length'>length</span> <span class='op'>&gt;</span> <span class='int'>0</span>
-    <span class='id p'>p</span> <span class='op'>=</span> <span class='id pivots'>pivots</span><span class='period'>.</span><span class='id shift'>shift</span>
-
-    <span class='kw'>if</span> <span class='id pass'>pass</span> <span class='op'>==</span> <span class='int'>0</span>
-      <span class='id pivoted'>pivoted</span> <span class='op'>=</span> <span class='id pivot'>pivot</span><span class='lparen'>(</span><span class='id list'>list</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id p'>p</span><span class='rparen'>)</span>
-    <span class='kw'>else</span>
-      <span class='id new_pivoted'>new_pivoted</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
-      <span class='id pivoted'>pivoted</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id old_key'>old_key</span><span class='comma'>,</span> <span class='id old_list'>old_list</span><span class='op'>|</span>
-        <span class='id tmp_pivoted'>tmp_pivoted</span> <span class='op'>=</span> <span class='id pivot'>pivot</span><span class='lparen'>(</span><span class='id old_list'>old_list</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id p'>p</span><span class='rparen'>)</span>
-        <span class='id tmp_pivoted'>tmp_pivoted</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id key'>key</span><span class='comma'>,</span> <span class='id list'>list</span><span class='op'>|</span>
-          <span class='id new_key'>new_key</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id safe_key'>safe_key</span><span class='lparen'>(</span><span class='id old_key'>old_key</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='embexpr_beg'>#{</span><span class='id multi_pivot_delimiter'>multi_pivot_delimiter</span><span class='rbrace'>}</span><span class='embexpr_beg'>#{</span><span class='id safe_key'>safe_key</span><span class='lparen'>(</span><span class='id key'>key</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
-          <span class='id new_pivoted'>new_pivoted</span><span class='lbracket'>[</span><span class='id new_key'>new_key</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id list'>list</span>
-        <span class='kw'>end</span>
-      <span class='kw'>end</span>
-      <span class='id pivoted'>pivoted</span> <span class='op'>=</span> <span class='id new_pivoted'>new_pivoted</span>
-    <span class='kw'>end</span>
-
-    <span class='id pass'>pass</span> <span class='op'>+=</span> <span class='int'>1</span>
-  <span class='kw'>end</span>
-
-  <span class='id pivoted'>pivoted</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <p class="signature " id="pivot-instance_method">
-  
-    - (<tt>Hash</tt>) <strong>pivot</strong>(list) {|item| ... }
-  
-
-  
-</p><div class="docstring">
-  <div class="discussion">
-    <p>
-Pivots a list of Objects grouping them into an organized Hash.
-</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-  <div class="examples">
-    <h3>Examples:</h3>
-    
-      <h4><div class='inline'><p>
-Pivot a list of numbers into 2 groups, those less than or equal to 5 and
-those greater than 5
-</p>
-</div></h4>
-      <pre class="example code"><span class='id list'>list</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span><span class='int'>2</span><span class='comma'>,</span><span class='int'>3</span><span class='comma'>,</span><span class='int'>4</span><span class='comma'>,</span><span class='int'>5</span><span class='comma'>,</span><span class='int'>6</span><span class='comma'>,</span><span class='int'>7</span><span class='comma'>,</span><span class='int'>8</span><span class='comma'>,</span><span class='int'>9</span><span class='rbracket'>]</span>
-<span class='id result'>result</span> <span class='op'>=</span> <span class='id pivot'>pivot</span><span class='lparen'>(</span><span class='id list'>list</span><span class='rparen'>)</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id num'>num</span><span class='op'>|</span> <span class='id num'>num</span> <span class='op'>&lt;=</span><span class='int'>5</span> <span class='rbrace'>}</span>
-
-<span class='comment'># the result will be a Hash with the following structure
-</span><span class='lbrace'>{</span>
-  <span class='kw'>true</span><span class='op'>=&gt;</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span><span class='comma'>,</span>
-  <span class='kw'>false</span><span class='op'>=&gt;</span><span class='lbracket'>[</span><span class='int'>6</span><span class='comma'>,</span> <span class='int'>7</span><span class='comma'>,</span> <span class='int'>8</span><span class='comma'>,</span> <span class='int'>9</span><span class='rbracket'>]</span> 
-<span class='rbrace'>}</span></pre>
-    
-  </div>
-<h3>Parameters:</h3>
-<ul class="param">
-  
-    <li>
-      
-        <span class='type'>(<tt>Array&lt;Object&gt;</tt>)</span>
-      
-      
-        <span class='name'>list</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-The list to pivot
-</p>
-</div>
-      
-    </li>
-  
-</ul>
-<h3>Yields:</h3>
+  <h3>Yields:</h3>
 <ul class="yield">
   
     <li>
@@ -549,7 +222,7 @@ The list to pivot
       
         &mdash;
         <div class='inline'><p>
-The block/proc used to invoke pivot will yield for each item in the list
+This block will be called for each item in the list when pivot is invoked
 </p>
 </div>
       
@@ -589,29 +262,23 @@ An item in the list
       
         &mdash;
         <div class='inline'><p>
-The value returned from the pivot block/proc will serve as the key in the
-pivot results
+The value returned from the pivot block will serve as the key in the pivot
+results
 </p>
 </div>
       
     </li>
   
 </ul>
-<h3>Returns:</h3>
-<ul class="return">
+<h3>Raises:</h3>
+<ul class="raise">
   
     <li>
       
-        <span class='type'>(<tt>Hash</tt>)</span>
+        <span class='type'>(<tt>LocalJumpError</tt>)</span>
       
       
       
-      
-        &mdash;
-        <div class='inline'><p>
-The pivoted results
-</p>
-</div>
       
     </li>
   
@@ -623,55 +290,108 @@ The pivoted results
       <pre class="lines">
 
 
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51</pre>
+14
+15
+16
+17
+18</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 29</span>
+      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 14</span>
 
-<span class='kw'>def</span> <span class='id pivot'>pivot</span><span class='lparen'>(</span><span class='id list'>list</span><span class='rparen'>)</span>
-  <span class='id pivoted'>pivoted</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
-  <span class='id list'>list</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id item'>item</span><span class='op'>|</span>
-    <span class='id value'>value</span> <span class='op'>=</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='id item'>item</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier'>identifier</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='id raise'>raise</span> <span class='const'>LocalJumpError</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>no block given</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id block_given?'>block_given?</span>
+  <span class='ivar'>@identifier</span> <span class='op'>=</span> <span class='id identifier'>identifier</span>
+  <span class='ivar'>@pivot_proc</span> <span class='op'>=</span> <span class='id block'>block</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
   
-    <span class='kw'>if</span> <span class='id value'>value</span><span class='period'>.</span><span class='id is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
-      <span class='kw'>if</span> <span class='id value'>value</span><span class='period'>.</span><span class='id empty?'>empty?</span>
-        <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='kw'>nil</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-        <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='kw'>nil</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id item'>item</span> 
-      <span class='kw'>else</span>
-        <span class='id value'>value</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id val'>val</span><span class='op'>|</span>
-          <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='id val'>val</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-          <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='id val'>val</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id item'>item</span> 
-        <span class='kw'>end</span>
-      <span class='kw'>end</span>
-    <span class='kw'>else</span>
-      <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='id value'>value</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-      <span class='id pivoted'>pivoted</span><span class='lbracket'>[</span><span class='id value'>value</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id item'>item</span> 
-    <span class='kw'>end</span>
-  <span class='kw'>end</span>
+</div>
 
-  <span class='id pivoted'>pivoted</span>
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <span id="identifier-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="identifier-instance_method">
+  
+    - (<tt>Object</tt>) <strong>identifier</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute identifier
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+6
+7
+8</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 6</span>
+
+<span class='kw'>def</span> <span class='id identifier'>identifier</span>
+  <span class='ivar'>@identifier</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <span id="pivot_proc-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="pivot_proc-instance_method">
+  
+    - (<tt>Object</tt>) <strong>pivot_proc</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute pivot_proc
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+7
+8
+9</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/one/pivot.rb', line 7</span>
+
+<span class='kw'>def</span> <span class='id pivot_proc'>pivot_proc</span>
+  <span class='ivar'>@pivot_proc</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -680,10 +400,11 @@ The pivoted results
     
   </div>
 
+
 </div>
     
     <div id="footer">
-  Generated on Mon Feb  7 19:01:57 2011 by 
+  Generated on Tue Feb  8 15:46:01 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.4 (ruby-1.9.2).
 </div>

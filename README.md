@@ -1,4 +1,4 @@
-#[One on One Marketing](http://1on1.com/)'s Pivot GEM
+#[1on1](http://1on1.com/) one-pivot GEM
 
 ##Overview
 The **one-pivot** GEM provides a simple way to mine data from a list of objects. There are no constraints on the types of objects that you can pivot. You can pivot anything from a list of numbers to a list of ActiveRecord objects to anything in between.  
@@ -11,6 +11,8 @@ The **one-pivot** GEM provides a simple way to mine data from a list of objects.
 A **`pivot`** is simply a Ruby block (or Proc) that executes for each item in the list.  The result returned from this block then serves as the key in the resulting Hash.
 
 Lets have a look at some examples.
+
+_Note: there are a few advanced features not demonstrated in the examples below. For example, adding identifiers to pivots or attaching observers to pivot operations. We use these features at 1on1 to cache pivot results for each item. This gives us a big performance boost when the same item participates in multiple pivots during its lifetime... especially when the pivot Proc is an expensive operation.  Have a look at the [tests](https://github.com/one-on-one/pivot/tree/master/test) when you want to dig a little deeper._
 
 ##A simple single pivot
 <pre>
