@@ -46,7 +46,7 @@ require 'one-pivot'
 
 # create the pivot instance
 # note: the multi-pivot delimiter that was specified
-pivoter = One::Pivot.new(:multi_pivot_delimiter => " & ")
+pivoter = One::Pivot.new
 
 # create a list of objects to pivot
 list = [1,2,3,4,5,6,7,8,9]
@@ -63,6 +63,8 @@ pivots << lambda do |i|
   key = "greater than or equal to 3" if i >= 3
   key ||= "less than 3"
 end
+
+pivots << {:delimiter => " & "}
 
 result = pivoter.multi_pivot(list, *pivots)
 

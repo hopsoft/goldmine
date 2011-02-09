@@ -92,7 +92,7 @@
 
 <span class='comment'># create the pivot instance
 </span><span class='comment'># note: the multi-pivot delimiter that was specified
-</span><span class='id pivoter'>pivoter</span> <span class='op'>=</span> <span class='const'>One</span><span class='op'>::</span><span class='const'>Pivot</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='symbol'>:multi_pivot_delimiter</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> &amp; </span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+</span><span class='id pivoter'>pivoter</span> <span class='op'>=</span> <span class='const'>One</span><span class='op'>::</span><span class='const'>Pivot</span><span class='period'>.</span><span class='id new'>new</span>
 
 <span class='comment'># create a list of objects to pivot
 </span><span class='id list'>list</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span><span class='int'>2</span><span class='comma'>,</span><span class='int'>3</span><span class='comma'>,</span><span class='int'>4</span><span class='comma'>,</span><span class='int'>5</span><span class='comma'>,</span><span class='int'>6</span><span class='comma'>,</span><span class='int'>7</span><span class='comma'>,</span><span class='int'>8</span><span class='comma'>,</span><span class='int'>9</span><span class='rbracket'>]</span>
@@ -109,6 +109,8 @@
   <span class='id key'>key</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>greater than or equal to 3</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id i'>i</span> <span class='op'>&gt;=</span> <span class='int'>3</span>
   <span class='id key'>key</span> <span class='op'>||=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>less than 3</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span>
+
+<span class='id pivots'>pivots</span> <span class='op'>&lt;&lt;</span> <span class='lbrace'>{</span><span class='symbol'>:delimiter</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> &amp; </span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span>
 
 <span class='id result'>result</span> <span class='op'>=</span> <span class='id pivoter'>pivoter</span><span class='period'>.</span><span class='id multi_pivot'>multi_pivot</span><span class='lparen'>(</span><span class='id list'>list</span><span class='comma'>,</span> <span class='op'>*</span><span class='id pivots'>pivots</span><span class='rparen'>)</span>
 
@@ -181,7 +183,7 @@
 </div></div>
     
     <div id="footer">
-  Generated on Tue Feb  8 15:46:01 2011 by 
+  Generated on Tue Feb  8 22:48:59 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.4 (ruby-1.9.2).
 </div>
