@@ -20,7 +20,7 @@ _Note: there are a few advanced features not demonstrated in the examples below.
 require 'one-pivot'
 
 # create the pivot instance
-pivoter = One::Pivot.new
+pivoter = One::Pivoter.new
 
 # create a list of objects to pivot
 list = [1,2,3,4,5,6,7,8,9]
@@ -28,7 +28,7 @@ list = [1,2,3,4,5,6,7,8,9]
 # run a single pivot
 # note: the block passed to the pivot method is invoked for each item in the list
 # note: the result from the block will act as the 'key' in the resulting Hash
-result = pivoter.pivot {|item| item <= 5}
+result = pivoter.pivot(list) {|item| item <= 5}
 
 # 'result' will be a Hash with the following structure
 {
@@ -46,7 +46,7 @@ require 'one-pivot'
 
 # create the pivot instance
 # note: the multi-pivot delimiter that was specified
-pivoter = One::Pivot.new
+pivoter = One::Pivoter.new
 
 # create a list of objects to pivot
 list = [1,2,3,4,5,6,7,8,9]
@@ -117,7 +117,7 @@ result = pivoter.multi_pivot(list, *pivots)
 
 require 'one-pivot'
 
-pivoter = One::Pivot.new
+pivoter = One::Pivoter.new
 # note that the pivot block returns an array
 # each unique value in the arrays returned will become a key in the resulting Hash
 result = pivoter.pivot(User.all) do |user|
