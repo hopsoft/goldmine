@@ -14,6 +14,13 @@ Lets have a look at some examples.
 
 _Note: there are a few advanced features not demonstrated in the examples below. For example, adding identifiers to pivots or attaching observers to pivot operations. We use these features at 1on1 to cache pivot results for each item. This gives us a big performance boost when the same item participates in multiple pivots during its lifetime... especially when the pivot Proc is an expensive operation.  Have a look at the [tests](https://github.com/one-on-one/pivot/tree/master/test) when you want to dig a little deeper._
 
+##Installation
+<pre>
+<code>
+gem install one-pivot
+</code>
+</pre>
+
 ##A simple single pivot
 <pre>
 <code>
