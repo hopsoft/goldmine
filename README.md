@@ -3,7 +3,7 @@
 ##Overview
 The **one-pivot** GEM provides a simple way to mine data from a list of objects. There are no constraints on the types of objects that you can pivot. You can pivot anything from a list of numbers to a list of ActiveRecord objects to anything in between.  
 
-**`One::Pivot`** exposes two methods of importance.  
+**`One::Pivoter`** exposes two methods of importance.  
 
 * **`pivot`** - runs a single pivot 
 * **`multi-pivot`** - stacks multiple pivots into a single result
