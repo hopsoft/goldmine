@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.authors = ['Nathan Hopkins']
   spec.email = ['natehop@gmail.com', 'natehop@1on1.com']
 
-  spec.add_dependency 'mash', '0.1.1'
+  #spec.add_dependency 'mash', '0.1.1'
   spec.add_development_dependency 'shoulda', '2.11.3'
 
   spec.files = FileList['lib/**/*.rb', 'bin/*', '[A-Z]*', 'test/**/*.rb'].to_a
