@@ -1,4 +1,30 @@
 require 'observer'
+require 'parallel'
+
+#def do_in_child
+#  read, write = IO.pipe
+#
+#  pid = fork do
+#    read.close
+#    result = yield
+#    write.puts [Marshal.dump(result)].pack("m")
+#    exit!
+#  end
+#
+#  write.close
+#  result = read.read
+#  Process.wait2(pid)
+#  Marshal.load(result.unpack("m")[0])
+#  Marshal.load
+#end
+#Then you could run:
+#
+#do_in_child do
+#  require "some_polluting_library"
+#  SomePollutingLibrary.some_operation
+#end
+
+
 
 # Namespace module for One on One Marketing.
 module One
@@ -27,33 +53,18 @@ module One
     # @yieldreturn [Object] The value returned from the pivot block will serve as the key in the pivot results
     # @return [Hash] The pivoted results
     def pivot(list, options={}, &block)
-      pivoted = {}
-      list.each do |item|
-        value = yield(item)
-
-        # notify observers that a pivot block was just called
-        identifier = options[:identifier] || "#{item.hash}:#{block.hash}"
-        changed
-        notify_observers(identifier, item, value) 
-
-        if value.is_a?(Array)
-          if value.empty?
-            pivoted[nil] ||= []
-            pivoted[nil] << item 
-          else
-            value.each do |val|
-              pivoted[val] ||= []
-              pivoted[val] << item 
-            end
-          end
-        else
-          pivoted[value] ||= []
-          pivoted[value] << item 
-        end
+      start = Time.now
+      list = list.to_a
+      processes = options[:processes] || 1
+      if processes > 1
+        chunks = list.each_slice(list.length/processes).map {|chunk| chunk}
+        results = pivot_in_child(chunks, options, &block)
+      else
+        results = run_pivot(list, options={}, &block)
       end
-
-      pivoted
-    end    
+      puts "#{Time.now - start} secs..."
+      results
+    end
 
     # Runs multiple pivots against a list of Objects.
     #
@@ -132,6 +143,71 @@ module One
     def safe_key(key)
       key = "nil" if key.to_s.strip.empty?
       key.to_s
+    end
+
+    def run_pivot(list, options={}, &block)
+      pivoted = {}
+
+      list.each do |item|
+        value = yield(item)
+
+        # notify observers that a pivot block was just called
+        identifier = options[:identifier] || "#{item.hash}:#{block.hash}"
+        changed
+        notify_observers(identifier, item, value)
+
+        if value.is_a?(Array)
+          if value.empty?
+            pivoted[nil] ||= []
+            pivoted[nil] << item
+          else
+            value.each do |val|
+              pivoted[val] ||= []
+              pivoted[val] << item
+            end
+          end
+        else
+          pivoted[value] ||= []
+          pivoted[value] << item
+        end
+      end
+
+      pivoted
+    end
+
+    def pivot_in_child(lists, options, &block)
+      reads = []
+      writes = []
+      pids = []
+
+      lists.each_with_index do |list, index|
+        reads[index], writes[index] = IO.pipe
+        puts "forking now..."
+        pids << fork do
+          reads[index].close
+          result = run_pivot(list, options, &block)
+          writes[index].puts [Marshal.dump(result)].pack("m")
+          exit!
+        end
+      end
+
+      results = []
+      (0..lists.length-1).each do |index|
+        writes[index].close
+        result = reads[index].read
+        Process.wait2(pids[index])
+        results << Marshal.load(result.unpack("m")[0])
+      end
+
+      pivoted = {}
+      results.each do |chunked_pivoted|
+        chunked_pivoted.each do |key, list|
+          pivoted[key] ||= []
+          pivoted[key].concat(list)
+        end
+      end
+
+      pivoted
     end
 
   end
