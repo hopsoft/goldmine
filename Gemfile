@@ -1,4 +1,7 @@
 source :rubygems
 
 gem 'eventmachine', '0.12.10'
-gem 'shoulda',      '2.11.3'
+
+group :test do
+  gem 'shoulda',      '2.11.3'
+end
