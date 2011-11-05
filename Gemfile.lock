@@ -1,16 +1,12 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    bluecloth (2.0.10)
     eventmachine (0.12.10)
     shoulda (2.11.3)
-    yard (0.6.4)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  bluecloth (= 2.0.10)
   eventmachine (= 0.12.10)
   shoulda (= 2.11.3)
-  yard (= 0.6.4)
