@@ -1,4 +1,8 @@
+require 'rubygems'
 require 'observer'
+require 'eventmachine'
+require 'thread'
+
 
 # Namespace module for One on One Marketing.
 module One
@@ -16,44 +20,69 @@ module One
     #   # the result will be a Hash with the following structure
     #   {
     #     true=>[1, 2, 3, 4, 5],
-    #     false=>[6, 7, 8, 9] 
+    #     false=>[6, 7, 8, 9]
     #   }
     #
     # @param [Array<Object>] list The list to pivot
     # @param [optional, Hash] options Options to pivot with
-    # @option options [Object] :identifier A name that uniquely identifies the pivot operation 
-    # @yield [item] The block passed to pivot will be called for each item in the list 
+    # @option options [Object] :identifier A name that uniquely identifies the pivot operation
+    # @yield [item] The block passed to pivot will be called for each item in the list
     # @yieldparam [Object] item An item in the list
     # @yieldreturn [Object] The value returned from the pivot block will serve as the key in the pivot results
     # @return [Hash] The pivoted results
     def pivot(list, options={}, &block)
       pivoted = {}
-      list.each do |item|
-        value = yield(item)
+      semaphore = Mutex.new
 
-        # notify observers that a pivot block was just called
-        identifier = options[:identifier] || "#{item.hash}:#{block.hash}"
-        changed
-        notify_observers(identifier, item, value) 
+      lists = list.each_slice(chunk_size(list)).to_a
+      loops = 0
 
-        if value.is_a?(Array)
-          if value.empty?
-            pivoted[nil] ||= []
-            pivoted[nil] << item 
-          else
-            value.each do |val|
-              pivoted[val] ||= []
-              pivoted[val] << item 
+      EM.run do
+        lists.each do |sub_list|
+
+          pivot_operation = Proc.new do
+            sub_list.each do |item|
+              # potential long running operation with blocking IO
+              value = yield(item)
+
+              # notify observers that a pivot block was just called
+              identifier = options[:identifier] || "#{item.hash}:#{block.hash}"
+              changed
+              # potential long running operation with blocking IO
+              notify_observers(identifier, item, value)
+
+              semaphore.synchronize {
+                if value.is_a?(Array)
+                  if value.empty?
+                      pivoted[nil] ||= []
+                      pivoted[nil] << item
+                  else
+                    value.each do |val|
+                      pivoted[val] ||= []
+                      pivoted[val] << item
+                    end
+                  end
+                else
+                  pivoted[value] ||= []
+                  pivoted[value] << item
+                end
+              }
             end
           end
-        else
-          pivoted[value] ||= []
-          pivoted[value] << item 
+
+          pivot_callback = Proc.new do
+            semaphore.synchronize {
+              loops += 1
+              EM.stop if loops == lists.length
+            }
+          end
+
+          EM.defer(pivot_operation, pivot_callback)
         end
       end
 
       pivoted
-    end    
+    end
 
     # Runs multiple pivots against a list of Objects.
     #
@@ -70,17 +99,17 @@ module One
     #     key = "greater than or equal to 3" if i >= 3
     #     key ||= "less than 3"
     #   end
-    # 
+    #
     #   # note the last pivot is an options Hash
     #   pivots << {:delimiter => " & "}
-    #    
+    #
     #   pivoter = One::Pivot.new
-    #   result = pivoter.multi_pivot(list, *pivots) 
-    #   
+    #   result = pivoter.multi_pivot(list, *pivots)
+    #
     #   # the result will be a Hash with the following structure
     #   {
-    #     "less than or equal to 5 & greater than or equal to 3" => [3, 4, 5], 
-    #     "less than or equal to 5 & less than 3" => [1, 2], 
+    #     "less than or equal to 5 & greater than or equal to 3" => [3, 4, 5],
+    #     "less than or equal to 5 & less than 3" => [1, 2],
     #     "greater than 5 & greater than or equal to 3" => [6, 7, 8, 9]
     #   }
     #
@@ -99,7 +128,7 @@ module One
 
       while pivots.length > 0
         p = pivots.shift
-        
+
         # handle the case where the pivots are One::Pivot objects
         pivot_options = {}
         if p.is_a?(One::Pivot)
@@ -132,6 +161,14 @@ module One
     def safe_key(key)
       key = "nil" if key.to_s.strip.empty?
       key.to_s
+    end
+
+    def chunk_size(list)
+      case list.length
+      when 0..10 then 2
+      when 10..100 then 5
+      else 10
+      end
     end
 
   end
