@@ -37,7 +37,9 @@ module One
       lists = list.each_slice(chunk_size(list)).to_a
       loops = 0
 
-      EM.run do
+      reactor_running = EM.reactor_running?
+
+      work = Proc.new do
         lists.each do |sub_list|
 
           pivot_operation = Proc.new do
@@ -73,12 +75,18 @@ module One
           pivot_callback = Proc.new do
             semaphore.synchronize {
               loops += 1
-              EM.stop if loops == lists.length
+              EM.stop if loops == lists.length && !reactor_running
             }
           end
 
           EM.defer(pivot_operation, pivot_callback)
         end
+      end
+
+      if reactor_running
+        work.call
+      else
+        EM.run &work
       end
 
       pivoted
@@ -164,10 +172,13 @@ module One
     end
 
     def chunk_size(list)
-      case list.length
-      when 0..10 then 2
-      when 10..100 then 5
-      else 10
+      len = list.length
+      case len
+      when 0..100 then len
+      when 100..1000 then len / 2
+      when 1000..10000 then len / 4
+      when 10000..100000 then len / 8
+      else len / 16
       end
     end
 

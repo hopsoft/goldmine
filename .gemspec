@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |spec|
   spec.name = 'one-pivot'
-  spec.version = '0.9.6'
+  spec.version = '0.9.7'
   spec.license = 'MIT'
   spec.homepage = 'https://github.com/one-on-one/pivot'
   spec.summary = 'Enumerable#group_by on steroids with an extra dash of awesome.'
