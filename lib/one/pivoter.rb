@@ -1,8 +1,5 @@
 require 'rubygems'
 require 'observer'
-require 'eventmachine'
-require 'thread'
-
 
 # Namespace module for One on One Marketing.
 module One
@@ -32,61 +29,33 @@ module One
     # @return [Hash] The pivoted results
     def pivot(list, options={}, &block)
       pivoted = {}
-      semaphore = Mutex.new
 
       lists = list.each_slice(chunk_size(list)).to_a
       loops = 0
 
-      reactor_running = EM.reactor_running?
+      list.each do |item|
+        # potential long running operation with blocking IO
+        value = yield(item)
 
-      work = Proc.new do
-        lists.each do |sub_list|
+        # notify observers that a pivot block was just called
+        identifier = options[:identifier] || "#{item.hash}:#{block.hash}"
+        changed
+        notify_observers(identifier, item, value)
 
-          pivot_operation = Proc.new do
-            sub_list.each do |item|
-              # potential long running operation with blocking IO
-              value = yield(item)
-
-              # notify observers that a pivot block was just called
-              identifier = options[:identifier] || "#{item.hash}:#{block.hash}"
-              changed
-              # potential long running operation with blocking IO
-              notify_observers(identifier, item, value)
-
-              semaphore.synchronize {
-                if value.is_a?(Array)
-                  if value.empty?
-                      pivoted[nil] ||= []
-                      pivoted[nil] << item
-                  else
-                    value.each do |val|
-                      pivoted[val] ||= []
-                      pivoted[val] << item
-                    end
-                  end
-                else
-                  pivoted[value] ||= []
-                  pivoted[value] << item
-                end
-              }
+        if value.is_a?(Array)
+          if value.empty?
+              pivoted[nil] ||= []
+              pivoted[nil] << item
+          else
+            value.each do |val|
+              pivoted[val] ||= []
+              pivoted[val] << item
             end
           end
-
-          pivot_callback = Proc.new do
-            semaphore.synchronize {
-              loops += 1
-              EM.stop if loops == lists.length && !reactor_running
-            }
-          end
-
-          EM.defer(pivot_operation, pivot_callback)
+        else
+          pivoted[value] ||= []
+          pivoted[value] << item
         end
-      end
-
-      if reactor_running
-        work.call
-      else
-        EM.run &work
       end
 
       pivoted
