@@ -1,12 +1,10 @@
 # Goldmine
 
-## Pivot tables for the Rubyist.
+## Pivot tables for the Rubyist
 
 ### Pivot any list into a wealth of information.
 
 Goldmine allows you to apply pivot table logic to any list for powerful data mining capabilities.
-
-In the nomenclature of Goldmine, we call this.pivotging for data.
 
 ### Reasons to love it
 
