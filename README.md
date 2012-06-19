@@ -18,7 +18,7 @@ In the nomenclature of Goldmine, we call this digging for data. So we've added a
 
 * [Pivot a list](#pivot-a-list-of-numbers-based-on-whether-or-not-they-are-less-than-5)
 * [Create a named pivot](#explicitly-name-a-pivot)
-* Chain pivots
+* [Chain pivots](#chain-pivots-together)
 * Chain pivots conditionally
 * Dig deep and extract meaningful data
 
@@ -42,16 +42,14 @@ data = list.dig { |i| i < 5 }
 
 ### Explicitly name a pivot
 
-operation
-
 ```ruby
+# operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.dig("less than 5") { |i| i < 5 }
 ```
 
-result
-
 ```ruby
+# resulting data
 {
   "less than 5: true"  => [1, 2, 3, 4],
   "less than 5: false" => [5, 6, 7, 8, 9]
@@ -60,32 +58,41 @@ result
 
 ## Next Steps
 
-#### Chain pivots together
+### Chain pivots together
 
 ```ruby
+# operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.dig { |i| i < 5 }.dig { |i| i % 2 == 0 }
-
-# {
-#   [true, false]  => [1, 3],
-#   [true, true]   => [2, 4],
-#   [false, false] => [5, 7, 9],
-#   [false, true]  => [6, 8]
-# }
 ```
 
-#### The same pivot as above but explicitly named
+```ruby
+# resulting data
+{
+  [true, false]  => [1, 3],
+  [true, true]   => [2, 4],
+  [false, false] => [5, 7, 9],
+  [false, true]  => [6, 8]
+}
+```
+
+### Conditionally chain pivots together
 
 ```ruby
+# operation
+params = { :divisible_by_two => false, :next_greater_than_five => true }
 list = [1,2,3,4,5,6,7,8,9]
-data = list.dig("less than 5") { |i| i < 5 }.dig("divisible by 2") { |i| i % 2 == 0 }
+data = list.dig("less than 5") { |i| i < 5 }
+data = data.dig("divisible by 2") { |i| i % 2 == 0 } if params[:divisible_by_two]
+data = data.dig("next greater than 5") { |i| i.next > 5 } if params[:next_greater_than_five]
+```
 
-# {
-#   ["less than 5: true", "divisible by 2: false"]  => [1, 3],
-#   ["less than 5: true", "divisible by 2: true"]   => [2, 4],
-#   ["less than 5: false", "divisible by 2: false"] => [5, 7, 9],
-#   ["less than 5: false", "divisible by 2: true"]  => [6, 8]
-# }
+```ruby
+# resulting data
+{
+  ["less than 5: true", "next greater than 5: false"] => [1, 2, 3, 4],
+  ["less than 5: false", "next greater than 5: true"] => [5, 6, 7, 8, 9]
+}
 ```
 
 ## Deep Cuts
