@@ -304,7 +304,7 @@ Here is the corresponding table view for the above dataset.
   <thead>
     <tr>
       <th>airline</th>
-      <th>population &lth; 750k</th>
+      <th>population &lt; 750k</th>
       <th>cities</th>
     </tr>
   </thead>
