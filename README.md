@@ -14,7 +14,7 @@ In the nomenclature of Goldmine, we call this digging for data. So we've added a
 * Handles values that are lists themselves
 * Allows you to name your pivots
 
-### Quick start
+## Quick start
 
 Install
 
@@ -22,7 +22,7 @@ Install
 $gem install goldmine
 ```
 
-Usage
+Use
 
 ```ruby
 [1,2,3,4,5,6,7,8,9].dig { |i| i < 5 }
@@ -131,77 +131,68 @@ data = data.dig("next greater than 5") { |i| i.next > 5 } if params[:next_greate
 
 ## Deep Cuts
 
-
-
-
-#### Pivot a list of users based on lang and number of projects owned
+### Build a moderately complex dataset of Cities
 
 ```ruby
-list = [
-  { :name => "Nathan",  :langs => [:ruby, :javascript],          :projects => [:a, :b] },
-  { :name => "Eric",    :langs => [:ruby, :javascript, :groovy], :projects => [:a, :d, :g] },
-  { :name => "Brian",   :langs => [:ruby, :javascript, :c, :go], :projects => [:b, :c, :e, :f] },
-  { :name => "Mark",    :langs => [:ruby, :java, :scala],        :projects => [:g] },
-  { :name => "Josh",    :langs => [:ruby, :lisp, :clojure],      :projects => [:a, :c] },
-  { :name => "Matthew", :langs => [:ruby, :c, :clojure],         :projects => [:b, :c, :d] }
+cities = [
+  { :name => "San Francisco",
+    :state => "CA",
+    :population => 805235,
+    :airlines => [ "Delta", "United", "Southwest" ]
+  },
+  {
+    :name => "Mountain View",
+    :state => "CA",
+    :population => 74066,
+    :airlines => [ "SkyWest", "United", "Southwest" ]
+  },
+  {
+    :name => "Manhattan",
+    :state => "NY",
+    :population => 1586698,
+    :airlines => [ "Delta", "JetBlue", "United" ]
+  },
+  {
+    :name => "Brooklyn",
+    :state => "NY",
+    :population => 2504700,
+    :airlines => [ "Delta", "American", "US Airways" ]
+  },
+  {
+    :name => "Boston",
+    :state => "MA",
+    :population => 617594,
+    :airlines => [ "Delta", "JetBlue", "American" ]
+  },
+  {
+    :name => "Atlanta",
+    :state => "GA",
+    :population => 420003,
+    :airlines => [ "Delta", "United", "SouthWest" ]
+  },
+  {
+    :name => "Dallas",
+    :state => "TX",
+    :population => 1197816,
+    :airlines => [ "Delta", "SouthWest", "Frontier" ]
+  }
 ]
-data = list
-  .dig("lang") { |rec| rec[:langs] }
-  .dig("project count") { |rec| rec[:projects].length }
-
-# {
-#   ["lang: ruby", "project count: 2"]       => [ { :name => "Nathan", ... }, { :name => "Josh", ... } ],
-#   ["lang: ruby", "project count: 3"]       => [ { :name => "Eric", ... }, { :name => "Matthew", ... } ],
-#   ["lang: ruby", "project count: 4"]       => [ { :name => "Brian", ... } ],
-#   ["lang: ruby", "project count: 1"]       => [ { :name => "Mark", ... } ],
-#   ["lang: javascript", "project count: 2"] => [ { :name => "Nathan", ... } ],
-#   ["lang: javascript", "project count: 3"] => [ { :name => "Eric", ... } ],
-#   ["lang: javascript", "project count: 4"] => [ { :name => "Brian", ... } ],
-#   ["lang: groovy", "project count: 3"]     => [ { :name => "Eric", ... } ],
-#   ["lang: c", "project count: 4"]          => [ { :name => "Brian", ... } ],
-#   ["lang: c", "project count: 3"]          => [ { :name => "Matthew", ... } ],
-#   ["lang: go", "project count: 4"]         => [ { :name => "Brian", ... } ],
-#   ["lang: java", "project count: 1"]       => [ { :name => "Mark", ... } ],
-#   ["lang: scala", "project count: 1"]      => [ { :name => "Mark", ... } ],
-#   ["lang: lisp", "project count: 2"]       => [ { :name => "Josh", ... } ],
-#   ["lang: clojure", "project count: 2"]    => [ { :name => "Josh", ... } ],
-#   ["lang: clojure", "project count: 3"]    => [ { :name => "Matthew", ... } ]
-# }
 ```
 
-#### Pivot a list of users based on whether or not they know javascript, what other languages they know, and whether or not their name contains the letter 'a'
-
-*Pretty contrived example here, but hopefully illustrates the type of power thats available.*
+### Pivot the cities by state for population over 750k
 
 ```ruby
-list = [
-  { :name => "Nathan",  :langs => [:ruby, :javascript],          :projects => [:a, :b] },
-  { :name => "Eric",    :langs => [:ruby, :javascript, :groovy], :projects => [:a, :d, :g] },
-  { :name => "Brian",   :langs => [:ruby, :javascript, :c, :go], :projects => [:b, :c, :e, :f] },
-  { :name => "Mark",    :langs => [:ruby, :java, :scala],        :projects => [:g] },
-  { :name => "Josh",    :langs => [:ruby, :lisp, :clojure],      :projects => [:a, :c] },
-  { :name => "Matthew", :langs => [:ruby, :c, :clojure],         :projects => [:b, :c, :d] }
-]
-data = list
-  .dig("knows javascript") { |rec| rec[:langs].include?(:javascript) }
-  .dig("lang") { |rec| rec[:langs] }
-  .dig("name includes 'a'") { |rec| rec[:name].include?("a") }
+# operation
+data = cities.dig("state") { |city| city[:state] }.dig("population >= 750k") { |city| city[:population] >= 750000 }
 
-# {
-#   ["knows javascript: true", "lang: ruby", "name includes 'a': true"]        => [ { :name => "Nathan", ... }, { :name => "Brian", ... } ],
-#   ["knows javascript: true", "lang: ruby", "name includes 'a': false"]       => [ { :name => "Eric", ... } ],
-#   ["knows javascript: true", "lang: javascript", "name includes 'a': true"]  => [ { :name => "Nathan", ... }, { :name => "Brian", ... } ],
-#   ["knows javascript: true", "lang: javascript", "name includes 'a': false"] => [ { :name => "Eric", ... } ],
-#   ["knows javascript: true", "lang: groovy", "name includes 'a': false"]     => [ { :name => "Eric", ... } ],
-#   ["knows javascript: true", "lang: c", "name includes 'a': true"]           => [ { :name => "Brian", ... } ],
-#   ["knows javascript: true", "lang: go", "name includes 'a': true"]          => [ { :name => "Brian", ... } ],
-#   ["knows javascript: false", "lang: ruby", "name includes 'a': true"]       => [ { :name => "Mark", ... }, { :name => "Matthew", ... } ],
-#   ["knows javascript: false", "lang: ruby", "name includes 'a': false"]      => [ { :name => "Josh", ... } ],
-#   ["knows javascript: false", "lang: java", "name includes 'a': true"]       => [ { :name => "Mark", ... } ],
-#   ["knows javascript: false", "lang: scala", "name includes 'a': true"]      => [ { :name => "Mark", ... } ],
-#   ["knows javascript: false", "lang: lisp", "name includes 'a': false"]      => [ { :name => "Josh", ... } ],
-#   ["knows javascript: false", "lang: clojure", "name includes 'a': false"]   => [ { :name => "Josh", ... } ],
-#   ["knows javascript: false", "lang: clojure", "name includes 'a': true"]    => [ { :name => "Matthew", ... } ],
-#   ["knows javascript: false", "lang: c", "name includes 'a': true"]          => [ { :name => "Matthew", ... } ]
-# }
+# resulting data
+{
+  ["state: CA", "population >= 750k: true"]  =>[ { :name => "San Francisco", ... } ],
+  ["state: CA", "population >= 750k: false"] =>[ { :name => "Mountain View", ... } ],
+  ["state: NY", "population >= 750k: true"]  =>[ { :name => "Manhattan", ... }, { :name => "Brooklyn", ... } ],
+  ["state: MA", "population >= 750k: false"] =>[ { :name => "Boston", ... } ],
+  ["state: GA", "population >= 750k: false"] =>[ { :name => "Atlanta", ... } ],
+  ["state: TX", "population >= 750k: true"]  =>[ { :name => "Dallas", ... } ]
+}
 ```
+
