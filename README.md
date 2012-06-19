@@ -10,7 +10,7 @@ In the nomenclature of Goldmine, we call this digging for data. So... we've adde
 #### More reasons to love it
 
 * ETL like functionality... but elegant
-* Chain `digs` *(or pivots)* for deep data mining
+* Chain **digs** *(or pivots)* for deep data mining
 * Support for values that are lists themselves
 * Named pivots
 
@@ -74,7 +74,7 @@ data = list.dig("less than 5") { |i| i < 5 }.dig("divisible by 2") { |i| i % 2 =
 
 ## Deep Cuts
 
-#### Pivot based on a value that is itself a list
+#### Pivot a list of users based on a value that is itself a list
 
 ```ruby
 list = [
@@ -107,7 +107,7 @@ data = list.dig { |record| record[:projects] }
 
 ```
 
-#### Deeper data mining
+#### Pivot a list of users based on lang and number of projects owned
 
 ```ruby
 list = [
@@ -118,7 +118,9 @@ list = [
   { :name => "Josh",    :langs => [:ruby, :lisp, :clojure],      :projects => [:a, :c] },
   { :name => "Matthew", :langs => [:ruby, :c, :clojure],         :projects => [:b, :c, :d] }
 ]
-list.dig("lang") { |rec| rec[:langs] }.dig("project count") { |rec| rec[:projects].length }
+data = list
+  .dig("lang") { |rec| rec[:langs] }
+  .dig("project count") { |rec| rec[:projects].length }
 
 # {
 #   ["lang: ruby", "project count: 2"]       => [ { :name => "Nathan", ... }, { :name => "Josh", ... } ],
@@ -137,5 +139,42 @@ list.dig("lang") { |rec| rec[:langs] }.dig("project count") { |rec| rec[:project
 #   ["lang: lisp", "project count: 2"]       => [ { :name => "Josh", ... } ],
 #   ["lang: clojure", "project count: 2"]    => [ { :name => "Josh", ... } ],
 #   ["lang: clojure", "project count: 3"]    => [ { :name => "Matthew", ... } ]
+# }
+```
+
+#### Pivot a list of users based on whether or not they know javascript, what other languages they know, and wether or not their name contains the letter 'a'
+
+*Pretty contrived example here, but hopefully you are beginning to see the power available to you.*
+
+```ruby
+list = [
+  { :name => "Nathan",  :langs => [:ruby, :javascript],          :projects => [:a, :b] },
+  { :name => "Eric",    :langs => [:ruby, :javascript, :groovy], :projects => [:a, :d, :g] },
+  { :name => "Brian",   :langs => [:ruby, :javascript, :c, :go], :projects => [:b, :c, :e, :f] },
+  { :name => "Mark",    :langs => [:ruby, :java, :scala],        :projects => [:g] },
+  { :name => "Josh",    :langs => [:ruby, :lisp, :clojure],      :projects => [:a, :c] },
+  { :name => "Matthew", :langs => [:ruby, :c, :clojure],         :projects => [:b, :c, :d] }
+]
+data = list
+  .dig("knows javascript") { |rec| rec[:langs].include?(:javascript) }
+  .dig("lang") { |rec| rec[:langs] }
+  .dig("name includes 'a'") { |rec| rec[:name].include?('a') }
+
+# {
+#   ["knows javascript: true", "lang: ruby", "name includes 'a': true"]        => [ { :name => "Nathan", ... }, { :name => "Brian", ... } ],
+#   ["knows javascript: true", "lang: ruby", "name includes 'a': false"]       => [ { :name => "Eric", ... } ],
+#   ["knows javascript: true", "lang: javascript", "name includes 'a': true"]  => [ { :name => "Nathan", ... }, { :name => "Brian", ... } ],
+#   ["knows javascript: true", "lang: javascript", "name includes 'a': false"] => [ { :name => "Eric", ... } ],
+#   ["knows javascript: true", "lang: groovy", "name includes 'a': false"]     => [ { :name => "Eric", ... } ],
+#   ["knows javascript: true", "lang: c", "name includes 'a': true"]           => [ { :name => "Brian", ... } ],
+#   ["knows javascript: true", "lang: go", "name includes 'a': true"]          => [ { :name => "Brian", ... } ],
+#   ["knows javascript: false", "lang: ruby", "name includes 'a': true"]       => [ { :name => "Mark", ... }, { :name => "Matthew", ... } ],
+#   ["knows javascript: false", "lang: ruby", "name includes 'a': false"]      => [ { :name => "Josh", ... } ],
+#   ["knows javascript: false", "lang: java", "name includes 'a': true"]       => [ { :name => "Mark", ... } ],
+#   ["knows javascript: false", "lang: scala", "name includes 'a': true"]      => [ { :name => "Mark", ... } ],
+#   ["knows javascript: false", "lang: lisp", "name includes 'a': false"]      => [ { :name => "Josh", ... } ],
+#   ["knows javascript: false", "lang: clojure", "name includes 'a': false"]   => [ { :name => "Josh", ... } ],
+#   ["knows javascript: false", "lang: clojure", "name includes 'a': true"]    => [ { :name => "Matthew", ... } ],
+#   ["knows javascript: false", "lang: c", "name includes 'a': true"]          => [ { :name => "Matthew", ... } ]
 # }
 ```
