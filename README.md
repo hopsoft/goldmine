@@ -7,27 +7,39 @@ Goldmine allows you to apply pivot table logic to any list for powerful data min
 
 In the nomenclature of Goldmine, we call this digging for data. So we've added a `dig` method to `Array`.
 
-#### More reasons to love it
+### More reasons to love it
 
 * Provides ETL like functionality... but simple and elegant
 * Supports method chaining for deep data mining
 * Handles values that are lists themselves
 * Allows you to name your pivots
 
-What does this all mean for you? Lets have a look.
+### Usage examples
+
+* Pivot a list
+* Create a named pivot
+* Chain pivots
+* Chain pivots conditionally
+* Dig deep and extract meaningful data
 
 ## The Basics
 
-#### Pivot a simple list of numbers based on whether or not they are less than 5
+### Pivot a list of numbers based on whether or not they are less than 5
+
+Operation
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 data = list.dig { |i| i < 5 }
+```
 
-# {
-#   true  => [1, 2, 3, 4],
-#   false => [5, 6, 7, 8, 9]
-# }
+Result
+
+```ruby
+{
+  true  => [1, 2, 3, 4],
+  false => [5, 6, 7, 8, 9]
+}
 ```
 
 #### The same pivot as above but explicitly named
