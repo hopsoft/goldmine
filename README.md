@@ -14,6 +14,16 @@ In the nomenclature of Goldmine, we call this digging for data. So we've added a
 * Handles values that are lists themselves
 * Allows you to name your pivots
 
+### Quick start
+
+```bash
+$gem install goldmine
+```
+
+```ruby
+[1,2,3,4,5,6,7,8,9].dig { |i| i < 5 }
+```
+
 ### Usage examples
 
 * [Pivot a list](#pivot-a-list-of-numbers-based-on-whether-or-not-they-are-less-than-5)
