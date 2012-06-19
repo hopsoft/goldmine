@@ -1,10 +1,8 @@
 # Goldmine
 
-*Pivot tables for the rest of us.*
+## Pivot tables for the Rubyist.
 
-## Data mining made easy... the Ruby way.
-
-### Pivot any list into a treasure trove of information.
+### Pivot any list into a wealth of information.
 
 Goldmine allows you to apply pivot table logic to any list for powerful data mining capabilities.
 
@@ -209,7 +207,7 @@ data = cities
 
 *You can think of these reports as individual data cubes.*
 
-Here is a table view of the pivoted city data.
+Here is a table view of the pivoted city data from above.
 
 <table>
   <thead>
