@@ -62,8 +62,8 @@ data = list.dig("less than 5") { |i| i < 5 }
 
 # resulting data
 {
-  "less than 5: true"  => [1, 2, 3, 4],
-  "less than 5: false" => [5, 6, 7, 8, 9]
+  { "less than 5" => true }  => [1, 2, 3, 4],
+  { "less than 5" => false } => [5, 6, 7, 8, 9]
 }
 ```
 
@@ -124,8 +124,8 @@ data = data.dig("next greater than 5") { |i| i.next > 5 } if params[:next_greate
 
 # resulting data
 {
-  ["less than 5: true", "next greater than 5: false"] => [1, 2, 3, 4],
-  ["less than 5: false", "next greater than 5: true"] => [5, 6, 7, 8, 9]
+  { "less than 5" => true,  "next greater than 5" => false } => [1, 2, 3, 4],
+  { "less than 5" => false, "next greater than 5" => true } => [5, 6, 7, 8, 9]
 }
 ```
 
@@ -179,7 +179,7 @@ cities = [
 ]
 ```
 
-### Pivot the cities by state for population over 750k
+### Pivot cities by state for population over 750k
 
 ```ruby
 # operation
@@ -189,12 +189,57 @@ data = cities
 
 # resulting data
 {
-  ["state: CA", "population >= 750k: true"]  =>[ { :name => "San Francisco", ... } ],
-  ["state: CA", "population >= 750k: false"] =>[ { :name => "Mountain View", ... } ],
-  ["state: NY", "population >= 750k: true"]  =>[ { :name => "Manhattan", ... }, { :name => "Brooklyn", ... } ],
-  ["state: MA", "population >= 750k: false"] =>[ { :name => "Boston", ... } ],
-  ["state: GA", "population >= 750k: false"] =>[ { :name => "Atlanta", ... } ],
-  ["state: TX", "population >= 750k: true"]  =>[ { :name => "Dallas", ... } ]
+  { "state" => "CA", "population >= 750k" => true }  => [ { :name => "San Francisco", ... } ],
+  { "state" => "CA", "population >= 750k" => false } => [ { :name => "Mountain View", ... } ],
+  { "state" => "NY", "population >= 750k" => true }  => [ { :name => "Manhattan", ... }, { :name => "Brooklyn", ... } ],
+  { "state" => "MA", "population >= 750k" => false } => [ { :name => "Boston", ... } ],
+  { "state" => "GA", "population >= 750k" => false"] => [ { :name => "Atlanta", ... } ],
+  { "state" => "TX", "population >= 750k" => true"]  => [ { :name => "Dallas", ... } ]
 }
 ```
 
+### Putting it all together
+
+The end goal of all this is to support the creation of aggregate reports. Think of these reports as a data cube.
+
+<table>
+  <thead>
+    <tr>
+      <th>state</th>
+      <th>population >= 750k</th>
+      <th>cities</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CA</td>
+      <td>true</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>CA</td>
+      <td>false</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>NY</td>
+      <td>true</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>false</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>false</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>TX</td>
+      <td>true</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>

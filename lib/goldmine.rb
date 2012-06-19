@@ -30,13 +30,12 @@ module Goldmine
         key = item.first
         value = item.last
         value.dig(name, &block).each do |k, v|
-          new_key = []
-          if key.is_a? Array
-            new_key = new_key + key
+          if key.is_a? Hash
+            k = { block.to_s => k } unless k.is_a?(Hash)
+            new_key = key.merge(k)
           else
-            new_key << key
+            new_key = [key, k]
           end
-          new_key << k
           memo[new_key] = v
         end
         memo.goldmine = true
@@ -51,7 +50,7 @@ module Goldmine
     end
 
     def goldmine_key(name, key)
-      mine_key = "#{name}: #{key}" if name
+      mine_key = { name => key } if name
       mine_key ||= key
     end
   end
