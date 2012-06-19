@@ -17,8 +17,9 @@ What does this all mean for you? Lets have a look at some examples.
 
 ## The Basics
 
+#### Pivot a simple list of numbers based on whether or not they are less than 5
+
 ```ruby
-# pivot a simple list of numbers based on whether or not they are less than 5
 list = [1,2,3,4,5,6,7,8,9]
 data = list.dig { |i| i < 5 }
 
@@ -28,8 +29,9 @@ data = list.dig { |i| i < 5 }
 # }
 ```
 
+#### The same pivot as above but explicitly named
+
 ```ruby
-# the same pivot as above but explicitly named
 list = [1,2,3,4,5,6,7,8,9]
 data = list.dig("less than 5") { |i| i < 5 }
 
@@ -41,5 +43,32 @@ data = list.dig("less than 5") { |i| i < 5 }
 
 ## Next Steps
 
+#### Chain pivots together
+
+```ruby
+list = [1,2,3,4,5,6,7,8,9]
+data = list.dig { |i| i < 5 }.dig { |i| i % 2 == 0 }
+
+# {
+#   [true, false]=>[1, 3],
+#   [true, true]=>[2, 4],
+#   [false, false]=>[5, 7, 9],
+#   [false, true]=>[6, 8]
+# }
+```
+
+#### The same pivot as above but explicitly named
+
+```ruby
+list = [1,2,3,4,5,6,7,8,9]
+data = list.dig("less than 5") { |i| i < 5 }.dig("divisible by 2") { |i| i % 2 == 0 }
+
+# {
+#   ["less than 5: true", "divisible by 2: false"]=>[1, 3],
+#   ["less than 5: true", "divisible by 2: true"]=>[2, 4],
+#   ["less than 5: false", "divisible by 2: false"]=>[5, 7, 9],
+#   ["less than 5: false", "divisible by 2: true"]=>[6, 8]
+# }
+```
 
 ## Deep Cuts
