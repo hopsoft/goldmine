@@ -1,11 +1,14 @@
 # Goldmine
 
+*Pivot tables for the rest of us.*
+
 ## Data mining made easy... the Ruby way.
-### Turn any list into a treasure trove.
+
+### Pivot any list into a treasure trove of information.
 
 Goldmine allows you to apply pivot table logic to any list for powerful data mining capabilities.
 
-In the nomenclature of Goldmine, we call this digging for data. So we've added a `dig` method to `Array`.
+In the nomenclature of Goldmine, we call this.pivotging for data.
 
 ### Reasons to love it
 
@@ -27,7 +30,7 @@ $gem install goldmine
 Use
 
 ```ruby
-[1,2,3,4,5,6,7,8,9].dig { |i| i < 5 }
+[1,2,3,4,5,6,7,8,9].pivot { |i| i < 5 }
 ```
 
 ### Usage examples
@@ -46,7 +49,7 @@ Use
 ```ruby
 # operation
 list = [1,2,3,4,5,6,7,8,9]
-data = list.dig { |i| i < 5 }
+data = list.pivot { |i| i < 5 }
 
 # resulting data
 {
@@ -60,7 +63,7 @@ data = list.dig { |i| i < 5 }
 ```ruby
 # operation
 list = [1,2,3,4,5,6,7,8,9]
-data = list.dig("less than 5") { |i| i < 5 }
+data = list.pivot("less than 5") { |i| i < 5 }
 
 # resulting data
 {
@@ -81,7 +84,7 @@ list = [
   { :name => "three", :list => [1, 2, 3] },
   { :name => "four",  :list => [1, 2, 3, 4] },
 ]
-data = list.dig { |record| record[:list] }
+data = list.pivot { |record| record[:list] }
 
 # resulting data
 {
@@ -103,7 +106,7 @@ data = list.dig { |record| record[:list] }
 ```ruby
 # operation
 list = [1,2,3,4,5,6,7,8,9]
-data = list.dig { |i| i < 5 }.dig { |i| i % 2 == 0 }
+data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
 
 # resulting data
 {
@@ -120,9 +123,9 @@ data = list.dig { |i| i < 5 }.dig { |i| i % 2 == 0 }
 # operation
 params = { :divisible_by_two => false, :next_greater_than_five => true }
 list = [1,2,3,4,5,6,7,8,9]
-data = list.dig("less than 5") { |i| i < 5 }
-data = data.dig("divisible by 2") { |i| i % 2 == 0 } if params[:divisible_by_two]
-data = data.dig("next greater than 5") { |i| i.next > 5 } if params[:next_greater_than_five]
+data = list.pivot("less than 5") { |i| i < 5 }
+data = data.pivot("divisible by 2") { |i| i % 2 == 0 } if params[:divisible_by_two]
+data = data.pivot("next greater than 5") { |i| i.next > 5 } if params[:next_greater_than_five]
 
 # resulting data
 {
@@ -186,8 +189,8 @@ cities = [
 ```ruby
 # operation
 data = cities
-  .dig("state") { |city| city[:state] }
-  .dig("population >= 750k") { |city| city[:population] >= 750000 }
+  .pivot("state") { |city| city[:state] }
+  .pivot("population >= 750k") { |city| city[:population] >= 750000 }
 
 # resulting data
 {
@@ -250,15 +253,15 @@ Here is a table view of the pivoted city data.
   </tbody>
 </table>
 
-Lets try another one
+Lets try another one.
 
 ### Determine which airlines service cities with fewer than 750k people
 
 ```ruby
 # operation
 data = cities
-  .dig("airline") { |city| city[:airlines] }
-  .dig("population < 750k") { |city| city[:population] < 750000 }
+  .pivot("airline") { |city| city[:airlines] }
+  .pivot("population < 750k") { |city| city[:population] < 750000 }
 
 # resulting data
 {

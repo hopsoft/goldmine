@@ -2,7 +2,7 @@ require "rubygems"
 
 module Goldmine
   module ArrayMiner
-    def dig(name=nil, &block)
+    def pivot(name=nil, &block)
       reduce({}) do |memo, item|
         value = yield(item)
 
@@ -24,12 +24,12 @@ module Goldmine
 
   module HashMiner
     attr_accessor :goldmine
-    def dig(name=nil, &block)
+    def pivot(name=nil, &block)
       return self unless goldmine
       reduce({}) do |memo, item|
         key = item.first
         value = item.last
-        value.dig(name, &block).each do |k, v|
+        value.pivot(name, &block).each do |k, v|
           if key.is_a? Hash
             k = { block.to_s => k } unless k.is_a?(Hash)
             new_key = key.merge(k)
