@@ -35,7 +35,7 @@ Use
 * [Pivot values that are lists themselves](#pivot-values-that-are-lists-themselves)
 * [Chain pivots](#chain-pivots-together)
 * [Chain pivots conditionally](#conditionally-chain-pivots-together)
-* Dig deep and extract meaningful data
+* [Dig deep and extract meaningful data](#deep-cuts)
 
 ## The Basics
 
@@ -193,14 +193,18 @@ data = cities
   { "state" => "CA", "population >= 750k" => false } => [ { :name => "Mountain View", ... } ],
   { "state" => "NY", "population >= 750k" => true }  => [ { :name => "Manhattan", ... }, { :name => "Brooklyn", ... } ],
   { "state" => "MA", "population >= 750k" => false } => [ { :name => "Boston", ... } ],
-  { "state" => "GA", "population >= 750k" => false"] => [ { :name => "Atlanta", ... } ],
-  { "state" => "TX", "population >= 750k" => true"]  => [ { :name => "Dallas", ... } ]
+  { "state" => "GA", "population >= 750k" => false } => [ { :name => "Atlanta", ... } ],
+  { "state" => "TX", "population >= 750k" => true }  => [ { :name => "Dallas", ... } ]
 }
 ```
 
 ### Putting it all together
 
-The end goal of all this is to support the creation of aggregate reports. Think of these reports as a data cube.
+**The end goal of all this is to support the creation of aggregate reports.**
+
+*You can think of these reports as individual data cubes.*
+
+Here is a table view of the pivots we applied to the list of cities.
 
 <table>
   <thead>
