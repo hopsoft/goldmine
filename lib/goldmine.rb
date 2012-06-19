@@ -57,5 +57,5 @@ module Goldmine
   end
 end
 
-::Array.send(:include, Miner::ArrayMiner)
-::Hash.send(:include, Miner::HashMiner)
+::Array.send(:include, Goldmine::ArrayMiner)
+::Hash.send(:include, Goldmine::HashMiner)
