@@ -10,6 +10,7 @@ In the nomenclature of Goldmine, we call this digging for data. So we've added a
 ### Reasons to love it
 
 * Provides ETL like functionality... but simple and elegant
+* Easily build OLAP cubes using Ruby
 * Supports method chaining for deep data mining
 * Handles values that are lists themselves
 * Allows you to name your pivots
@@ -138,13 +139,13 @@ cities = [
   { :name => "San Francisco",
     :state => "CA",
     :population => 805235,
-    :airlines => [ "Delta", "United", "Southwest" ]
+    :airlines => [ "Delta", "United", "SouthWest" ]
   },
   {
     :name => "Mountain View",
     :state => "CA",
     :population => 74066,
-    :airlines => [ "SkyWest", "United", "Southwest" ]
+    :airlines => [ "SkyWest", "United", "SouthWest" ]
   },
   {
     :name => "Manhattan",
@@ -204,7 +205,7 @@ data = cities
 
 *You can think of these reports as individual data cubes.*
 
-Here is a table view of the pivots we applied to the list of cities.
+Here is a table view of the pivoted city data.
 
 <table>
   <thead>
@@ -247,3 +248,138 @@ Here is a table view of the pivots we applied to the list of cities.
     </tr>
   </tbody>
 </table>
+
+Lets try another one
+
+### Determine which airlines service cities with fewer than 750k people
+
+```ruby
+# operation
+data = cities.dig("airlines") { |city| city[:airlines] }.dig("population < 750k") { |city| city[:population] < 750000 }
+
+# resulting data
+{
+  { "airlines" => "Delta", "population < 750k" => false } => [
+    { :name => "San Francisco", ... },
+    { :name => "Manhattan", ... },
+    { :name => "Brooklyn", ... },
+    { :name => "Dallas", ... }],
+  { "airlines" => "Delta", "population < 750k" => true } => [
+    { :name => "Boston", ... },
+    { :name => "Atlanta", ... }],
+  { "airlines" => "United", "population < 750k" => false } => [
+    { :name => "San Francisco", ... },
+    { :name => "Manhattan", ... }],
+  { "airlines" => "United", "population < 750k" => true } => [
+    { :name => "Mountain View", ... },
+    { :name => "Atlanta", ... }],
+  { "airlines" => "SouthWest", "population < 750k" => false } => [
+    { :name => "San Francisco", ... },
+    { :name => "Dallas", ... }],
+  { "airlines" => "SouthWest", "population < 750k" => true } => [
+    { :name => "Mountain View", ... },
+    { :name => "Atlanta", ... }],
+  { "airlines" => "SkyWest", "population < 750k" => true } => [
+    { :name => "Mountain View", ... }],
+  { "airlines" => "JetBlue", "population < 750k" => false } => [
+    { :name => "Manhattan", ... }],
+  { "airlines" => "JetBlue", "population < 750k" => true } => [
+    { :name => "Boston", ... }],
+  { "airlines" => "American", "population < 750k" => false } => [
+    { :name => "Brooklyn", ... }],
+  { "airlines" => "American", "population < 750k" => true } => [
+    { :name => "Boston", ... }],
+  { "airlines" => "US Airways", "population < 750k" => false } => [
+    { :name => "Brooklyn", ... }],
+  { "airlines" => "Frontier", "population < 750k" => false } => [
+    { :name => "Dallas", ... }]
+}
+```
+
+Here is the corresponding table view for the above dataset.
+
+<table>
+  <thead>
+    <tr>
+      <th>airline</th>
+      <th>population < 750k</th>
+      <th>cities</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Delta</td>
+      <td>false</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>Delta</td>
+      <td>true</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>United</td>
+      <td>false</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>United</td>
+      <td>true</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>SouthWest</td>
+      <td>false</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>SouthWest</td>
+      <td>true</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>SkyWest</td>
+      <td>true</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>JetBlue</td>
+      <td>false</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>JetBlue</td>
+      <td>true</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>American</td>
+      <td>false</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>American</td>
+      <td>true</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>US Airways</td>
+      <td>false</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Frontier</td>
+      <td>false</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+
+*Hopefully you can see the potential even though the above examples are somewhat contrived.*
+
+## Special thanks
+
+* One on One Marketing - for sponsoring the development of Goldmine
+* Eric Berry - for constructive feedback
+* Josh Bowles - for early adoption and feedback
+* Brett Beers - for early adoption and feedback
