@@ -26,16 +26,14 @@ In the nomenclature of Goldmine, we call this digging for data. So we've added a
 
 ### Pivot a list of numbers based on whether or not they are less than 5
 
-operation
-
 ```ruby
+# operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.dig { |i| i < 5 }
 ```
 
-result
-
 ```ruby
+# resulting data
 {
   true  => [1, 2, 3, 4],
   false => [5, 6, 7, 8, 9]
