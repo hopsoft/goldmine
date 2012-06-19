@@ -13,7 +13,8 @@ In the nomenclature of Goldmine, we call this digging for data. So we've added a
 * Easily build OLAP cubes using Ruby
 * Supports method chaining for deep data mining
 * Handles values that are lists themselves
-* Allows you to name your pivots
+
+[Why use it?](#putting-it-all-together)
 
 ## Quick start
 
@@ -377,7 +378,7 @@ Here is the corresponding table view for the above dataset.
   </tbody>
 </table>
 
-*Hopefully you can see the potential even though the above examples are somewhat contrived.*
+Hopefully you can see the potential even though the above examples are somewhat contrived.
 
 ## Special thanks
 
