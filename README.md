@@ -7,7 +7,7 @@ Goldmine allows you to apply pivot table logic to any list for powerful data min
 
 In the nomenclature of Goldmine, we call this digging for data. So we've added a `dig` method to `Array`.
 
-### More reasons to love it
+### Reasons to love it
 
 * Provides ETL like functionality... but simple and elegant
 * Supports method chaining for deep data mining
