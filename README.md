@@ -256,44 +256,44 @@ Lets try another one
 ```ruby
 # operation
 data = cities
-  .dig("airlines") { |city| city[:airlines] }
+  .dig("airline") { |city| city[:airlines] }
   .dig("population < 750k") { |city| city[:population] < 750000 }
 
 # resulting data
 {
-  { "airlines" => "Delta", "population < 750k" => false } => [
+  { "airline" => "Delta", "population < 750k" => false } => [
     { :name => "San Francisco", ... },
     { :name => "Manhattan", ... },
     { :name => "Brooklyn", ... },
     { :name => "Dallas", ... }],
-  { "airlines" => "Delta", "population < 750k" => true } => [
+  { "airline" => "Delta", "population < 750k" => true } => [
     { :name => "Boston", ... },
     { :name => "Atlanta", ... }],
-  { "airlines" => "United", "population < 750k" => false } => [
+  { "airline" => "United", "population < 750k" => false } => [
     { :name => "San Francisco", ... },
     { :name => "Manhattan", ... }],
-  { "airlines" => "United", "population < 750k" => true } => [
+  { "airline" => "United", "population < 750k" => true } => [
     { :name => "Mountain View", ... },
     { :name => "Atlanta", ... }],
-  { "airlines" => "SouthWest", "population < 750k" => false } => [
+  { "airline" => "SouthWest", "population < 750k" => false } => [
     { :name => "San Francisco", ... },
     { :name => "Dallas", ... }],
-  { "airlines" => "SouthWest", "population < 750k" => true } => [
+  { "airline" => "SouthWest", "population < 750k" => true } => [
     { :name => "Mountain View", ... },
     { :name => "Atlanta", ... }],
-  { "airlines" => "SkyWest", "population < 750k" => true } => [
+  { "airline" => "SkyWest", "population < 750k" => true } => [
     { :name => "Mountain View", ... }],
-  { "airlines" => "JetBlue", "population < 750k" => false } => [
+  { "airline" => "JetBlue", "population < 750k" => false } => [
     { :name => "Manhattan", ... }],
-  { "airlines" => "JetBlue", "population < 750k" => true } => [
+  { "airline" => "JetBlue", "population < 750k" => true } => [
     { :name => "Boston", ... }],
-  { "airlines" => "American", "population < 750k" => false } => [
+  { "airline" => "American", "population < 750k" => false } => [
     { :name => "Brooklyn", ... }],
-  { "airlines" => "American", "population < 750k" => true } => [
+  { "airline" => "American", "population < 750k" => true } => [
     { :name => "Boston", ... }],
-  { "airlines" => "US Airways", "population < 750k" => false } => [
+  { "airline" => "US Airways", "population < 750k" => false } => [
     { :name => "Brooklyn", ... }],
-  { "airlines" => "Frontier", "population < 750k" => false } => [
+  { "airline" => "Frontier", "population < 750k" => false } => [
     { :name => "Dallas", ... }]
 }
 ```
