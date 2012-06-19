@@ -5,14 +5,14 @@
 
 Goldmine allows you to apply pivot table logic to any list for powerful data mining capabilities.
 
-In the nomenclature of Goldmine, we call this digging for data. So... we've added a `dig` method to `Array`.
+In the nomenclature of Goldmine, we call this digging for data. So we've added a **`dig`** method to **`Array`**.
 
 #### More reasons to love it
 
-* ETL like functionality... but elegant
-* Chain **digs** *(or pivots)* for deep data mining
-* Support for values that are lists themselves
-* Named pivots
+* Provides ETL like functionality... but simple & elegant
+* Supports method chaining for deep data mining
+* Handles values that are lists themselves
+* Allows you to name your pivots
 
 What does this all mean for you? Lets have a look at some examples.
 
@@ -142,9 +142,9 @@ data = list
 # }
 ```
 
-#### Pivot a list of users based on whether or not they know javascript, what other languages they know, and wether or not their name contains the letter 'a'
+#### Pivot a list of users based on whether or not they know javascript, what other languages they know, and whether or not their name contains the letter 'a'
 
-*Pretty contrived example here, but hopefully you are beginning to see the power available to you.*
+*Pretty contrived example here, but hopefully illustrates the type of power thats available.*
 
 ```ruby
 list = [
@@ -158,7 +158,7 @@ list = [
 data = list
   .dig("knows javascript") { |rec| rec[:langs].include?(:javascript) }
   .dig("lang") { |rec| rec[:langs] }
-  .dig("name includes 'a'") { |rec| rec[:name].include?('a') }
+  .dig("name includes 'a'") { |rec| rec[:name].include?("a") }
 
 # {
 #   ["knows javascript: true", "lang: ruby", "name includes 'a': true"]        => [ { :name => "Nathan", ... }, { :name => "Brian", ... } ],
