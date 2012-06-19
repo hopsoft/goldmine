@@ -16,8 +16,8 @@ In the nomenclature of Goldmine, we call this digging for data. So we've added a
 
 ### Usage examples
 
-* Pivot a list
-* Create a named pivot
+* [Pivot a list](#pivot-a-list-of-numbers-based-on-whether-or-not-they-are-less-than-5)
+* [Create a named pivot](#explicitly-name-a-pivot)
 * Chain pivots
 * Chain pivots conditionally
 * Dig deep and extract meaningful data
@@ -42,7 +42,7 @@ result
 }
 ```
 
-### The same pivot as above but explicitly named
+### Explicitly name a pivot
 
 operation
 
