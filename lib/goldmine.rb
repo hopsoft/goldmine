@@ -25,11 +25,11 @@ module Goldmine
   module HashMiner
     attr_accessor :goldmine
     def dig(name=nil, &block)
-      return self unless goldmined
+      return self unless goldmine
       reduce({}) do |memo, item|
         key = item.first
         value = item.last
-        value.mine(name, &block).each do |k, v|
+        value.dig(name, &block).each do |k, v|
           new_key = []
           if key.is_a? Array
             new_key = new_key + key
