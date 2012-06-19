@@ -255,7 +255,9 @@ Lets try another one
 
 ```ruby
 # operation
-data = cities.dig("airlines") { |city| city[:airlines] }.dig("population < 750k") { |city| city[:population] < 750000 }
+data = cities
+  .dig("airlines") { |city| city[:airlines] }
+  .dig("population < 750k") { |city| city[:population] < 750000 }
 
 # resulting data
 {
@@ -302,7 +304,7 @@ Here is the corresponding table view for the above dataset.
   <thead>
     <tr>
       <th>airline</th>
-      <th>population < 750k</th>
+      <th>population &lth; 750k</th>
       <th>cities</th>
     </tr>
   </thead>
