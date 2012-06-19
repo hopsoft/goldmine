@@ -16,9 +16,13 @@ In the nomenclature of Goldmine, we call this digging for data. So we've added a
 
 ### Quick start
 
-```bash
+#### Install
+
+```
 $gem install goldmine
 ```
+
+# Usage
 
 ```ruby
 [1,2,3,4,5,6,7,8,9].dig { |i| i < 5 }
