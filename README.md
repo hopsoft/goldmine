@@ -183,7 +183,9 @@ cities = [
 
 ```ruby
 # operation
-data = cities.dig("state") { |city| city[:state] }.dig("population >= 750k") { |city| city[:population] >= 750000 }
+data = cities
+  .dig("state") { |city| city[:state] }
+  .dig("population >= 750k") { |city| city[:population] >= 750000 }
 
 # resulting data
 {
