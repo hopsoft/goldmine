@@ -13,18 +13,15 @@ In the nomenclature of Goldmine, we call this digging for data. So... we've adde
 * Chain `digs` (or pivots) for deep data mining
 * Support for values that are lists themselves
 
-What does this all mean for you?
-
-Lets have a look at some examples.
+What does this all mean for you? Lets have a look at some examples.
 
 ## The Basics
 
 ```ruby
-# pivot a simple list of numbers
-# based on whether or not they are less than 5
+# pivot a simple list of numbers based on whether or not they are less than 5
 list = [1,2,3,4,5,6,7,8,9]
 data = list.dig { |i| i < 5 }
-# data is equal to
+
 # {
 #   true  => [1, 2, 3, 4],
 #   false => [5, 6, 7, 8, 9]
@@ -32,10 +29,10 @@ data = list.dig { |i| i < 5 }
 ```
 
 ```ruby
-# the same pivot as above but named
+# the same pivot as above but explicitly named
 list = [1,2,3,4,5,6,7,8,9]
 data = list.dig("less than 5") { |i| i < 5 }
-# data is equal to
+
 # {
 #   "less than 5: true"  => [1, 2, 3, 4],
 #   "less than 5: false" => [5, 6, 7, 8, 9]
