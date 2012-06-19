@@ -10,8 +10,9 @@ In the nomenclature of Goldmine, we call this digging for data. So... we've adde
 #### More reasons to love it
 
 * ETL like functionality... but elegant
-* Chain `digs` **(or pivots)** for deep data mining
+* Chain `digs` *(or pivots)* for deep data mining
 * Support for values that are lists themselves
+* Named pivots
 
 What does this all mean for you? Lets have a look at some examples.
 
@@ -77,38 +78,64 @@ data = list.dig("less than 5") { |i| i < 5 }.dig("divisible by 2") { |i| i % 2 =
 
 ```ruby
 list = [
-  { :name => "Nathan",  :projects => [:a, :b, :c] },
+  { :name => "Nathan",  :projects => [:a, :b] },
   { :name => "Eric",    :projects => [:a, :d, :g] },
-  { :name => "Brian",   :projects => [:b, :c, :e] },
-  { :name => "Mark",    :projects => [:d, :f, :g] },
-  { :name => "Josh",    :projects => [:a, :c, :g] },
+  { :name => "Brian",   :projects => [:b, :c, :e, :f] },
+  { :name => "Mark",    :projects => [:g] },
+  { :name => "Josh",    :projects => [:a, :c] },
   { :name => "Matthew", :projects => [:b, :c, :d] }
 ]
-list.dig { |record| record[:projects] }
+data = list.dig { |record| record[:projects] }
 
 # {
-#   :a => [ { :name=>"Nathan",  :projects=>[:a, :b, :c] },
-#           { :name=>"Eric",    :projects=>[:a, :d, :g] },
-#           { :name=>"Josh",    :projects=>[:a, :c, :g] } ],
-#   :b => [ { :name=>"Nathan",  :projects=>[:a, :b, :c] },
-#           { :name=>"Brian",   :projects=>[:b, :c, :e] },
-#           { :name=>"Matthew", :projects=>[:b, :c, :d] } ],
-#   :c => [ { :name=>"Nathan",  :projects=>[:a, :b, :c] },
-#           { :name=>"Brian",   :projects=>[:b, :c, :e] },
-#           { :name=>"Josh",    :projects=>[:a, :c, :g] },
-#           { :name=>"Matthew", :projects=>[:b, :c, :d] } ],
-#   :d => [ { :name=>"Eric",    :projects=>[:a, :d, :g] },
-#           { :name=>"Mark",    :projects=>[:d, :f, :g] },
-#           { :name=>"Matthew", :projects=>[:b, :c, :d] } ],
-#   :g => [ { :name=>"Eric",    :projects=>[:a, :d, :g] },
-#           { :name=>"Mark",    :projects=>[:d, :f, :g] },
-#           { :name=>"Josh",    :projects=>[:a, :c, :g] } ],
-#   :e => [ { :name=>"Brian",   :projects=>[:b, :c, :e] } ],
-#   :f => [ { :name=>"Mark",    :projects=>[:d, :f, :g] } ]
+#   :a => [ { :name => "Nathan",  :projects => [:a, :b] },
+#           { :name => "Eric",    :projects => [:a, :d, :g] },
+#           { :name => "Josh",    :projects => [:a, :c] } ],
+#   :b => [ { :name => "Nathan",  :projects => [:a, :b] },
+#           { :name => "Brian",   :projects => [:b, :c, :e, :f] },
+#           { :name => "Matthew", :projects => [:b, :c, :d] } ],
+#   :d => [ { :name => "Eric",    :projects => [:a, :d, :g] },
+#           { :name => "Matthew", :projects => [:b, :c, :d] } ],
+#   :g => [ { :name => "Eric",    :projects => [:a, :d, :g] },
+#           { :name => "Mark",    :projects => [:g] } ],
+#   :c => [ { :name => "Brian",   :projects => [:b, :c, :e, :f] },
+#           { :name => "Josh",    :projects => [:a, :c] },
+#           { :name => "Matthew", :projects => [:b, :c, :d] } ],
+#   :e => [ { :name => "Brian",   :projects => [:b, :c, :e, :f] } ],
+#   :f => [ { :name => "Brian",   :projects => [:b, :c, :e, :f] } ]
 # }
 
 ```
 
+#### Deeper data mining
 
+```ruby
+list = [
+  { :name => "Nathan",  :langs => [:ruby, :javascript],          :projects => [:a, :b] },
+  { :name => "Eric",    :langs => [:ruby, :javascript, :groovy], :projects => [:a, :d, :g] },
+  { :name => "Brian",   :langs => [:ruby, :javascript, :c, :go], :projects => [:b, :c, :e, :f] },
+  { :name => "Mark",    :langs => [:ruby, :java, :scala],        :projects => [:g] },
+  { :name => "Josh",    :langs => [:ruby, :lisp, :clojure],      :projects => [:a, :c] },
+  { :name => "Matthew", :langs => [:ruby, :c, :clojure],         :projects => [:b, :c, :d] }
+]
+list.dig("lang") { |rec| rec[:langs] }.dig("project count") { |rec| rec[:projects].length }
 
-
+# {
+#   ["lang: ruby", "project count: 2"]       => [ { :name => "Nathan", ... }, { :name => "Josh", ... } ],
+#   ["lang: ruby", "project count: 3"]       => [ { :name => "Eric", ... }, { :name => "Matthew", ... } ],
+#   ["lang: ruby", "project count: 4"]       => [ { :name => "Brian", ... } ],
+#   ["lang: ruby", "project count: 1"]       => [ { :name => "Mark", ... } ],
+#   ["lang: javascript", "project count: 2"] => [ { :name => "Nathan", ... } ],
+#   ["lang: javascript", "project count: 3"] => [ { :name => "Eric", ... } ],
+#   ["lang: javascript", "project count: 4"] => [ { :name => "Brian", ... } ],
+#   ["lang: groovy", "project count: 3"]     => [ { :name => "Eric", ... } ],
+#   ["lang: c", "project count: 4"]          => [ { :name => "Brian", ... } ],
+#   ["lang: c", "project count: 3"]          => [ { :name => "Matthew", ... } ],
+#   ["lang: go", "project count: 4"]         => [ { :name => "Brian", ... } ],
+#   ["lang: java", "project count: 1"]       => [ { :name => "Mark", ... } ],
+#   ["lang: scala", "project count: 1"]      => [ { :name => "Mark", ... } ],
+#   ["lang: lisp", "project count: 2"]       => [ { :name => "Josh", ... } ],
+#   ["lang: clojure", "project count: 2"]    => [ { :name => "Josh", ... } ],
+#   ["lang: clojure", "project count: 3"]    => [ { :name => "Matthew", ... } ]
+# }
+```
