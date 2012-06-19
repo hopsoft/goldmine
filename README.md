@@ -18,8 +18,9 @@ In the nomenclature of Goldmine, we call this digging for data. So we've added a
 
 * [Pivot a list](#pivot-a-list-of-numbers-based-on-whether-or-not-they-are-less-than-5)
 * [Create a named pivot](#explicitly-name-a-pivot)
+* [Pivot values that are lists themselves](#pivot-values-that-are-lists-themselves)
 * [Chain pivots](#chain-pivots-together)
-* Chain pivots conditionally
+* [Chain pivots conditionally](#conditionally-chain-pivots-together)
 * Dig deep and extract meaningful data
 
 ## The Basics
@@ -30,9 +31,7 @@ In the nomenclature of Goldmine, we call this digging for data. So we've added a
 # operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.dig { |i| i < 5 }
-```
 
-```ruby
 # resulting data
 {
   true  => [1, 2, 3, 4],
@@ -46,9 +45,7 @@ data = list.dig { |i| i < 5 }
 # operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.dig("less than 5") { |i| i < 5 }
-```
 
-```ruby
 # resulting data
 {
   "less than 5: true"  => [1, 2, 3, 4],
@@ -58,15 +55,40 @@ data = list.dig("less than 5") { |i| i < 5 }
 
 ## Next Steps
 
+### Pivot values that are lists themselves
+
+```ruby
+# operation
+list = [
+  { :name => "one",   :list => [1] },
+  { :name => "two",   :list => [1, 2] },
+  { :name => "three", :list => [1, 2, 3] },
+  { :name => "four",  :list => [1, 2, 3, 4] },
+]
+data = list.dig { |record| record[:list] }
+
+# resulting data
+{
+  1 => [ { :name => "one",   :list => [1] },
+         { :name => "two",   :list => [1, 2] },
+         { :name => "three", :list => [1, 2, 3] },
+         { :name => "four",  :list => [1, 2, 3, 4] } ],
+  2 => [ { :name => "two",   :list => [1, 2] },
+         { :name => "three", :list => [1, 2, 3] },
+         { :name => "four",  :list => [1, 2, 3, 4] } ],
+  3 => [ { :name => "three", :list => [1, 2, 3] },
+         { :name => "four",  :list => [1, 2, 3, 4] } ],
+  4 => [ { :name => "four",  :list => [1, 2, 3, 4] } ]
+}
+```
+
 ### Chain pivots together
 
 ```ruby
 # operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.dig { |i| i < 5 }.dig { |i| i % 2 == 0 }
-```
 
-```ruby
 # resulting data
 {
   [true, false]  => [1, 3],
@@ -85,9 +107,7 @@ list = [1,2,3,4,5,6,7,8,9]
 data = list.dig("less than 5") { |i| i < 5 }
 data = data.dig("divisible by 2") { |i| i % 2 == 0 } if params[:divisible_by_two]
 data = data.dig("next greater than 5") { |i| i.next > 5 } if params[:next_greater_than_five]
-```
 
-```ruby
 # resulting data
 {
   ["less than 5: true", "next greater than 5: false"] => [1, 2, 3, 4],
@@ -97,38 +117,8 @@ data = data.dig("next greater than 5") { |i| i.next > 5 } if params[:next_greate
 
 ## Deep Cuts
 
-#### Pivot a list of users based on a value that is itself a list
 
-```ruby
-list = [
-  { :name => "Nathan",  :projects => [:a, :b] },
-  { :name => "Eric",    :projects => [:a, :d, :g] },
-  { :name => "Brian",   :projects => [:b, :c, :e, :f] },
-  { :name => "Mark",    :projects => [:g] },
-  { :name => "Josh",    :projects => [:a, :c] },
-  { :name => "Matthew", :projects => [:b, :c, :d] }
-]
-data = list.dig { |record| record[:projects] }
 
-# {
-#   :a => [ { :name => "Nathan",  :projects => [:a, :b] },
-#           { :name => "Eric",    :projects => [:a, :d, :g] },
-#           { :name => "Josh",    :projects => [:a, :c] } ],
-#   :b => [ { :name => "Nathan",  :projects => [:a, :b] },
-#           { :name => "Brian",   :projects => [:b, :c, :e, :f] },
-#           { :name => "Matthew", :projects => [:b, :c, :d] } ],
-#   :d => [ { :name => "Eric",    :projects => [:a, :d, :g] },
-#           { :name => "Matthew", :projects => [:b, :c, :d] } ],
-#   :g => [ { :name => "Eric",    :projects => [:a, :d, :g] },
-#           { :name => "Mark",    :projects => [:g] } ],
-#   :c => [ { :name => "Brian",   :projects => [:b, :c, :e, :f] },
-#           { :name => "Josh",    :projects => [:a, :c] },
-#           { :name => "Matthew", :projects => [:b, :c, :d] } ],
-#   :e => [ { :name => "Brian",   :projects => [:b, :c, :e, :f] } ],
-#   :f => [ { :name => "Brian",   :projects => [:b, :c, :e, :f] } ]
-# }
-
-```
 
 #### Pivot a list of users based on lang and number of projects owned
 
