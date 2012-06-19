@@ -10,7 +10,7 @@ In the nomenclature of Goldmine, we call this digging for data. So... we've adde
 #### More reasons to love it
 
 * ETL like functionality... but elegant
-* Chain `digs` (or pivots) for deep data mining
+* Chain `digs` **(or pivots)** for deep data mining
 * Support for values that are lists themselves
 
 What does this all mean for you? Lets have a look at some examples.
@@ -50,10 +50,10 @@ list = [1,2,3,4,5,6,7,8,9]
 data = list.dig { |i| i < 5 }.dig { |i| i % 2 == 0 }
 
 # {
-#   [true, false]=>[1, 3],
-#   [true, true]=>[2, 4],
-#   [false, false]=>[5, 7, 9],
-#   [false, true]=>[6, 8]
+#   [true, false]  => [1, 3],
+#   [true, true]   => [2, 4],
+#   [false, false] => [5, 7, 9],
+#   [false, true]  => [6, 8]
 # }
 ```
 
@@ -64,11 +64,51 @@ list = [1,2,3,4,5,6,7,8,9]
 data = list.dig("less than 5") { |i| i < 5 }.dig("divisible by 2") { |i| i % 2 == 0 }
 
 # {
-#   ["less than 5: true", "divisible by 2: false"]=>[1, 3],
-#   ["less than 5: true", "divisible by 2: true"]=>[2, 4],
-#   ["less than 5: false", "divisible by 2: false"]=>[5, 7, 9],
-#   ["less than 5: false", "divisible by 2: true"]=>[6, 8]
+#   ["less than 5: true", "divisible by 2: false"]  => [1, 3],
+#   ["less than 5: true", "divisible by 2: true"]   => [2, 4],
+#   ["less than 5: false", "divisible by 2: false"] => [5, 7, 9],
+#   ["less than 5: false", "divisible by 2: true"]  => [6, 8]
 # }
 ```
 
 ## Deep Cuts
+
+#### Pivot based on a value that is itself a list
+
+```ruby
+list = [
+  { :name => "Nathan",  :projects => [:a, :b, :c] },
+  { :name => "Eric",    :projects => [:a, :d, :g] },
+  { :name => "Brian",   :projects => [:b, :c, :e] },
+  { :name => "Mark",    :projects => [:d, :f, :g] },
+  { :name => "Josh",    :projects => [:a, :c, :g] },
+  { :name => "Matthew", :projects => [:b, :c, :d] }
+]
+list.dig { |record| record[:projects] }
+
+# {
+#   :a => [ { :name=>"Nathan",  :projects=>[:a, :b, :c] },
+#           { :name=>"Eric",    :projects=>[:a, :d, :g] },
+#           { :name=>"Josh",    :projects=>[:a, :c, :g] } ],
+#   :b => [ { :name=>"Nathan",  :projects=>[:a, :b, :c] },
+#           { :name=>"Brian",   :projects=>[:b, :c, :e] },
+#           { :name=>"Matthew", :projects=>[:b, :c, :d] } ],
+#   :c => [ { :name=>"Nathan",  :projects=>[:a, :b, :c] },
+#           { :name=>"Brian",   :projects=>[:b, :c, :e] },
+#           { :name=>"Josh",    :projects=>[:a, :c, :g] },
+#           { :name=>"Matthew", :projects=>[:b, :c, :d] } ],
+#   :d => [ { :name=>"Eric",    :projects=>[:a, :d, :g] },
+#           { :name=>"Mark",    :projects=>[:d, :f, :g] },
+#           { :name=>"Matthew", :projects=>[:b, :c, :d] } ],
+#   :g => [ { :name=>"Eric",    :projects=>[:a, :d, :g] },
+#           { :name=>"Mark",    :projects=>[:d, :f, :g] },
+#           { :name=>"Josh",    :projects=>[:a, :c, :g] } ],
+#   :e => [ { :name=>"Brian",   :projects=>[:b, :c, :e] } ],
+#   :f => [ { :name=>"Mark",    :projects=>[:d, :f, :g] } ]
+# }
+
+```
+
+
+
+
