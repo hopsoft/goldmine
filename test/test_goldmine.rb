@@ -1,3 +1,5 @@
+require "simplecov"
+SimpleCov.start
 require "test/unit"
 require "turn"
 require File.join(File.dirname(__FILE__), "..", "lib", "goldmine")
@@ -69,21 +71,46 @@ class TestGoldmine < MiniTest::Unit::TestCase
 
   def test_deep_chained_pivots
     list = [1,2,3,4,5,6,7,8,9]
-    data = list.pivot("a") { |i| i < 3 }.pivot("b") { |i| i < 6 }.pivot("c") { |i| i < 9 }.pivot("d") { |i| i % 2 == 0 }.pivot("e") { |i| i % 3 == 0 }
+    # list = [2,5,9]
+    data = list
+      .pivot { |i| i < 3 }
+      .pivot { |i| i < 6 }
+      .pivot { |i| i < 9 }
+      .pivot { |i| i % 2 == 0 }
+      .pivot { |i| i % 3 == 0 }
 
-    expected1 = {
-      {"a"=>true, "b"=>true, "c"=>true, "d"=>false, "e"=>false}=>[1],
-      {"a"=>true, "b"=>true, "c"=>true, "d"=>true, "e"=>false}=>[2],
-      {"a"=>false, "b"=>true, "c"=>true, "d"=>false, "e"=>true}=>[3],
-      {"a"=>false, "b"=>true, "c"=>true, "d"=>false, "e"=>false}=>[5],
-      {"a"=>false, "b"=>true, "c"=>true, "d"=>true, "e"=>false}=>[4],
-      {"a"=>false, "b"=>false, "c"=>true, "d"=>true, "e"=>true}=>[6],
-      {"a"=>false, "b"=>false, "c"=>true, "d"=>true, "e"=>false}=>[8],
-      {"a"=>false, "b"=>false, "c"=>true, "d"=>false, "e"=>false}=>[7],
-      {"a"=>false, "b"=>false, "c"=>false, "d"=>false, "e"=>true}=>[9]
+    expected = {
+      [true,  true,  true,  false, false] => [1],
+      [true,  true,  true,  true,  false] => [2],
+      [false, true,  true,  false, true]  => [3],
+      [false, true,  true,  false, false] => [5],
+      [false, true,  true,  true,  false] => [4],
+      [false, false, true,  true,  true]  => [6],
+      [false, false, true,  true,  false] => [8],
+      [false, false, true,  false, false] => [7],
+      [false, false, false, false, true]  => [9]
     }
 
-    assert_equal expected1, data
+    assert_equal expected, data
+  end
+
+  def test_named_deep_chained_pivots
+    list = [1,2,3,4,5,6,7,8,9]
+    data = list.pivot("a") { |i| i < 3 }.pivot("b") { |i| i < 6 }.pivot("c") { |i| i < 9 }.pivot("d") { |i| i % 2 == 0 }.pivot("e") { |i| i % 3 == 0 }
+
+    expected = {
+      {"a"=>true,  "b"=>true,  "c"=>true,  "d"=>false, "e"=>false} => [1],
+      {"a"=>true,  "b"=>true,  "c"=>true,  "d"=>true,  "e"=>false} => [2],
+      {"a"=>false, "b"=>true,  "c"=>true,  "d"=>false, "e"=>true}  => [3],
+      {"a"=>false, "b"=>true,  "c"=>true,  "d"=>false, "e"=>false} => [5],
+      {"a"=>false, "b"=>true,  "c"=>true,  "d"=>true,  "e"=>false} => [4],
+      {"a"=>false, "b"=>false, "c"=>true,  "d"=>true,  "e"=>true}  => [6],
+      {"a"=>false, "b"=>false, "c"=>true,  "d"=>true,  "e"=>false} => [8],
+      {"a"=>false, "b"=>false, "c"=>true,  "d"=>false, "e"=>false} => [7],
+      {"a"=>false, "b"=>false, "c"=>false, "d"=>false, "e"=>true}  => [9]
+    }
+
+    assert_equal expected, data
   end
 
   def test_named_chained_pivots

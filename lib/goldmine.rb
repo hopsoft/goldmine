@@ -91,6 +91,7 @@ module Goldmine
     # @return [Hash] The pivoted Hash of data.
     def pivot(name=nil, &block)
       return self unless goldmine
+
       reduce({}) do |memo, item|
         key = item.first
         value = item.last
@@ -99,8 +100,7 @@ module Goldmine
             k = { block.to_s => k } unless k.is_a?(Hash)
             new_key = key.merge(k)
           else
-            new_key = key.push(k) if key.is_a?(Array)
-            new_key ||= [key, k]
+            new_key = [key, k].flatten
           end
           memo[new_key] = v
         end
