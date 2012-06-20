@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |spec|
   spec.name = 'goldmine'
-  spec.version = '0.9.0'
+  spec.version = '0.9.1'
   spec.license = 'MIT'
   spec.homepage = 'http://hopsoft.github.com/goldmine/'
   spec.summary = 'Pivot tables for the Rubyist'
