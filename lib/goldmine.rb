@@ -99,7 +99,8 @@ module Goldmine
             k = { block.to_s => k } unless k.is_a?(Hash)
             new_key = key.merge(k)
           else
-            new_key = [key, k]
+            new_key = key.push(k) if key.is_a?(Array)
+            new_key ||= [key, k]
           end
           memo[new_key] = v
         end

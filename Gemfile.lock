@@ -1,16 +1,22 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    ansi (1.4.2)
     coderay (1.0.6)
     method_source (0.7.1)
+    minitest (3.1.0)
     pry (0.9.9.6)
       coderay (~> 1.0.5)
       method_source (~> 0.7.1)
       slop (>= 2.4.4, < 3)
     slop (2.4.4)
+    turn (0.9.5)
+      ansi
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  minitest
   pry
+  turn
