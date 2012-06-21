@@ -4,8 +4,7 @@
 
 ### Pivot any list into a wealth of information.
 
-Goldmine allows you to apply pivot table logic to any list for powerful
-data mining capabilities.
+Goldmine allows you to apply pivot table logic to any list for powerful data mining capabilities.
 
 ### Reasons to love it
 
@@ -33,11 +32,9 @@ require "goldmine"
 
 ### Usage examples
 
-* [Pivot a
-  list](#pivot-a-list-of-numbers-based-on-whether-or-not-they-are-less-than-5)
+* [Pivot a list](#pivot-a-list-of-numbers-based-on-whether-or-not-they-are-less-than-5)
 * [Create a named pivot](#explicitly-name-a-pivot)
-* [Pivot values that are lists
-  themselves](#pivot-values-that-are-lists-themselves)
+* [Pivot values that are lists themselves](#pivot-values-that-are-lists-themselves)
 * [Chain pivots](#chain-pivots-together)
 * [Chain pivots conditionally](#conditionally-chain-pivots-together)
 * [Dig deep and extract meaningful data](#deep-cuts)
@@ -124,17 +121,13 @@ data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
 params = { :divisible_by_two => false, :next_greater_than_five => true }
 list = [1,2,3,4,5,6,7,8,9]
 data = list.pivot("less than 5") { |i| i < 5 }
-data = data.pivot("divisible by 2") { |i| i % 2 == 0 } if
-params[:divisible_by_two]
-data = data.pivot("next greater than 5") { |i| i.next > 5 } if
-params[:next_greater_than_five]
+data = data.pivot("divisible by 2") { |i| i % 2 == 0 } if params[:divisible_by_two]
+data = data.pivot("next greater than 5") { |i| i.next > 5 } if params[:next_greater_than_five]
 
 # resulting data
 {
-  { "less than 5" => true,  "next greater than 5" => false } => [1, 2,
-3, 4],
-  { "less than 5" => false, "next greater than 5" => true } => [5, 6, 7,
-8, 9]
+  { "less than 5" => true,  "next greater than 5" => false } => [1, 2, 3, 4],
+  { "less than 5" => false, "next greater than 5" => true } => [5, 6, 7, 8, 9]
 }
 ```
 
@@ -198,25 +191,18 @@ data = cities
 
 # resulting data
 {
-  { "state" => "CA", "population >= 750k" => true }  => [ { :name =>
-"San Francisco", ... } ],
-  { "state" => "CA", "population >= 750k" => false } => [ { :name =>
-"Mountain View", ... } ],
-  { "state" => "NY", "population >= 750k" => true }  => [ { :name =>
-"Manhattan", ... }, { :name => "Brooklyn", ... } ],
-  { "state" => "MA", "population >= 750k" => false } => [ { :name =>
-"Boston", ... } ],
-  { "state" => "GA", "population >= 750k" => false } => [ { :name =>
-"Atlanta", ... } ],
-  { "state" => "TX", "population >= 750k" => true }  => [ { :name =>
-"Dallas", ... } ]
+  { "state" => "CA", "population >= 750k" => true }  => [ { :name => "San Francisco", ... } ],
+  { "state" => "CA", "population >= 750k" => false } => [ { :name => "Mountain View", ... } ],
+  { "state" => "NY", "population >= 750k" => true }  => [ { :name => "Manhattan", ... }, { :name => "Brooklyn", ... } ],
+  { "state" => "MA", "population >= 750k" => false } => [ { :name => "Boston", ... } ],
+  { "state" => "GA", "population >= 750k" => false } => [ { :name => "Atlanta", ... } ],
+  { "state" => "TX", "population >= 750k" => true }  => [ { :name => "Dallas", ... } ]
 }
 ```
 
 ### Putting it all together
 
-**The end goal of all this is to support the creation of aggregate
-reports.**
+**The end goal of all this is to support the creation of aggregate reports.**
 
 *You can think of these reports as individual data cubes.*
 
@@ -392,17 +378,12 @@ Here is the corresponding table view for the above dataset.
   </tbody>
 </table>
 
-Hopefully you can see the potential even though the above examples are
-somewhat contrived.
+Hopefully you can see the potential even though the above examples are somewhat contrived.
 
 ## Special thanks
 
-* [One on One Marketing](http://www.1on1.com/) - for sponsoring the
-  development of Goldmine
+* [One on One Marketing](http://www.1on1.com/) - for sponsoring the development of Goldmine
 * [Eric Berry](https://github.com/cavneb/) - for constructive feedback
-* [Brian Johnson](https://github.com/whap/) - for bringing some sanity
-  to the recursion
-* [Josh Bowles](https://github.com/jbowles/) - for early adoption and
-  feedback
-* [Brett Beers](https://github.com/beersbr/) - for early adoption and
-  feedback
+* [Brian Johnson](https://github.com/whap/) - for bringing some sanity to the recursion
+* [Josh Bowles](https://github.com/jbowles/) - for early adoption and feedback
+* [Brett Beers](https://github.com/beersbr/) - for early adoption and feedback
