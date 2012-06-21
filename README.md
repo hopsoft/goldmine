@@ -208,7 +208,7 @@ data = cities
 
 Here is a table view of the pivoted city data from above.
 
-<table>
+<table class="table table-bordered table-striped">
   <thead>
     <tr>
       <th>state</th>
@@ -301,7 +301,7 @@ data = cities
 
 Here is the corresponding table view for the above dataset.
 
-<table>
+<table class="table table-bordered table-striped">
   <thead>
     <tr>
       <th>airline</th>
@@ -383,7 +383,7 @@ Hopefully you can see the potential even though the above examples are somewhat 
 ## Special thanks
 
 * [One on One Marketing](http://www.1on1.com/) - for sponsoring the development of Goldmine
-* [Eric Berry](https://github.com/cavneb/) - for constructive feedback (Eric Rocks!)
+* [Eric Berry](https://github.com/cavneb/) - for constructive feedback
 * [Brian Johnson](https://github.com/whap/) - for bringing some sanity to the recursion
 * [Josh Bowles](https://github.com/jbowles/) - for early adoption and feedback
 * [Brett Beers](https://github.com/beersbr/) - for early adoption and feedback
