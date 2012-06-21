@@ -1,12 +1,15 @@
-# Goldmine
+---
+layout: main
+---
+# Goldmine {#goldmine}
 
-## Pivot tables for the Rubyist
+## Pivot tables for the Rubyist {#pivot-tables-for-the-rubyist}
 
-### Pivot any list into a wealth of information.
+### Pivot any list into a wealth of information. {#pivot-any-list-into-a-wealth-of-information.}
 
 Goldmine allows you to apply pivot table logic to any list for powerful data mining capabilities.
 
-### Reasons to love it
+### Reasons to love it {#reasons-to-love-it}
 
 * Provides ETL like functionality... but simple and elegant
 * Easily build OLAP cubes using Ruby
@@ -15,22 +18,22 @@ Goldmine allows you to apply pivot table logic to any list for powerful data min
 
 [Why use it?](#putting-it-all-together)
 
-## Quick start
+## Quick start {#quick-start}
 
 Install
 
-```bash
+{% highlight bash %}
 $gem install goldmine
-```
+{% endhighlight %}
 
 Use
 
-```ruby
+{% highlight ruby %}
 require "goldmine"
 [1,2,3,4,5,6,7,8,9].pivot { |i| i < 5 }
-```
+{% endhighlight %}
 
-### Usage examples
+### Usage examples {#usage-examples}
 
 * [Pivot a list](#pivot-a-list-of-numbers-based-on-whether-or-not-they-are-less-than-5)
 * [Create a named pivot](#explicitly-name-a-pivot)
@@ -39,42 +42,42 @@ require "goldmine"
 * [Chain pivots conditionally](#conditionally-chain-pivots-together)
 * [Dig deep and extract meaningful data](#deep-cuts)
 
-## The Basics
+## The Basics {#the-basics}
 
-### Pivot a list of numbers based on whether or not they are less than 5
+### Pivot a list of numbers based on whether or not they are less than 5 {#pivot-a-list-of-numbers-based-on-whether-or-not-they-are-less-than-5}
 
-```ruby
-# operation
+{% highlight ruby %}
+# operation {#operation}
 list = [1,2,3,4,5,6,7,8,9]
 data = list.pivot { |i| i < 5 }
 
-# resulting data
+# resulting data {#resulting-data}
 {
   true  => [1, 2, 3, 4],
   false => [5, 6, 7, 8, 9]
 }
-```
+{% endhighlight %}
 
-### Explicitly name a pivot
+### Explicitly name a pivot {#explicitly-name-a-pivot}
 
-```ruby
-# operation
+{% highlight ruby %}
+# operation {#operation}
 list = [1,2,3,4,5,6,7,8,9]
 data = list.pivot("less than 5") { |i| i < 5 }
 
-# resulting data
+# resulting data {#resulting-data}
 {
   { "less than 5" => true }  => [1, 2, 3, 4],
   { "less than 5" => false } => [5, 6, 7, 8, 9]
 }
-```
+{% endhighlight %}
 
-## Next Steps
+## Next Steps {#next-steps}
 
-### Pivot values that are lists themselves
+### Pivot values that are lists themselves {#pivot-values-that-are-lists-themselves}
 
-```ruby
-# operation
+{% highlight ruby %}
+# operation {#operation}
 list = [
   { :name => "one",   :list => [1] },
   { :name => "two",   :list => [1, 2] },
@@ -83,7 +86,7 @@ list = [
 ]
 data = list.pivot { |record| record[:list] }
 
-# resulting data
+# resulting data {#resulting-data}
 {
   1 => [ { :name => "one",   :list => [1] },
          { :name => "two",   :list => [1, 2] },
@@ -96,46 +99,46 @@ data = list.pivot { |record| record[:list] }
          { :name => "four",  :list => [1, 2, 3, 4] } ],
   4 => [ { :name => "four",  :list => [1, 2, 3, 4] } ]
 }
-```
+{% endhighlight %}
 
-### Chain pivots together
+### Chain pivots together {#chain-pivots-together}
 
-```ruby
-# operation
+{% highlight ruby %}
+# operation {#operation}
 list = [1,2,3,4,5,6,7,8,9]
 data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
 
-# resulting data
+# resulting data {#resulting-data}
 {
   [true, false]  => [1, 3],
   [true, true]   => [2, 4],
   [false, false] => [5, 7, 9],
   [false, true]  => [6, 8]
 }
-```
+{% endhighlight %}
 
-### Conditionally chain pivots together
+### Conditionally chain pivots together {#conditionally-chain-pivots-together}
 
-```ruby
-# operation
+{% highlight ruby %}
+# operation {#operation}
 params = { :divisible_by_two => false, :next_greater_than_five => true }
 list = [1,2,3,4,5,6,7,8,9]
 data = list.pivot("less than 5") { |i| i < 5 }
 data = data.pivot("divisible by 2") { |i| i % 2 == 0 } if params[:divisible_by_two]
 data = data.pivot("next greater than 5") { |i| i.next > 5 } if params[:next_greater_than_five]
 
-# resulting data
+# resulting data {#resulting-data}
 {
   { "less than 5" => true,  "next greater than 5" => false } => [1, 2, 3, 4],
   { "less than 5" => false, "next greater than 5" => true } => [5, 6, 7, 8, 9]
 }
-```
+{% endhighlight %}
 
-## Deep Cuts
+## Deep Cuts {#deep-cuts}
 
-### Build a moderately complex dataset of Cities
+### Build a moderately complex dataset of Cities {#build-a-moderately-complex-dataset-of-cities}
 
-```ruby
+{% highlight ruby %}
 cities = [
   { :name => "San Francisco",
     :state => "CA",
@@ -179,17 +182,17 @@ cities = [
     :airlines => [ "Delta", "SouthWest", "Frontier" ]
   }
 ]
-```
+{% endhighlight %}
 
-### Pivot cities by state for population over 750k
+### Pivot cities by state for population over 750k {#pivot-cities-by-state-for-population-over-750k}
 
-```ruby
-# operation
+{% highlight ruby %}
+# operation {#operation}
 data = cities
   .pivot("state") { |city| city[:state] }
   .pivot("population >= 750k") { |city| city[:population] >= 750000 }
 
-# resulting data
+# resulting data {#resulting-data}
 {
   { "state" => "CA", "population >= 750k" => true }  => [ { :name => "San Francisco", ... } ],
   { "state" => "CA", "population >= 750k" => false } => [ { :name => "Mountain View", ... } ],
@@ -198,9 +201,9 @@ data = cities
   { "state" => "GA", "population >= 750k" => false } => [ { :name => "Atlanta", ... } ],
   { "state" => "TX", "population >= 750k" => true }  => [ { :name => "Dallas", ... } ]
 }
-```
+{% endhighlight %}
 
-### Putting it all together
+### Putting it all together {#putting-it-all-together}
 
 **The end goal of all this is to support the creation of aggregate reports.**
 
@@ -252,15 +255,15 @@ Here is a table view of the pivoted city data from above.
 
 Lets try another one.
 
-### Determine which airlines service cities with fewer than 750k people
+### Determine which airlines service cities with fewer than 750k people {#determine-which-airlines-service-cities-with-fewer-than-750k-people}
 
-```ruby
-# operation
+{% highlight ruby %}
+# operation {#operation}
 data = cities
   .pivot("airline") { |city| city[:airlines] }
   .pivot("population < 750k") { |city| city[:population] < 750000 }
 
-# resulting data
+# resulting data {#resulting-data}
 {
   { "airline" => "Delta", "population < 750k" => false } => [
     { :name => "San Francisco", ... },
@@ -297,7 +300,7 @@ data = cities
   { "airline" => "Frontier", "population < 750k" => false } => [
     { :name => "Dallas", ... }]
 }
-```
+{% endhighlight %}
 
 Here is the corresponding table view for the above dataset.
 
@@ -380,7 +383,7 @@ Here is the corresponding table view for the above dataset.
 
 Hopefully you can see the potential even though the above examples are somewhat contrived.
 
-## Special thanks
+## Special thanks {#special-thanks}
 
 * [One on One Marketing](http://www.1on1.com/) - for sponsoring the development of Goldmine
 * [Eric Berry](https://github.com/cavneb/) - for constructive feedback
