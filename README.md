@@ -19,7 +19,7 @@ Goldmine allows you to apply pivot table logic to any list for powerful data min
 
 Install
 
-```
+```bash
 $gem install goldmine
 ```
 
