@@ -36,7 +36,6 @@ require "goldmine"
 * [Create a named pivot](#explicitly-name-a-pivot)
 * [Pivot values that are lists themselves](#pivot-values-that-are-lists-themselves)
 * [Chain pivots](#chain-pivots-together)
-* [Chain pivots conditionally](#conditionally-chain-pivots-together)
 * [Dig deep and extract meaningful data](#deep-cuts)
 
 ## The Basics
@@ -111,23 +110,6 @@ data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
   [true, true]   => [2, 4],
   [false, false] => [5, 7, 9],
   [false, true]  => [6, 8]
-}
-```
-
-### Conditionally chain pivots together
-
-```ruby
-# operation
-params = { :divisible_by_two => false, :next_greater_than_five => true }
-list = [1,2,3,4,5,6,7,8,9]
-data = list.pivot("less than 5") { |i| i < 5 }
-data = data.pivot("divisible by 2") { |i| i % 2 == 0 } if params[:divisible_by_two]
-data = data.pivot("next greater than 5") { |i| i.next > 5 } if params[:next_greater_than_five]
-
-# resulting data
-{
-  { "less than 5" => true,  "next greater than 5" => false } => [1, 2, 3, 4],
-  { "less than 5" => false, "next greater than 5" => true } => [5, 6, 7, 8, 9]
 }
 ```
 
