@@ -366,6 +366,7 @@ Hopefully you can see the potential even though the above examples are somewhat 
 
 * [One on One Marketing](http://www.1on1.com/) - for sponsoring the development of Goldmine
 * [Eric Berry](https://github.com/cavneb/) - for constructive feedback
+* [Spencer Roan](https://github.com/spencerroan) - for constructive feedback
 * [Brian Johnson](https://github.com/whap/) - for bringing some sanity to the recursion
 * [Josh Bowles](https://github.com/jbowles/) - for early adoption and feedback
 * [Brett Beers](https://github.com/beersbr/) - for early adoption and feedback
