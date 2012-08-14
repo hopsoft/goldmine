@@ -2,6 +2,8 @@
 
 ## Pivot tables for the Rubyist
 
+![Goldmine GEM](http://hopsoft.github.com/goldmine/images/gold.jpg)
+
 ### Pivot any list into a wealth of information.
 
 Goldmine allows you to apply pivot table logic to any list for powerful data mining capabilities.
@@ -370,3 +372,13 @@ Hopefully you can see the potential even though the above examples are somewhat 
 * [Brian Johnson](https://github.com/whap/) - for bringing some sanity to the recursion
 * [Josh Bowles](https://github.com/jbowles/) - for early adoption and feedback
 * [Brett Beers](https://github.com/beersbr/) - for early adoption and feedback
+
+## The MIT License (MIT)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+<a href="https://github.com/hopsoft/goldmine"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 9999;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
