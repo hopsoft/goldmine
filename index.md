@@ -5,6 +5,8 @@ layout: main
 
 ## Pivot tables for the Rubyist {#pivot-tables-for-the-rubyist}
 
+![Goldmine GEM](http://hopsoft.github.com/goldmine/images/gold.jpg)
+
 ### Pivot any list into a wealth of information. {#pivot-any-list-into-a-wealth-of-information.}
 
 Goldmine allows you to apply pivot table logic to any list for powerful data mining capabilities.
@@ -39,7 +41,6 @@ require "goldmine"
 * [Create a named pivot](#explicitly-name-a-pivot)
 * [Pivot values that are lists themselves](#pivot-values-that-are-lists-themselves)
 * [Chain pivots](#chain-pivots-together)
-* [Chain pivots conditionally](#conditionally-chain-pivots-together)
 * [Dig deep and extract meaningful data](#deep-cuts)
 
 ## The Basics {#the-basics}
@@ -114,23 +115,6 @@ data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
   [true, true]   => [2, 4],
   [false, false] => [5, 7, 9],
   [false, true]  => [6, 8]
-}
-{% endhighlight %}
-
-### Conditionally chain pivots together {#conditionally-chain-pivots-together}
-
-{% highlight ruby %}
-# operation {#operation}
-params = { :divisible_by_two => false, :next_greater_than_five => true }
-list = [1,2,3,4,5,6,7,8,9]
-data = list.pivot("less than 5") { |i| i < 5 }
-data = data.pivot("divisible by 2") { |i| i % 2 == 0 } if params[:divisible_by_two]
-data = data.pivot("next greater than 5") { |i| i.next > 5 } if params[:next_greater_than_five]
-
-# resulting data {#resulting-data}
-{
-  { "less than 5" => true,  "next greater than 5" => false } => [1, 2, 3, 4],
-  { "less than 5" => false, "next greater than 5" => true } => [5, 6, 7, 8, 9]
 }
 {% endhighlight %}
 
@@ -211,7 +195,7 @@ data = cities
 
 Here is a table view of the pivoted city data from above.
 
-<table>
+<table class="table table-bordered table-striped">
   <thead>
     <tr>
       <th>state</th>
@@ -304,7 +288,7 @@ data = cities
 
 Here is the corresponding table view for the above dataset.
 
-<table>
+<table class="table table-bordered table-striped">
   <thead>
     <tr>
       <th>airline</th>
@@ -387,6 +371,17 @@ Hopefully you can see the potential even though the above examples are somewhat 
 
 * [One on One Marketing](http://www.1on1.com/) - for sponsoring the development of Goldmine
 * [Eric Berry](https://github.com/cavneb/) - for constructive feedback
+* [Spencer Roan](https://github.com/spencerroan) - for constructive feedback
 * [Brian Johnson](https://github.com/whap/) - for bringing some sanity to the recursion
 * [Josh Bowles](https://github.com/jbowles/) - for early adoption and feedback
 * [Brett Beers](https://github.com/beersbr/) - for early adoption and feedback
+
+## The MIT License (MIT) {#the-mit-license-(mit)}
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+<a href="https://github.com/hopsoft/goldmine"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 9999;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
