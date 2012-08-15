@@ -1,17 +1,14 @@
----
-layout: main
----
-# Goldmine {#goldmine}
+# Goldmine
 
-## Pivot tables for the Rubyist {#pivot-tables-for-the-rubyist}
+## Pivot tables for the Rubyist
 
 ![Goldmine GEM](http://hopsoft.github.com/goldmine/images/gold.jpg)
 
-### Pivot any list into a wealth of information. {#pivot-any-list-into-a-wealth-of-information.}
+### Pivot any list into a wealth of information
 
 Goldmine allows you to apply pivot table logic to any list for powerful data mining capabilities.
 
-### Reasons to love it {#reasons-to-love-it}
+### Reasons to love it
 
 * Provides ETL like functionality... but simple and elegant
 * Easily build OLAP cubes using Ruby
@@ -20,7 +17,7 @@ Goldmine allows you to apply pivot table logic to any list for powerful data min
 
 [Why use it?](#putting-it-all-together)
 
-## Quick start {#quick-start}
+## Quick start
 
 Install
 
@@ -35,7 +32,7 @@ require "goldmine"
 [1,2,3,4,5,6,7,8,9].pivot { |i| i < 5 }
 {% endhighlight %}
 
-### Usage examples {#usage-examples}
+### Usage examples
 
 * [Pivot a list](#pivot-a-list-of-numbers-based-on-whether-or-not-they-are-less-than-5)
 * [Create a named pivot](#explicitly-name-a-pivot)
@@ -43,42 +40,42 @@ require "goldmine"
 * [Chain pivots](#chain-pivots-together)
 * [Dig deep and extract meaningful data](#deep-cuts)
 
-## The Basics {#the-basics}
+## The Basics
 
-### Pivot a list of numbers based on whether or not they are less than 5 {#pivot-a-list-of-numbers-based-on-whether-or-not-they-are-less-than-5}
+### Pivot a list of numbers based on whether or not they are less than 5
 
 {% highlight ruby %}
-# operation {#operation}
+# operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.pivot { |i| i < 5 }
 
-# resulting data {#resulting-data}
+# resulting data
 {
   true  => [1, 2, 3, 4],
   false => [5, 6, 7, 8, 9]
 }
 {% endhighlight %}
 
-### Explicitly name a pivot {#explicitly-name-a-pivot}
+### Explicitly name a pivot
 
 {% highlight ruby %}
-# operation {#operation}
+# operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.pivot("less than 5") { |i| i < 5 }
 
-# resulting data {#resulting-data}
+# resulting data
 {
   { "less than 5" => true }  => [1, 2, 3, 4],
   { "less than 5" => false } => [5, 6, 7, 8, 9]
 }
 {% endhighlight %}
 
-## Next Steps {#next-steps}
+## Next Steps
 
-### Pivot values that are lists themselves {#pivot-values-that-are-lists-themselves}
+### Pivot values that are lists themselves
 
 {% highlight ruby %}
-# operation {#operation}
+# operation
 list = [
   { :name => "one",   :list => [1] },
   { :name => "two",   :list => [1, 2] },
@@ -87,7 +84,7 @@ list = [
 ]
 data = list.pivot { |record| record[:list] }
 
-# resulting data {#resulting-data}
+# resulting data
 {
   1 => [ { :name => "one",   :list => [1] },
          { :name => "two",   :list => [1, 2] },
@@ -102,14 +99,14 @@ data = list.pivot { |record| record[:list] }
 }
 {% endhighlight %}
 
-### Chain pivots together {#chain-pivots-together}
+### Chain pivots together
 
 {% highlight ruby %}
-# operation {#operation}
+# operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
 
-# resulting data {#resulting-data}
+# resulting data
 {
   [true, false]  => [1, 3],
   [true, true]   => [2, 4],
@@ -118,9 +115,9 @@ data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
 }
 {% endhighlight %}
 
-## Deep Cuts {#deep-cuts}
+## Deep Cuts
 
-### Build a moderately complex dataset of Cities {#build-a-moderately-complex-dataset-of-cities}
+### Build a moderately complex dataset of Cities
 
 {% highlight ruby %}
 cities = [
@@ -168,15 +165,15 @@ cities = [
 ]
 {% endhighlight %}
 
-### Pivot cities by state for population over 750k {#pivot-cities-by-state-for-population-over-750k}
+### Pivot cities by state for population over 750k
 
 {% highlight ruby %}
-# operation {#operation}
+# operation
 data = cities
   .pivot("state") { |city| city[:state] }
   .pivot("population >= 750k") { |city| city[:population] >= 750000 }
 
-# resulting data {#resulting-data}
+# resulting data
 {
   { "state" => "CA", "population >= 750k" => true }  => [ { :name => "San Francisco", ... } ],
   { "state" => "CA", "population >= 750k" => false } => [ { :name => "Mountain View", ... } ],
@@ -187,7 +184,7 @@ data = cities
 }
 {% endhighlight %}
 
-### Putting it all together {#putting-it-all-together}
+### Putting it all together
 
 **The end goal of all this is to support the creation of aggregate reports.**
 
@@ -239,15 +236,15 @@ Here is a table view of the pivoted city data from above.
 
 Lets try another one.
 
-### Determine which airlines service cities with fewer than 750k people {#determine-which-airlines-service-cities-with-fewer-than-750k-people}
+### Determine which airlines service cities with fewer than 750k people
 
 {% highlight ruby %}
-# operation {#operation}
+# operation
 data = cities
   .pivot("airline") { |city| city[:airlines] }
   .pivot("population < 750k") { |city| city[:population] < 750000 }
 
-# resulting data {#resulting-data}
+# resulting data
 {
   { "airline" => "Delta", "population < 750k" => false } => [
     { :name => "San Francisco", ... },
@@ -367,7 +364,7 @@ Here is the corresponding table view for the above dataset.
 
 Hopefully you can see the potential even though the above examples are somewhat contrived.
 
-## Special thanks {#special-thanks}
+## Special thanks
 
 * [One on One Marketing](http://www.1on1.com/) - for sponsoring the development of Goldmine
 * [Eric Berry](https://github.com/cavneb/) - for constructive feedback
@@ -376,7 +373,7 @@ Hopefully you can see the potential even though the above examples are somewhat 
 * [Josh Bowles](https://github.com/jbowles/) - for early adoption and feedback
 * [Brett Beers](https://github.com/beersbr/) - for early adoption and feedback
 
-## The MIT License (MIT) {#the-mit-license-(mit)}
+## The MIT License (MIT)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
