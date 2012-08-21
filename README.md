@@ -21,16 +21,16 @@ Goldmine allows you to apply pivot table logic to any list for powerful data min
 
 Install
 
-{% highlight bash %}
+```bash
 $gem install goldmine
-{% endhighlight %}
+```
 
 Use
 
-{% highlight ruby %}
+```ruby
 require "goldmine"
 [1,2,3,4,5,6,7,8,9].pivot { |i| i < 5 }
-{% endhighlight %}
+```
 
 ### Usage examples
 
@@ -44,7 +44,7 @@ require "goldmine"
 
 ### Pivot a list of numbers based on whether or not they are less than 5
 
-{% highlight ruby %}
+```ruby
 # operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.pivot { |i| i < 5 }
@@ -54,11 +54,11 @@ data = list.pivot { |i| i < 5 }
   true  => [1, 2, 3, 4],
   false => [5, 6, 7, 8, 9]
 }
-{% endhighlight %}
+```
 
 ### Explicitly name a pivot
 
-{% highlight ruby %}
+```ruby
 # operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.pivot("less than 5") { |i| i < 5 }
@@ -68,13 +68,13 @@ data = list.pivot("less than 5") { |i| i < 5 }
   { "less than 5" => true }  => [1, 2, 3, 4],
   { "less than 5" => false } => [5, 6, 7, 8, 9]
 }
-{% endhighlight %}
+```
 
 ## Next Steps
 
 ### Pivot values that are lists themselves
 
-{% highlight ruby %}
+```ruby
 # operation
 list = [
   { :name => "one",   :list => [1] },
@@ -97,11 +97,11 @@ data = list.pivot { |record| record[:list] }
          { :name => "four",  :list => [1, 2, 3, 4] } ],
   4 => [ { :name => "four",  :list => [1, 2, 3, 4] } ]
 }
-{% endhighlight %}
+```
 
 ### Chain pivots together
 
-{% highlight ruby %}
+```ruby
 # operation
 list = [1,2,3,4,5,6,7,8,9]
 data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
@@ -113,13 +113,13 @@ data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
   [false, false] => [5, 7, 9],
   [false, true]  => [6, 8]
 }
-{% endhighlight %}
+```
 
 ## Deep Cuts
 
 ### Build a moderately complex dataset of Cities
 
-{% highlight ruby %}
+```ruby
 cities = [
   { :name => "San Francisco",
     :state => "CA",
@@ -163,11 +163,11 @@ cities = [
     :airlines => [ "Delta", "SouthWest", "Frontier" ]
   }
 ]
-{% endhighlight %}
+```
 
 ### Pivot cities by state for population over 750k
 
-{% highlight ruby %}
+```ruby
 # operation
 data = cities
   .pivot("state") { |city| city[:state] }
@@ -182,7 +182,7 @@ data = cities
   { "state" => "GA", "population >= 750k" => false } => [ { :name => "Atlanta", ... } ],
   { "state" => "TX", "population >= 750k" => true }  => [ { :name => "Dallas", ... } ]
 }
-{% endhighlight %}
+```
 
 ### Putting it all together
 
@@ -238,7 +238,7 @@ Lets try another one.
 
 ### Determine which airlines service cities with fewer than 750k people
 
-{% highlight ruby %}
+```ruby
 # operation
 data = cities
   .pivot("airline") { |city| city[:airlines] }
@@ -281,7 +281,7 @@ data = cities
   { "airline" => "Frontier", "population < 750k" => false } => [
     { :name => "Dallas", ... }]
 }
-{% endhighlight %}
+```
 
 Here is the corresponding table view for the above dataset.
 
