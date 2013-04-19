@@ -1,20 +1,21 @@
 require File.join(File.expand_path("../lib", __FILE__), "goldmine", "version")
 
-Gem::Specification.new do |spec|
-  spec.name        = "goldmine"
-  spec.license     = "MIT"
-  spec.version     = Goldmine::VERSION
-  spec.authors     = ["Nathan Hopkins"]
-  spec.email       = ["natehop@gmail.com"]
-  spec.homepage    = "https://github.com/hopsoft/goldmine"
-  spec.summary     = "Pivot tables for the Rubyist."
-  spec.description = "Pivot tables for the Rubyist."
+Gem::Specification.new do |gem|
+  gem.name        = "goldmine"
+  gem.license     = "MIT"
+  gem.version     = Goldmine::VERSION
+  gem.authors     = ["Nathan Hopkins"]
+  gem.email       = ["natehop@gmail.com"]
+  gem.homepage    = "https://github.com/hopsoft/goldmine"
+  gem.summary     = "Pivot tables for the Rubyist."
+  gem.description = "Pivot tables for the Rubyist."
 
-  spec.files       = Dir["lib/**/*.rb", "bin/*", "[A-Z]*"]
-  spec.test_files  = Dir["test/**/*.rb"]
+  gem.files       = Dir["lib/**/*.rb", "bin/*", "[A-Z]*"]
+  gem.test_files  = Dir["test/**/*.rb"]
 
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "minitest"
-  spec.add_development_dependency "turn"
-  spec.add_development_dependency "pry"
+  gem.add_development_dependency "rake"
+  gem.add_development_dependency "minitest"
+  gem.add_development_dependency "simplecov"
+  gem.add_development_dependency "turn"
+  gem.add_development_dependency "pry"
 end
