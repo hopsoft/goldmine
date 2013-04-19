@@ -6,3 +6,4 @@
 .idea
 coverage
 _site
+Gemfile.lock
