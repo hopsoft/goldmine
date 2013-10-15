@@ -10,9 +10,8 @@ Think of it as Ruby's `Enumerable#group_by` on steroids.
 ## Start Here
 
 The [example project's output](http://hopsoft.github.io/goldmine/) should help answer the question of why Goldmine exists.
-It helps visualize the end goal.
-
-Also, take some time checkout the [source](https://github.com/hopsoft/goldmine/tree/master/example) for the example.
+It will help you visualize the end goal.
+Also, checkout the [source](https://github.com/hopsoft/goldmine/tree/master/example) for the example.
 
 ## Usage
 
