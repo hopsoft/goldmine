@@ -53,7 +53,7 @@ class Presenter < Struct.new(:data, :mined_data)
     when :address_sum
       %Q{<span
         data-title="Computed Column"
-        data-content="The sum of all the address numbers in the set of matching records. Note: This is a contrived example illustrating the ability to compute column values."
+        data-content="The sum of all address numbers in the set of matching records. Note: This is a contrived example illustrating the ability to compute column values."
         data-toggle="popover"
         data-placement="top">
         #{column.to_s.humanize}
