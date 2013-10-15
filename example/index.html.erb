@@ -1,39 +1,73 @@
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8">
-  <title>NY Wifi</title>
+  <title>Wifi hotspots in New York</title>
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+  <style type="text/css">
+  th .popover-content { font-weight: normal; }
+  </style>
 </head>
 <body>
-
   <div class="container">
     <div class="row">
       <div class="col-md-12">
         <h1 class="page-header">
-          Use <a href="https://github.com/hopsoft/goldmine">Goldmine</a> to help visualize data
+          Using <a href="https://github.com/hopsoft/goldmine">Goldmine</a> to help visualize data
         </h1>
         <p class="lead">
-          Accelerate your ability to extract valuable data from lists of objects.<br />
-          <small>Think of it as <code>Enumerable#group_by</code> on steroids.</small>
+          Accelerate your ability to extract valuable data from lists of objects.
+          <i><small>Think of it as Ruby's <code>Enumerable#group_by</code> on steroids.</small></i>
         </p>
         <hr />
         <p>
           The example below
           uses New York wifi hotspot data from <a href="https://nycopendata.socrata.com/data">NYC Open Data</a>
-          to illustrate just how simple it can be to derive meaning from a dataset.
+          to illustrate just how simple it can be to extract meaning from a dataset.
         </p>
         <p>
-          Checkout <a href="">the example project</a> to learn how this page was created using just 150 lines of code.
+          Checkout the <a href="">project</a>
+          to learn how this page was created with less than <strong class="text-success">250 lines of code</strong>.
         </p>
-        <br />
-        <br />
+        <ul>
+          <li><a href="">Data</a></li>
+          <li><a href="">Ruby</a></li>
+          <li><a href="">HTML</a></li>
+        </ul>
+        <p>
+          Of course we are leverageing several libraries to make life easy.
+        </p>
+        <ul>
+          <li><a href="http://jquery.com/">JQuery</a></li>
+          <li><a href="http://getbootstrap.com">Bootstrap</a></li>
+          <li><a href="https://developers.google.com/chart/">Google Chart</a></li>
+        </ul>
+        <p>
+          <em class="text-muted">
+            <strong>Note:</strong>
+            This example project manages all concerns in just 2 files.
+            A formal project would lend itself to a more elegant solution.
+          </em>
+        </p>
       </div>
     </div>
+
+    <br />
+
     <div class="row">
       <div class="col-md-4">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Free Wifi in New York (Libraries)</h3>
+            <h3 class="panel-title">Paid wifi in New York</h3>
+          </div>
+          <div class="panel-body">
+            <div id="chart-paid"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Free wifi in New York (libraries)</h3>
           </div>
           <div class="panel-body">
             <div id="chart-library"></div>
@@ -43,7 +77,7 @@
       <div class="col-md-4">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Free Wifi in New York (Non-Libraries)</h3>
+            <h3 class="panel-title">Free wifi in New York (non-libraries)</h3>
           </div>
           <div class="panel-body">
             <div id="chart-non-library"></div>
@@ -51,8 +85,34 @@
         </div>
       </div>
     </div>
+
+    <br />
+
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-bordered table-striped table-hover">
+          <thead>
+            <tr>
+            <% columns.each do |column| %>
+              <th><%= header_value column %></th>
+            <% end %>
+            </tr>
+          </thead>
+          <tbody>
+          <% mined_data.each do |record| %>
+            <tr>
+            <% columns.each do |column| %>
+              <td><%= cell_value(column, record) %></td>
+            <% end %>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript">
@@ -67,6 +127,10 @@
 
     google.load("visualization", "1", {packages:["corechart"]});
 
+    var paid = <%= aggregate(:city, paid).to_json %>;
+    paid.unshift(["City", "Free Wifi Hotspots"]);
+    renderChart("chart-paid", paid);
+
     var library = <%= aggregate(:city, free_libraries).to_json %>;
     library.unshift(["City", "Free Wifi Hotspots"]);
     renderChart("chart-library", library);
@@ -74,6 +138,8 @@
     var nonLibrary = <%= aggregate(:city, free_non_libraries).to_json %>;
     nonLibrary.unshift(["City", "Free Wifi Hotspots"]);
     renderChart("chart-non-library", nonLibrary);
+
+    $("[data-toggle='popover']").popover("show");
   </script>
 </body>
 </html>
