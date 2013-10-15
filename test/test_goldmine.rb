@@ -6,8 +6,21 @@ require File.expand_path("../../lib/goldmine", __FILE__)
 
 class TestGoldmine < MicroTest::Test
 
+  test "miner from array" do
+    assert Goldmine.miner([]).is_a?(Goldmine::ArrayMiner)
+  end
+
+  test "miner from hash" do
+    assert Goldmine.miner({}).is_a?(Goldmine::HashMiner)
+  end
+
+  test "miner from usupported object" do
+    assert Goldmine.miner(Object.new).nil?
+  end
+
   test "simple pivot" do
     list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
     data = list.pivot { |i| i < 5 }
 
     expected = {
@@ -20,6 +33,7 @@ class TestGoldmine < MicroTest::Test
 
   test "named pivot" do
     list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
     data = list.pivot("less than 5") { |i| i < 5 }
 
     expected = {
@@ -37,6 +51,7 @@ class TestGoldmine < MicroTest::Test
       { :name => "three", :list => [1, 2, 3] },
       { :name => "four",  :list => [1, 2, 3, 4] },
     ]
+    list = Goldmine::ArrayMiner.new(list)
     data = list.pivot { |record| record[:list] }
 
     expected = {
@@ -63,6 +78,7 @@ class TestGoldmine < MicroTest::Test
       { :name => "three", :list => [1, 2, 3] },
       { :name => "four",  :list => [1, 2, 3, 4] },
     ]
+    list = Goldmine::ArrayMiner.new(list)
     data = list.pivot { |record| record[:list] }
 
     expected = {
@@ -84,6 +100,7 @@ class TestGoldmine < MicroTest::Test
 
   test "chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
     data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
 
     expected = {
@@ -98,7 +115,7 @@ class TestGoldmine < MicroTest::Test
 
   test "deep chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
-    # list = [2,5,9]
+    list = Goldmine::ArrayMiner.new(list)
     data = list
       .pivot { |i| i < 3 }
       .pivot { |i| i < 6 }
@@ -123,6 +140,7 @@ class TestGoldmine < MicroTest::Test
 
   test "named deep chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
     data = list.pivot("a") { |i| i < 3 }.pivot("b") { |i| i < 6 }.pivot("c") { |i| i < 9 }.pivot("d") { |i| i % 2 == 0 }.pivot("e") { |i| i % 3 == 0 }
 
     expected = {
@@ -142,6 +160,7 @@ class TestGoldmine < MicroTest::Test
 
   test "named chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
     data = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }
 
     expected = {

@@ -1,7 +1,11 @@
-module Goldmine
+require "delegate"
 
-  # Extends Array with a pivot method.
-  module ArrayMiner
+module Goldmine
+  class ArrayMiner < SimpleDelegator
+
+    def initialize(array=[])
+      super array
+    end
 
     # Pivots the Array into a Hash of mined data.
     # Think of it as creating a pivot table or perhaps an OLAP cube.
@@ -42,7 +46,7 @@ module Goldmine
     # @yield [Object] Yields once for each item in the Array
     # @return [Hash] The pivoted Hash of data.
     def pivot(name=nil, &block)
-      reduce({}) do |memo, item|
+      reduce(HashMiner.new) do |memo, item|
         value = yield(item)
 
         if value.is_a?(Array)

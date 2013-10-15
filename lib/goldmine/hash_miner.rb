@@ -1,7 +1,12 @@
-module Goldmine
+require "delegate"
+require "hash_miner"
 
-  # Extends Hash with a pivot method.
-  module HashMiner
+module Goldmine
+  class HashMiner < SimpleDelegator
+
+    def initialize(hash={})
+      super hash
+    end
 
     attr_accessor :goldmine
 
@@ -28,9 +33,9 @@ module Goldmine
     def pivot(name=nil, &block)
       return self unless goldmine
 
-      reduce({}) do |memo, item|
+      reduce(HashMiner.new) do |memo, item|
         key = item.first
-        value = item.last
+        value = Goldmine.miner(item.last)
         value.pivot(name, &block).each do |k, v|
           if key.is_a? Hash
             k = { block.to_s => k } unless k.is_a?(Hash)
