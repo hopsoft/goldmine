@@ -1,12 +1,12 @@
+require "micro_test"
 require "simplecov"
+SimpleCov.command_name "MicroTest"
 SimpleCov.start
-require "test/unit"
-require "turn"
-require File.join(File.dirname(__FILE__), "..", "lib", "goldmine")
+require File.expand_path("../../lib/goldmine", __FILE__)
 
-class TestGoldmine < MiniTest::Unit::TestCase
+class TestGoldmine < MicroTest::Test
 
-  def test_simple_pivot
+  test "simple pivot" do
     list = [1,2,3,4,5,6,7,8,9]
     data = list.pivot { |i| i < 5 }
 
@@ -15,10 +15,10 @@ class TestGoldmine < MiniTest::Unit::TestCase
       false => [5, 6, 7, 8, 9]
     }
 
-    assert_equal expected, data
+    assert data == expected
   end
 
-  def test_named_pivot
+  test "named pivot" do
     list = [1,2,3,4,5,6,7,8,9]
     data = list.pivot("less than 5") { |i| i < 5 }
 
@@ -27,10 +27,10 @@ class TestGoldmine < MiniTest::Unit::TestCase
       { "less than 5" => false } => [5, 6, 7, 8, 9]
     }
 
-    assert_equal expected, data
+    assert data == expected
   end
 
-  def test_pivot_of_list_values
+  test "pivot of list values" do
     list = [
       { :name => "one",   :list => [1] },
       { :name => "two",   :list => [1, 2] },
@@ -52,10 +52,37 @@ class TestGoldmine < MiniTest::Unit::TestCase
       4 => [ { :name => "four",  :list => [1, 2, 3, 4] } ]
     }
 
-    assert_equal expected, data
+    assert data == expected
   end
 
-  def test_chained_pivots
+  test "pivot of list values with empty list" do
+    list = [
+      { :name => "empty", :list => [] },
+      { :name => "one",   :list => [1] },
+      { :name => "two",   :list => [1, 2] },
+      { :name => "three", :list => [1, 2, 3] },
+      { :name => "four",  :list => [1, 2, 3, 4] },
+    ]
+    data = list.pivot { |record| record[:list] }
+
+    expected = {
+      nil => [ {:name => "empty", :list => [] } ],
+      1 => [ { :name => "one",   :list => [1] },
+             { :name => "two",   :list => [1, 2] },
+             { :name => "three", :list => [1, 2, 3] },
+             { :name => "four",  :list => [1, 2, 3, 4] } ],
+      2 => [ { :name => "two",   :list => [1, 2] },
+             { :name => "three", :list => [1, 2, 3] },
+             { :name => "four",  :list => [1, 2, 3, 4] } ],
+      3 => [ { :name => "three", :list => [1, 2, 3] },
+             { :name => "four",  :list => [1, 2, 3, 4] } ],
+      4 => [ { :name => "four",  :list => [1, 2, 3, 4] } ]
+    }
+
+    assert data == expected
+  end
+
+  test "chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
     data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
 
@@ -66,10 +93,10 @@ class TestGoldmine < MiniTest::Unit::TestCase
       [false, true]  => [6, 8]
     }
 
-    assert_equal expected, data
+    assert data == expected
   end
 
-  def test_deep_chained_pivots
+  test "deep chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
     # list = [2,5,9]
     data = list
@@ -91,10 +118,10 @@ class TestGoldmine < MiniTest::Unit::TestCase
       [false, false, false, false, true]  => [9]
     }
 
-    assert_equal expected, data
+    assert data == expected
   end
 
-  def test_named_deep_chained_pivots
+  test "named deep chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
     data = list.pivot("a") { |i| i < 3 }.pivot("b") { |i| i < 6 }.pivot("c") { |i| i < 9 }.pivot("d") { |i| i % 2 == 0 }.pivot("e") { |i| i % 3 == 0 }
 
@@ -110,10 +137,10 @@ class TestGoldmine < MiniTest::Unit::TestCase
       {"a"=>false, "b"=>false, "c"=>false, "d"=>false, "e"=>true}  => [9]
     }
 
-    assert_equal expected, data
+    assert data == expected
   end
 
-  def test_named_chained_pivots
+  test "named chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
     data = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }
 
@@ -124,9 +151,7 @@ class TestGoldmine < MiniTest::Unit::TestCase
       { "less than 5" => false, "divisible by 2" => true}  => [6, 8]
     }
 
-    assert_equal expected, data
+    assert data == expected
   end
-
-
 
 end
