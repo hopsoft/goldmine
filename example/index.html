@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>NY Wifi</title>
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="page-header">
+          Use <a href="https://github.com/hopsoft/goldmine">Goldmine</a> to help visualize data
+        </h1>
+        <p class="lead">
+          Accelerate your ability to extract valuable data from lists of objects.<br />
+          <small>Think of it as <code>Enumerable#group_by</code> on steroids.</small>
+        </p>
+        <hr />
+        <p>
+          The example below
+          uses New York wifi hotspot data from <a href="https://nycopendata.socrata.com/data">NYC Open Data</a>
+          to illustrate just how simple it can be to derive meaning from a dataset.
+        </p>
+        <p>
+          Checkout <a href="">the example project</a> to learn how this page was created using just 150 lines of code.
+        </p>
+        <br />
+        <br />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Free Wifi in New York (Libraries)</h3>
+          </div>
+          <div class="panel-body">
+            <div id="chart-library"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Free Wifi in New York (Non-Libraries)</h3>
+          </div>
+          <div class="panel-body">
+            <div id="chart-non-library"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    function renderChart(id, data) {
+      google.setOnLoadCallback(function () {
+        var chart = new google.visualization.PieChart(document.getElementById(id));
+        chart.draw(google.visualization.arrayToDataTable(data), {
+          is3D: true,
+        });
+      });
+    }
+
+    google.load("visualization", "1", {packages:["corechart"]});
+
+    var library = [["New York",42],["Brooklyn",61],["Bronx",35],["Arverne",1],["Flushing",9],["Jamaica",4],["Bayside",3],["Bellerose",1],["Briarwood",1],["Broad Channel",1],["Cambria Heights",1],["Little Neck",2],["Elmhurst",1],["Far Rockaway",1],["Forest Hills",2],["Fresh Meadows",1],["Glendale",1],["Hollis",1],["Howard Beach",1],["Laurelton",1],["Richmond Hill",2],["Corona",3],["Maspeth",1],["Middle Village",1],["Long Island City",6],["Staten Island",7],["Ozone Park",1],["Rockaway Beach",1],["College Point",1],["Queens Village",1],["Rego Park",1],["Ridgewood",1],["Rosedale",1],["Rockaway Park",1],["South Hollis",1],["Woodside",1],["South Ozone Park",1],["St. Albans",1],["Whitestone",1],["Woodhaven",1],["Jackson Heights",1],["East Elmhurst",1]];
+    library.unshift(["City", "Free Wifi Hotspots"]);
+    renderChart("chart-library", library);
+
+    var nonLibrary = [["New York",219],["Brooklyn",51],["Bronx",13],["Flushing",2],["Jamaica",2],["Bayside",4],["Little Neck",1],["Elmhurst",2],["Forest Hills",3],["Fresh Meadows",1],["Glendale",1],["Corona",1],["Long Island City",5],["Staten Island",7],["Rego Park",1],["Astoria",5],["Queens",1]];
+    nonLibrary.unshift(["City", "Free Wifi Hotspots"]);
+    renderChart("chart-non-library", nonLibrary);
+  </script>
+</body>
+</html>

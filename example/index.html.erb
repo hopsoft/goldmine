@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>NY Wifi</title>
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="page-header">
+          Use <a href="https://github.com/hopsoft/goldmine">Goldmine</a> to help visualize data
+        </h1>
+        <p class="lead">
+          Accelerate your ability to extract valuable data from lists of objects.<br />
+          <small>Think of it as <code>Enumerable#group_by</code> on steroids.</small>
+        </p>
+        <hr />
+        <p>
+          The example below
+          uses New York wifi hotspot data from <a href="https://nycopendata.socrata.com/data">NYC Open Data</a>
+          to illustrate just how simple it can be to derive meaning from a dataset.
+        </p>
+        <p>
+          Checkout <a href="">the example project</a> to learn how this page was created using just 150 lines of code.
+        </p>
+        <br />
+        <br />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Free Wifi in New York (Libraries)</h3>
+          </div>
+          <div class="panel-body">
+            <div id="chart-library"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Free Wifi in New York (Non-Libraries)</h3>
+          </div>
+          <div class="panel-body">
+            <div id="chart-non-library"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    function renderChart(id, data) {
+      google.setOnLoadCallback(function () {
+        var chart = new google.visualization.PieChart(document.getElementById(id));
+        chart.draw(google.visualization.arrayToDataTable(data), {
+          is3D: true,
+        });
+      });
+    }
+
+    google.load("visualization", "1", {packages:["corechart"]});
+
+    var library = <%= aggregate(:city, free_libraries).to_json %>;
+    library.unshift(["City", "Free Wifi Hotspots"]);
+    renderChart("chart-library", library);
+
+    var nonLibrary = <%= aggregate(:city, free_non_libraries).to_json %>;
+    nonLibrary.unshift(["City", "Free Wifi Hotspots"]);
+    renderChart("chart-non-library", nonLibrary);
+  </script>
+</body>
+</html>
