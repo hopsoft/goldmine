@@ -4,7 +4,8 @@
 [![Dependency Status](https://gemnasium.com/hopsoft/goldmine.png)](https://gemnasium.com/hopsoft/goldmine)
 [![Code Climate](https://codeclimate.com/github/hopsoft/goldmine.png)](https://codeclimate.com/github/hopsoft/goldmine)
 
-Accelerate your ability to extract valuable data from lists of objects.
+### Accelerate your ability to extract valuable data from lists of objects.
+
 Think of it as Ruby's `Enumerable#group_by` on steroids.
 
 ## Start Here
