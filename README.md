@@ -30,6 +30,7 @@ require "goldmine"
 list = [1,2,3,4,5,6,7,8,9]
 list = Goldmine::ArrayMiner.new(list)
 list.pivot { |i| i < 5 }
+# result:
 {
   true  => [1, 2, 3, 4],
   false => [5, 6, 7, 8, 9]
@@ -41,6 +42,7 @@ list.pivot { |i| i < 5 }
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 list = Goldmine::ArrayMiner.new(list)
+# result:
 list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
 {
   [true, false]  => [1, 3],
@@ -56,6 +58,7 @@ list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
 list = [1,2,3,4,5,6,7,8,9]
 list = Goldmine::ArrayMiner.new(list)
 list.pivot(:less_than_5) { |i| i < 5 }
+# result:
 {
   { :less_than_5 => true }  => [1, 2, 3, 4],
   { :less_than_5 => false } => [5, 6, 7, 8, 9]
@@ -74,6 +77,7 @@ list = [
 ]
 list = Goldmine::ArrayMiner.new(list)
 list.pivot { |record| record[:favorite_colors] }
+# result:
 {
   :blue => [
     { :name => "Sally", :favorite_colors => [:blue] },
@@ -116,6 +120,7 @@ end
 mined = mined.pivot(">= 21 years old") do |record|
   record[:age] >= 21
 end
+# result:
 {
   { "Name has an 'e'" => false, ">= 21 years old" => true } => [
     { :name => "Sally", :age => 21 },
