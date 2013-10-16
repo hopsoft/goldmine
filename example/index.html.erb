@@ -98,7 +98,7 @@
           <thead>
             <tr>
             <% columns.each do |column| %>
-              <th><%= header_value column %></th>
+              <th><%= send "#{column}_header" %></th>
             <% end %>
             </tr>
           </thead>
@@ -106,7 +106,7 @@
           <% mined_data.each do |record| %>
             <tr>
             <% columns.each do |column| %>
-              <td><%= cell_value(column, record) %></td>
+              <td><%= send column, record %></td>
             <% end %>
             </tr>
           <% end %>

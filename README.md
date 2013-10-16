@@ -4,9 +4,9 @@
 [![Dependency Status](https://gemnasium.com/hopsoft/goldmine.png)](https://gemnasium.com/hopsoft/goldmine)
 [![Code Climate](https://codeclimate.com/github/hopsoft/goldmine.png)](https://codeclimate.com/github/hopsoft/goldmine)
 
-### Accelerate your ability to extract valuable data from lists of objects.
+### Extract a wealth of information from Arrays & Hashes
 
-Think of it as Ruby's `Enumerable#group_by` on steroids.
+Think of it as an enhanced `Enumerable#group_by`.
 
 ## Uses
 
@@ -16,7 +16,7 @@ Think of it as Ruby's `Enumerable#group_by` on steroids.
 - Prep for data visualization
 - Fact table creation
 
-The [demo project](http://hopsoft.github.io/goldmine/) illustrates some of Goldmine's uses.
+The [demo project](http://hopsoft.github.io/goldmine/) demonstrates some of Goldmine's uses.
 
 ## Quick Start
 

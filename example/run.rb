@@ -48,62 +48,90 @@ class Presenter < Struct.new(:data, :mined_data)
     [:city, :free, :library, :hotspots, :percentage, :address_sum, :location_names, :zip_codes]
   end
 
-  def header_value(column)
-    case column
-    when :address_sum
-      %Q{<span
-        data-title="Computed Column"
-        data-content="The sum of all address numbers in the set of matching records. Note: This is a contrived example illustrating the ability to compute column values."
-        data-toggle="popover"
-        data-placement="top">
-        #{column.to_s.humanize}
-      </span>}
-    when :location_names
-      %Q{<span
-        data-title="Computed Column"
-        data-content="The total number of location names in the set of matching records. e.g. Starbucks, Barnes &amp; Noble, etc..."
-        data-toggle="popover"
-        data-placement="bottom">
-        #{column.to_s.humanize}
-      </span>}
-    when :zip_codes
-      %Q{<span
-        data-title="Computed Column"
-        data-content="The total number of zip codes in the set of matching records."
-        data-toggle="popover"
-        data-placement="top">
-        #{column.to_s.humanize}
-      </span>}
-    else
-      column.to_s.humanize
+  def city_header
+    "City"
+  end
+
+  def city(record)
+    record.first[:city]
+  end
+
+  def free_header
+    "Free"
+  end
+
+  def free(record)
+    return nil unless record.first[:free]
+    "<span class='glyphicon glyphicon-star'></span>"
+  end
+
+  def library_header
+    "Library"
+  end
+
+  def library(record)
+    return nil unless record.first[:library]
+    "<span class='glyphicon glyphicon-star'></span>"
+  end
+
+  def hotspots_header
+    "Hotspots"
+  end
+
+  def hotspots(record)
+    record.last.length
+  end
+
+  def percentage_header
+    "Percentage"
+  end
+
+  def percentage(record)
+    number_to_percentage (record.last.length / data.length.to_f) * 100, :precision => 2
+  end
+
+  def address_sum_header
+    %Q{<span
+      data-title="Computed Column"
+      data-content="The sum of all address numbers in the set of matching records. Note: This is a contrived example illustrating the ability to compute column values."
+      data-toggle="popover"
+      data-placement="top">
+      Address Sum
+    </span>}
+  end
+
+  def address_sum(record)
+    record.last.reduce(0) do |memo, row|
+      memo + row["ADDRESS"].to_s.gsub(/\D/, "").to_i
     end
   end
 
-  def cell_value(column, record)
-    case column
-    when :city
-      record.first[column]
-    when :free, :library
-      if record.first[column]
-        "<span class='glyphicon glyphicon-star'></span>"
-      else
-        nil
-      end
-    when :hotspots
-      record.last.length
-    when :percentage
-      number_to_percentage (record.last.length / data.length.to_f) * 100, :precision => 2
-    when :address_sum
-      record.last.reduce(0) do |memo, row|
-        memo + row["ADDRESS"].to_s.gsub(/\D/, "").to_i
-      end
-    when :location_names
-      record.last.map { |row| row["NAME"].to_s.strip }.uniq.length
-    when :zip_codes
-      record.last.map { |row| row["ZIP"].to_s.strip }.uniq.length
-    else
-      nil
-    end
+  def location_names_header
+    %Q{<span
+      data-title="Computed Column"
+      data-content="The total number of location names in the set of matching records. e.g. Starbucks, Barnes &amp; Noble, etc..."
+      data-toggle="popover"
+      data-placement="bottom">
+      Location Names
+    </span>}
+  end
+
+  def location_names(record)
+    record.last.map { |row| row["NAME"].to_s.strip }.uniq.length
+  end
+
+  def zip_codes_header
+    %Q{<span
+      data-title="Computed Column"
+      data-content="The total number of zip codes in the set of matching records."
+      data-toggle="popover"
+      data-placement="top">
+      Zip Codes
+    </span>}
+  end
+
+  def zip_codes(record)
+    record.last.map { |row| row["ZIP"].to_s.strip }.uniq.length
   end
 
   def paid
