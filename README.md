@@ -42,8 +42,8 @@ list.pivot { |i| i < 5 }
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 list = Goldmine::ArrayMiner.new(list)
-# result:
 list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
+# result:
 {
   [true, false]  => [1, 3],
   [true, true]   => [2, 4],
