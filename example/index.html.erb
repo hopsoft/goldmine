@@ -19,33 +19,37 @@
           <i><small>Think of it as Ruby's <code>Enumerable#group_by</code> on steroids.</small></i>
         </p>
         <hr />
+        <div class="alert alert-warning">
+          <strong>Note:</strong>
+          This example manages all concerns in just 2 files.
+          A formal project would lend itself to a more elegant solution.
+        </div>
         <p>
-          The example below
-          uses New York wifi hotspot data from <a href="https://nycopendata.socrata.com/data">NYC Open Data</a>
+          We use New York wifi hotspot data from <a href="https://nycopendata.socrata.com/data">NYC Open Data</a>
           to illustrate just how simple it can be to extract meaning from a dataset.
-        </p>
-        <p>
-          Checkout the <a href="https://github.com/hopsoft/goldmine/tree/master/example">project</a>
-          to learn how this page was created with less than <strong class="text-success">250 lines of code</strong>.
+          Checkout the <a href="https://github.com/hopsoft/goldmine/tree/master/example">project source</a>
+          to learn how this page was created.
         </p>
         <ul>
-          <li><a href="https://github.com/hopsoft/goldmine/blob/master/example/DOITT_WIFI_HOTSPOT_01_13SEPT2010.csv">Data</a></li>
-          <li><a href="https://github.com/hopsoft/goldmine/blob/master/example/run.rb">Ruby</a></li>
-          <li><a href="https://github.com/hopsoft/goldmine/blob/master/example/index.html.erb">HTML</a></li>
+          <li>
+            <a href="https://github.com/hopsoft/goldmine/blob/master/example/DOITT_WIFI_HOTSPOT_01_13SEPT2010.csv">Data</a>
+            <span class="text-muted">- a CSV file that serves as the source data</span>
+          </li>
+          <li>
+            <a href="https://github.com/hopsoft/goldmine/blob/master/example/run.rb">Ruby</a>
+            <span class="text-muted">- extracts info from the data &amp; renders it to HTML</span>
+          </li>
+          <li>
+            <a href="https://github.com/hopsoft/goldmine/blob/master/example/index.html.erb">HTML</a>
+            <span class="text-muted">- the HTML template used for rendering the page</span>
+          </li>
         </ul>
         <p>
-          Of course we are leverageing several libraries to make life easy.
-        </p>
-        <ul>
-          <li><a href="http://jquery.com/">JQuery</a></li>
-          <li><a href="http://getbootstrap.com">Bootstrap</a></li>
-          <li><a href="https://developers.google.com/chart/">Google Chart</a></li>
-        </ul>
-        <p>
-          <em class="text-muted">
-            <strong>Note:</strong>
-            This example project manages all concerns in just 2 files.
-            A formal project would lend itself to a more elegant solution.
+          <em>
+            Of course, we are using a few libs to make life easy.
+            Namely <a href="http://jquery.com/">JQuery</a>,
+            <a href="http://getbootstrap.com">Bootstrap</a>, &amp;
+            <a href="https://developers.google.com/chart/">Google Chart</a>
           </em>
         </p>
       </div>
