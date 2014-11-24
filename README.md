@@ -27,11 +27,11 @@ The [demo project](http://hopsoft.github.io/goldmine/) demonstrates some of Gold
 
 ```
 gem install goldmine
-irb
 ```
 
 ```ruby
 require "goldmine"
+
 list = [1,2,3,4,5,6,7,8,9]
 list = Goldmine::ArrayMiner.new(list)
 list.pivot { |i| i < 5 }
