@@ -1,4 +1,4 @@
-require File.join(File.expand_path("../lib", __FILE__), "goldmine", "version")
+require File.expand_path("../lib/goldmine/version", __FILE__)
 
 Gem::Specification.new do |gem|
   gem.name        = "goldmine"
