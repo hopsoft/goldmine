@@ -1,5 +1,4 @@
 require "delegate"
-require "hash_miner"
 
 module Goldmine
   class HashMiner < SimpleDelegator
