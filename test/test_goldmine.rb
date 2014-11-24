@@ -1,10 +1,9 @@
-require "micro_test"
-require "simplecov"
-SimpleCov.command_name "MicroTest"
-SimpleCov.start
+require "pry-test"
+require "coveralls"
+Coveralls.wear!
 require File.expand_path("../../lib/goldmine", __FILE__)
 
-class TestGoldmine < MicroTest::Test
+class TestGoldmine < PryTest::Test
 
   test "miner from array" do
     assert Goldmine.miner([]).is_a?(Goldmine::ArrayMiner)

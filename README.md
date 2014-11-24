@@ -1,12 +1,13 @@
+[![Lines of Code](http://img.shields.io/badge/lines_of_code-74-brightgreen.svg?style=flat)](http://blog.codinghorror.com/the-best-code-is-no-code-at-all/)
+[![Code Status](http://img.shields.io/codeclimate/github/hopsoft/goldmine.svg?style=flat)](https://codeclimate.com/github/hopsoft/goldmine)
+[![Dependency Status](http://img.shields.io/gemnasium/hopsoft/goldmine.svg?style=flat)](https://gemnasium.com/hopsoft/goldmine)
+[![Build Status](http://img.shields.io/travis/hopsoft/goldmine.svg?style=flat)](https://travis-ci.org/hopsoft/goldmine)
+[![Coverage Status](https://img.shields.io/coveralls/hopsoft/goldmine.svg?style=flat)](https://coveralls.io/r/hopsoft/goldmine?branch=master)
+
 # Goldmine
 
-[![Build Status](https://travis-ci.org/hopsoft/goldmine.png)](https://travis-ci.org/hopsoft/goldmine)
-[![Dependency Status](https://gemnasium.com/hopsoft/goldmine.png)](https://gemnasium.com/hopsoft/goldmine)
-[![Code Climate](https://codeclimate.com/github/hopsoft/goldmine.png)](https://codeclimate.com/github/hopsoft/goldmine)
-
-### Extract a wealth of information from Arrays & Hashes
-
-Think of it as an enhanced `Enumerable#group_by`.
+Extract a wealth of information from Arrays & Hashes.
+Think of __Goldmine__ as `Enumerable#group_by` on steroids.
 
 ## Uses
 
@@ -16,7 +17,11 @@ Think of it as an enhanced `Enumerable#group_by`.
 - Prep for data visualization
 - Fact table creation
 
+---
+
 The [demo project](http://hopsoft.github.io/goldmine/) demonstrates some of Goldmine's uses.
+
+---
 
 ## Quick Start
 
