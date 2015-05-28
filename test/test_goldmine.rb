@@ -67,7 +67,7 @@ class TestGoldmine < PryTest::Test
       record[:age] >= 21
     end
 
-    expected = [["Name has an 'e'", ">= 21 years old", "Percent of Total", "Total"], [true, false, 0.33, 1], [false, true, 0.67, 2], [true, true, 0.67, 2]]
+    expected = [["Name has an 'e'", ">= 21 years old", "Percent of Total", "Count"], [true, false, 0.2, 1], [false, true, 0.4, 2], [true, true, 0.4, 2]]
 
     # block is sort_by
     tabular_data = mined.to_a do |row|
