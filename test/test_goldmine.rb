@@ -52,18 +52,41 @@ class TestGoldmine < PryTest::Test
   end
 
   test "to_a tabular data" do
-    list = [1,2,3,4,5,6,7,8,9]
+    list = [
+      { :name => "Sally",   :age => 21 },
+      { :name => "John",    :age => 28 },
+      { :name => "Stephen", :age => 37 },
+      { :name => "Emily",   :age => 32 },
+      { :name => "Joe",     :age => 18 }
+    ]
     list = Goldmine::ArrayMiner.new(list)
-    data = list.pivot("less than 5") { |i| i < 5 }
-    expected = [["less than 5"], [true, 4], [false, 5]]
-    assert data.to_a == expected
+    mined = list.pivot("Name has an 'e'") do |record|
+      !!record[:name].match(/e/i)
+    end
+    mined = mined.pivot(">= 21 years old") do |record|
+      record[:age] >= 21
+    end
+
+    expected = [["Name has an 'e'", ">= 21 years old"], [false, true, 2], [true, true, 2], [true, false, 1]]
+    assert mined.to_a == expected
   end
 
   test "source_data" do
-    list = [1,2,3,4,5,6,7,8,9]
+    list = [
+      { :name => "Sally",   :age => 21 },
+      { :name => "John",    :age => 28 },
+      { :name => "Stephen", :age => 37 },
+      { :name => "Emily",   :age => 32 },
+      { :name => "Joe",     :age => 18 }
+    ]
     list = Goldmine::ArrayMiner.new(list)
-    data = list.pivot("less than 5") { |i| i < 5 }
-    assert data.source_data == list
+    mined = list.pivot("Name has an 'e'") do |record|
+      !!record[:name].match(/e/i)
+    end
+    mined = mined.pivot(">= 21 years old") do |record|
+      record[:age] >= 21
+    end
+    assert mined.source_data == list
   end
 
   test "pivot of list values" do

@@ -142,3 +142,22 @@ end
 }
 ```
 
+# Returning pivots in tabular format
+
+This feature is useful when you need to do things like export to CSV or build user interfaces.
+
+```ruby
+# using the stacked pivot example above
+mined.to_a
+# result:
+[
+  ["Name has an 'e'", ">= 21 years old"],
+  [false, true, 2],
+  [true, true, 2],
+  [true, false, 1]
+]
+```
+
+The first entry is the header row.
+Subsequent entries are data rows.
+The last value in each data row indicates the number of matches.
