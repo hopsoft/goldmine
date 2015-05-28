@@ -67,8 +67,14 @@ class TestGoldmine < PryTest::Test
       record[:age] >= 21
     end
 
-    expected = [["Name has an 'e'", ">= 21 years old", "total"], [false, true, 2], [true, true, 2], [true, false, 1]]
-    assert mined.to_a == expected
+    expected = [["Name has an 'e'", ">= 21 years old", "total"], [true, false, 1], [false, true, 2], [true, true, 2]]
+
+    # block is sort_by
+    tabular_data = mined.to_a do |row|
+      [row[2], row[0] ? 1 : 0, row[1] ? 1 : 0]
+    end
+
+    assert tabular_data == expected
   end
 
   test "source_data" do

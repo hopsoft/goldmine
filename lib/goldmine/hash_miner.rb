@@ -79,13 +79,15 @@ module Goldmine
 
     # Returns pivoted data as a tabular Array that can be used to build CSVs or user interfaces.
     # @return [Array] Tabular pivot data
-    def to_a
+    # @yield [Array] sort_by block for sorting the Array
+    def to_a(&block)
       rows = map do |pair|
         [].tap do |row|
           row.concat pair.first.values
           row << pair.last.size
         end
       end
+      rows = rows.sort_by(&block) if block_given?
       header = pivoted_keys.map(&:to_s) << "total"
       rows.insert 0, header
       rows

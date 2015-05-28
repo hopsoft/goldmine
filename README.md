@@ -161,3 +161,12 @@ mined.to_a
 The first entry is the header row.
 Subsequent entries are data rows.
 The last value in each data row indicates the number of matches.
+
+Need to sort the rows? Just pass a `sort_by` block.
+
+```ruby
+# sort on "total" i.e. 3rd value in the row
+mined.to_a do |row|
+  row[2]
+end
+```
