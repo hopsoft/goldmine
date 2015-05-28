@@ -151,7 +151,7 @@ This feature is useful when you need to do things like export to CSV or build us
 mined.to_a
 # result:
 [
-  ["Name has an 'e'", ">= 21 years old"],
+  ["Name has an 'e'", ">= 21 years old", "total"],
   [false, true, 2],
   [true, true, 2],
   [true, false, 1]

@@ -86,7 +86,8 @@ module Goldmine
           row << pair.last.size
         end
       end
-      rows.insert 0, pivoted_keys
+      header = pivoted_keys.map(&:to_s) << "total"
+      rows.insert 0, header
       rows
     end
 

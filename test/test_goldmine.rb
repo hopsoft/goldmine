@@ -67,7 +67,7 @@ class TestGoldmine < PryTest::Test
       record[:age] >= 21
     end
 
-    expected = [["Name has an 'e'", ">= 21 years old"], [false, true, 2], [true, true, 2], [true, false, 1]]
+    expected = [["Name has an 'e'", ">= 21 years old", "total"], [false, true, 2], [true, true, 2], [true, false, 1]]
     assert mined.to_a == expected
   end
 
