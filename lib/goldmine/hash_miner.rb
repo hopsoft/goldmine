@@ -69,5 +69,24 @@ module Goldmine
       goldmine_key ||= key
     end
 
+    # Returns the pivot keys.
+    # @return [Array]
+    def pivoted_keys
+      first.first.keys
+    end
+
+    # Returns pivoted data as a tabular Array that can be used to build CSVs or user interfaces.
+    # @return [Array] Tabular pivot data
+    def to_a
+      rows = map do |pair|
+        [].tap do |row|
+          row.concat pair.first.values
+          row << pair.last.size
+        end
+      end
+      rows.insert 0, pivoted_keys
+      rows
+    end
+
   end
 end
