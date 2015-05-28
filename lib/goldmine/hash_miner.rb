@@ -83,12 +83,14 @@ module Goldmine
     def to_a(&block)
       rows = map do |pair|
         [].tap do |row|
+          total = pair.last.size
           row.concat pair.first.values
-          row << pair.last.size
+          row << sprintf("%.2f", (total / size.to_f)).to_f
+          row << total
         end
       end
       rows = rows.sort_by(&block) if block_given?
-      header = pivoted_keys.map(&:to_s) << "total"
+      header = [pivoted_keys.map(&:to_s), "Percent of Total", "Total"].flatten
       rows.insert 0, header
       rows
     end
