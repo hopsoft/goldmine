@@ -2,8 +2,10 @@ require "delegate"
 
 module Goldmine
   class HashMiner < SimpleDelegator
+    attr_reader :source_data
 
-    def initialize(hash={})
+    def initialize(hash={}, source_data: nil)
+      @source_data = source_data || hash
       super hash
     end
 
@@ -32,7 +34,7 @@ module Goldmine
     def pivot(name=nil, &block)
       return self unless goldmine
 
-      reduce(HashMiner.new) do |memo, item|
+      reduce(HashMiner.new(source_data: source_data)) do |memo, item|
         key = item.first
         value = Goldmine.miner(item.last)
         value.pivot(name, &block).each do |k, v|
