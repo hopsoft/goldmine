@@ -43,6 +43,29 @@ class TestGoldmine < PryTest::Test
     assert data == expected
   end
 
+  test "pivoted_keys" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot("less than 5") { |i| i < 5 }
+    expected = ["less than 5"]
+    assert data.pivoted_keys == expected
+  end
+
+  test "to_a tabular data" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot("less than 5") { |i| i < 5 }
+    expected = [["less than 5"], [true, 4], [false, 5]]
+    assert data.to_a == expected
+  end
+
+  test "source_data" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot("less than 5") { |i| i < 5 }
+    assert data.source_data == list
+  end
+
   test "pivot of list values" do
     list = [
       { :name => "one",   :list => [1] },
@@ -155,6 +178,7 @@ class TestGoldmine < PryTest::Test
     }
 
     assert data == expected
+    assert data.source_data == list
   end
 
   test "named chained pivots" do
