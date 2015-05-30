@@ -28,6 +28,9 @@ class TestGoldmine < PryTest::Test
     }
 
     assert data == expected
+
+    expected = [["true", "Percent of Total", "Count"], [true, 0.44, 4], [false, 0.56, 5]]
+    assert data.to_tabular.to_a == expected
   end
 
   test "named pivot" do
@@ -51,7 +54,7 @@ class TestGoldmine < PryTest::Test
     assert data.pivoted_keys == expected
   end
 
-  test "to_a tabular data" do
+  test "to_tabular & to_a" do
     list = [
       { :name => "Sally",   :age => 21 },
       { :name => "John",    :age => 28 },
@@ -67,14 +70,15 @@ class TestGoldmine < PryTest::Test
       record[:age] >= 21
     end
 
-    expected = [["Name has an 'e'", ">= 21 years old", "Percent of Total", "Count"], [true, false, 0.2, 1], [false, true, 0.4, 2], [true, true, 0.4, 2]]
+    expected = [["Name has an 'e'", ">= 21 years old", "Percent of Total", "Count"], [false, true, 0.4, 2], [true, true, 0.4, 2], [true, false, 0.2, 1]]
+    assert mined.to_a == expected
 
-    # block is sort_by
-    tabular_data = mined.to_a do |row|
-      [row[2], row[0] ? 1 : 0, row[1] ? 1 : 0]
+    sorted = mined.to_tabular.sort_by do |row|
+      [ row[">= 21 years old"].to_s, row["Count"] ]
     end
 
-    assert tabular_data == expected
+    expected = [["Name has an 'e'", ">= 21 years old", "Percent of Total", "Count"], [true, false, 0.2, 1], [true, true, 0.4, 2], [false, true, 0.4, 2]]
+    assert sorted.to_a == expected
   end
 
   test "source_data" do

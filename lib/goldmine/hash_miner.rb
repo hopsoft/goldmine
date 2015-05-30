@@ -1,4 +1,5 @@
 require "delegate"
+require "tabular_data"
 
 module Goldmine
   class HashMiner < SimpleDelegator
@@ -74,24 +75,35 @@ module Goldmine
     # Returns the pivot keys.
     # @return [Array]
     def pivoted_keys
-      first.first.keys
+      key = first.first # key from first entry
+      return key.keys if key.is_a?(Hash)
+      [key]
     end
 
-    # Returns pivoted data as a tabular Array that can be used to build CSVs or user interfaces.
-    # @return [Array] Tabular pivot data
-    # @yield [Array] sort_by block for sorting the Array
-    def to_a(&block)
+    # Returns pivoted data as tabular data with header & rows.
+    # Tabular data can be used to build CSVs or user interfaces more easily.
+    # @return [Array] Tabular data
+    def to_tabular
       rows = map do |pair|
         [].tap do |row|
-          row.concat pair.first.values
+          row.concat extract_values_from_pivot_key(pair.first)
           row << sprintf("%.2f", (pair.last.size / source_data.size.to_f)).to_f
           row << pair.last.size
         end
       end
-      rows = rows.sort_by(&block) if block_given?
       header = [pivoted_keys.map(&:to_s), "Percent of Total", "Count"].flatten
-      rows.insert 0, header
-      rows
+      TabularData.new(header, rows)
+    end
+
+    def to_a
+      to_tabular.to_a
+    end
+
+    private
+
+    def extract_values_from_pivot_key(pivot_key)
+      return pivot_key.values if pivot_key.is_a?(Hash)
+      [pivot_key]
     end
 
   end
