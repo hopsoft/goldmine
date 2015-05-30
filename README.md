@@ -148,7 +148,7 @@ This feature is useful when you need to do things like export to CSV or build us
 
 ```ruby
 # using the stacked pivot example above
-mined.to_a
+mined.to_tabular.to_a
 # result:
 [
   ["Name has an 'e'", ">= 21 years old", "Percent of Total", "Count"],
@@ -162,11 +162,18 @@ The first entry is the header row.
 Subsequent entries are data rows.
 The last value in each data row indicates the number of matches.
 
-Need to sort the rows? Just pass a `sort_by` block.
+Need to sort the rows?
 
 ```ruby
 # sort on "total" i.e. 3rd value in the row
-mined.to_a do |row|
-  row[2]
-end
+mined.to_tabular.sort_by do |row|
+  row[">= 21 years old"].to_s
+end.to_a
+# result:
+[
+  ["Name has an 'e'", ">= 21 years old", "Percent of Total", "Count"],
+  [true, false, 0.2, 1],
+  [true, true, 0.4, 2],
+  [false, true, 0.4, 2]
+]
 ```
