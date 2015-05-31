@@ -142,38 +142,3 @@ end
 }
 ```
 
-# Returning pivots in tabular format
-
-This feature is useful when you need to do things like export to CSV or build user interfaces.
-
-```ruby
-# using the stacked pivot example above
-mined.to_tabular.to_a
-# result:
-[
-  ["Name has an 'e'", ">= 21 years old", "Percent of Total", "Count"],
-  [false, true, 0.4, 2],
-  [true, true, 0.4, 2],
-  [true, false, 0.2, 1]
-]
-```
-
-The first entry is the header row.
-Subsequent entries are data rows.
-The last value in each data row indicates the number of matches.
-
-Need to sort the rows?
-
-```ruby
-# sort on "total" i.e. 3rd value in the row
-mined.to_tabular.sort_by do |row|
-  row[">= 21 years old"].to_s
-end.to_a
-# result:
-[
-  ["Name has an 'e'", ">= 21 years old", "Percent of Total", "Count"],
-  [true, false, 0.2, 1],
-  [true, true, 0.4, 2],
-  [false, true, 0.4, 2]
-]
-```

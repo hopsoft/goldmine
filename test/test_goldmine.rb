@@ -28,9 +28,45 @@ class TestGoldmine < PryTest::Test
     }
 
     assert data == expected
+  end
 
-    expected = [["true", "Percent of Total", "Count"], [true, 0.44, 4], [false, 0.56, 5]]
-    assert data.to_tabular.to_a == expected
+  test "simple pivot rollup" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot { |i| i < 5 }
+
+    expected = {
+      true => 4,
+      false => 5
+    }
+
+    assert data.rollup == expected
+  end
+
+  test "simple pivot rollup as percentage" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot { |i| i < 5 }
+
+    expected = {
+      true => 0.44,
+      false => 0.56
+    }
+
+    assert data.rollup(percentage: true) == expected
+  end
+
+  test "simple pivot to_tabular" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot { |i| i < 5 }
+
+    expected = [
+      [true, 4],
+      [false, 5]
+    ]
+
+    assert data.to_tabular == expected
   end
 
   test "named pivot" do
@@ -46,57 +82,31 @@ class TestGoldmine < PryTest::Test
     assert data == expected
   end
 
-  test "pivoted_keys" do
+  test "named pivot rollup" do
     list = [1,2,3,4,5,6,7,8,9]
     list = Goldmine::ArrayMiner.new(list)
     data = list.pivot("less than 5") { |i| i < 5 }
-    expected = ["less than 5"]
-    assert data.pivoted_keys == expected
+
+    expected = {
+      { "less than 5" => true }  => 4,
+      { "less than 5" => false } => 5
+    }
+
+    assert data.rollup == expected
   end
 
-  test "to_tabular & to_a" do
-    list = [
-      { :name => "Sally",   :age => 21 },
-      { :name => "John",    :age => 28 },
-      { :name => "Stephen", :age => 37 },
-      { :name => "Emily",   :age => 32 },
-      { :name => "Joe",     :age => 18 }
-    ]
+  test "named pivot to_tabular" do
+    list = [1,2,3,4,5,6,7,8,9]
     list = Goldmine::ArrayMiner.new(list)
-    mined = list.pivot("Name has an 'e'") do |record|
-      !!record[:name].match(/e/i)
-    end
-    mined = mined.pivot(">= 21 years old") do |record|
-      record[:age] >= 21
-    end
+    data = list.pivot("less than 5") { |i| i < 5 }
 
-    expected = [["Name has an 'e'", ">= 21 years old", "Percent of Total", "Count"], [false, true, 0.4, 2], [true, true, 0.4, 2], [true, false, 0.2, 1]]
-    assert mined.to_a == expected
-
-    sorted = mined.to_tabular.sort_by do |row|
-      [ row[">= 21 years old"].to_s, row["Count"] ]
-    end
-
-    expected = [["Name has an 'e'", ">= 21 years old", "Percent of Total", "Count"], [true, false, 0.2, 1], [true, true, 0.4, 2], [false, true, 0.4, 2]]
-    assert sorted.to_a == expected
-  end
-
-  test "source_data" do
-    list = [
-      { :name => "Sally",   :age => 21 },
-      { :name => "John",    :age => 28 },
-      { :name => "Stephen", :age => 37 },
-      { :name => "Emily",   :age => 32 },
-      { :name => "Joe",     :age => 18 }
+    expected = [
+      ["less than 5", "count"],
+      [true, 4],
+      [false, 5]
     ]
-    list = Goldmine::ArrayMiner.new(list)
-    mined = list.pivot("Name has an 'e'") do |record|
-      !!record[:name].match(/e/i)
-    end
-    mined = mined.pivot(">= 21 years old") do |record|
-      record[:age] >= 21
-    end
-    assert mined.source_data == list
+
+    assert data.to_tabular == expected
   end
 
   test "pivot of list values" do
@@ -168,6 +178,36 @@ class TestGoldmine < PryTest::Test
     assert data == expected
   end
 
+  test "chained pivots rollup" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
+
+    expected = {
+      [true, false]  => 2,
+      [true, true]   => 2,
+      [false, false] => 3,
+      [false, true]  => 2
+    }
+
+    assert data.rollup == expected
+  end
+
+  test "chained pivots to_tabular" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
+
+    expected = [
+      [true, false, 2],
+      [true, true, 2],
+      [false, false, 3],
+      [false, true, 2]
+    ]
+
+    assert data.to_tabular == expected
+  end
+
   test "deep chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
     list = Goldmine::ArrayMiner.new(list)
@@ -211,7 +251,26 @@ class TestGoldmine < PryTest::Test
     }
 
     assert data == expected
-    assert data.source_data == list
+  end
+
+  test "named deep chained pivots rollup as percentage" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot("a") { |i| i < 3 }.pivot("b") { |i| i < 6 }.pivot("c") { |i| i < 9 }.pivot("d") { |i| i % 2 == 0 }.pivot("e") { |i| i % 3 == 0 }
+
+    expected = {
+      {"a"=>true, "b"=>true, "c"=>true, "d"=>false, "e"=>false}   => 0.11,
+      {"a"=>true, "b"=>true, "c"=>true, "d"=>true, "e"=>false}    => 0.11,
+      {"a"=>false, "b"=>true, "c"=>true, "d"=>false, "e"=>true}   => 0.11,
+      {"a"=>false, "b"=>true, "c"=>true, "d"=>false, "e"=>false}  => 0.11,
+      {"a"=>false, "b"=>true, "c"=>true, "d"=>true, "e"=>false}   => 0.11,
+      {"a"=>false, "b"=>false, "c"=>true, "d"=>true, "e"=>true}   => 0.11,
+      {"a"=>false, "b"=>false, "c"=>true, "d"=>true, "e"=>false}  => 0.11,
+      {"a"=>false, "b"=>false, "c"=>true, "d"=>false, "e"=>false} => 0.11,
+      {"a"=>false, "b"=>false, "c"=>false, "d"=>false, "e"=>true} => 0.11
+    }
+
+    assert data.rollup(percentage: true) == expected
   end
 
   test "named chained pivots" do
@@ -229,4 +288,49 @@ class TestGoldmine < PryTest::Test
     assert data == expected
   end
 
+  test "named chained pivots rollup" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }
+
+    expected = {
+      { "less than 5" => true, "divisible by 2" => false }  => 2,
+      { "less than 5" => true, "divisible by 2" => true }   => 2,
+      { "less than 5" => false, "divisible by 2" => false } => 3,
+      { "less than 5" => false, "divisible by 2" => true }  => 2
+    }
+
+    assert data.rollup == expected
+  end
+
+  test "named chained pivots rollup as percentage" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }
+
+    expected = {
+      {"less than 5"=>true, "divisible by 2"=>false}  => 0.22,
+      {"less than 5"=>true, "divisible by 2"=>true}   => 0.22,
+      {"less than 5"=>false, "divisible by 2"=>false} => 0.33,
+      {"less than 5"=>false, "divisible by 2"=>true}  => 0.22
+    }
+
+    assert data.rollup(percentage: true) == expected
+  end
+
+  test "named chained pivots to tabular" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }
+
+    expected = [
+      ["less than 5", "divisible by 2", "count"],
+      [true, false, 2],
+      [true, true, 2],
+      [false, false, 3],
+      [false, true, 2]
+    ]
+
+    assert data.to_tabular == expected
+  end
 end

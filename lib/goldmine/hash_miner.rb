@@ -1,12 +1,11 @@
 require "delegate"
-require "tabular_data"
 
 module Goldmine
   class HashMiner < SimpleDelegator
     attr_reader :source_data
 
-    def initialize(hash={}, source_data: nil)
-      @source_data = source_data || hash
+    def initialize(hash={}, source_data: [])
+      @source_data = source_data
       super hash
     end
 
@@ -29,8 +28,8 @@ module Goldmine
     #
     # @note This method should not be called directly. Call Array#pivot instead.
     #
-    # @param [String] name The named of the pivot.
-    # @yield [Object] Yields once for each item in the Array
+    # @param name [String] The named of the pivot.
+    # @yield [Object] Yields once for each item in the Array.
     # @return [Hash] The pivoted Hash of data.
     def pivot(name=nil, &block)
       return self unless goldmine
@@ -52,10 +51,36 @@ module Goldmine
       end
     end
 
+    # Returns a new Hash with the pivoted count instead of an array of objects.
+    #
+    # @param percentage [Boolean] Indicates that a percentage of total should be returned instead of the count.
+    # @return [Hash] The rollup Hash of data.
+    def rollup(percentage: false)
+      each_with_object({}) do |pair, memo|
+        if percentage
+          memo[pair.first] = calculate_percentage(pair.last.size, source_data.size)
+        else
+          memo[pair.first] = pair.last.size
+        end
+      end
+    end
+
+    def to_tabular
+      [].tap do |rows|
+        tabular_header_from_key(first.first).tap do |header|
+          rows << header.push("count") unless header.nil?
+        end
+
+        rollup.each do |key, value|
+          rows << tabular_row_from_key(key).push(value)
+        end
+      end
+    end
+
     # Assigns a key/value pair to the Hash.
-    # @param [String] name The name of a pivot (can be null).
-    # @param [Object] key The key to use.
-    # @param [Object] value The value to assign
+    # @param name [String] The name of a pivot (can be null).
+    # @param key [Object] The key to use.
+    # @param value [Object] The value to assign
     # @return [Object] The result of the assignment.
     def assign_mined(name, key, value)
       goldmine_key = goldmine_key(name, key)
@@ -64,46 +89,30 @@ module Goldmine
     end
 
     # Creates a key for a pivot-name/key combo.
-    # @param [String] name The name of a pivot (can be null).
-    # @param [Object] key The key to use.
+    # @param name [String] The name of a pivot (can be null).
+    # @param key [Object] The key to use.
     # @return [Object] The constructed key.
     def goldmine_key(name, key)
       goldmine_key = { name => key } if name
       goldmine_key ||= key
     end
 
-    # Returns the pivot keys.
-    # @return [Array]
-    def pivoted_keys
-      key = first.first # key from first entry
-      return key.keys if key.is_a?(Hash)
-      [key]
-    end
-
-    # Returns pivoted data as tabular data with header & rows.
-    # Tabular data can be used to build CSVs or user interfaces more easily.
-    # @return [Array] Tabular data
-    def to_tabular
-      rows = map do |pair|
-        [].tap do |row|
-          row.concat extract_values_from_pivot_key(pair.first)
-          row << sprintf("%.2f", (pair.last.size / source_data.size.to_f)).to_f
-          row << pair.last.size
-        end
-      end
-      header = [pivoted_keys.map(&:to_s), "Percent of Total", "Count"].flatten
-      TabularData.new(header, rows)
-    end
-
-    def to_a
-      to_tabular.to_a
-    end
-
     private
 
-    def extract_values_from_pivot_key(pivot_key)
-      return pivot_key.values if pivot_key.is_a?(Hash)
-      [pivot_key]
+    def calculate_percentage(count, total)
+      return 0.0 unless total > 0
+      sprintf("%.2f", count / total.to_f).to_f
+    end
+
+    def tabular_header_from_key(key)
+      return nil unless key.is_a?(Hash)
+      key.keys.dup
+    end
+
+    def tabular_row_from_key(key)
+      return key.dup if key.is_a?(Array)
+      return [key] unless key.is_a?(Hash)
+      key.values.dup
     end
 
   end
