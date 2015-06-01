@@ -69,6 +69,16 @@ class TestGoldmine < PryTest::Test
     assert data.to_tabular == expected
   end
 
+  test "simple pivot to_csv" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot { |i| i < 5 }
+    csv = data.to_csv
+
+    assert csv.headers == ["column0", "column1", "column2"]
+    assert csv.to_a == [["column0", "column1", "column2"], [true, 0.44, 4], [false, 0.56, 5]]
+  end
+
   test "named pivot" do
     list = [1,2,3,4,5,6,7,8,9]
     list = Goldmine::ArrayMiner.new(list)

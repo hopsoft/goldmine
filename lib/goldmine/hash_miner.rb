@@ -88,16 +88,23 @@ module Goldmine
       end
     end
 
-    # Returns an in memory CSV representation of a pivot rollup.
-    # Useful for persisting CSVs & building data visualizations.
+    # Returns an in memory CSV table representation of a pivot rollup.
+    # Useful for working with data & building data visualizations.
     #
     # @param percent_column_name [String] The name of the percent column (percent of total)
     # @param count_column_name [String] The name of the count column (number of objects)
     # @return [CSV::Table] The CSV representation of the data.
     def to_csv(percent_column_name: "percent", count_column_name: "count")
       tabular = to_tabular(percent_column_name: percent_column_name, count_column_name: count_column_name)
-      header = tabular.shift
-      CSV::Table.new tabular.map { |row| CSV::Row.new(header, row) }
+      if (tabular.first.map(&:class) - [String]).empty?
+        header = tabular.shift
+        rows = tabular.map { |row| CSV::Row.new(header, row) }
+        CSV::Table.new rows
+      else
+        header = (0..tabular.size).to_a.map { |i| "column#{i}" }
+        rows = tabular.map { |row| CSV::Row.new(header, row) }
+        CSV::Table.new rows
+      end
     end
 
     # Assigns a key/value pair to the Hash.
