@@ -109,7 +109,7 @@ list.pivot { |record| record[:favorite_colors] }
 }
 ```
 
-# Stacked pivots
+## Stacked pivots
 
 ```ruby
 list = [
@@ -141,4 +141,73 @@ end
   ]
 }
 ```
+
+## Rollups
+
+Sometimes it's useful to roll pivots into a summary.
+
+```ruby
+list = [1,2,3,4,5,6,7,8,9]
+list = Goldmine::ArrayMiner.new(list)
+pivoted = list.pivot(:less_than_5) { |i| i < 5 }.pivot(:even) { |i| i % 2 == 0 }
+pivoted.rollup { |values| values.size }
+# result:
+{
+  { :less_than_5 => true, :even => false} => 2,
+  { :less_than_5 => true, :even => true} => 2,
+  { :less_than_5 => false, :even => false} => 3,
+  { :less_than_5 => false, :even => true} => 2
+}
+```
+
+## Tabular data
+
+Tabular data provides a more streamlined summary view of a pivot.
+
+```ruby
+list = [1,2,3,4,5,6,7,8,9]
+list = Goldmine::ArrayMiner.new(list)
+pivoted = list.pivot(:less_than_5) { |i| i < 5 }.pivot(:even) { |i| i % 2 == 0 }
+pivoted.to_tabular
+# result:
+[
+  ["less_than_5", "even", "percent", "count"],
+  [true, false, 0.22, 2],
+  [true, true, 0.22, 2],
+  [false, false, 0.33, 3],
+  [false, true, 0.22, 2]
+]
+```
+
+## CSV table
+
+CSV tables are a formalized version of tabular data.
+They simplify the complexity of working with tabular data.
+
+```ruby
+list = [1,2,3,4,5,6,7,8,9]
+list = Goldmine::ArrayMiner.new(list)
+pivoted = list.pivot(:less_than_5) { |i| i < 5 }.pivot(:even) { |i| i % 2 == 0 }
+csv = pivoted.to_csv
+
+csv.headers # => ["less_than_5", "even", "percent", "count"]
+
+csv.each do |row|
+  puts row["less_than_5"]
+  puts row["even"]
+end
+
+csv.to_csv
+# result:
+"less_than_5,even,percent,count\ntrue,false,0.22,2\ntrue,true,0.22,2\nfalse,false,0.33,3\nfalse,true,0.22,2\n"
+```
+
+## Summary
+
+Goldmine allows you to combine the power of pivots, rollups, tabular data,
+& csv to construct deep insights into your data with minimal effort.
+
+One of our common use cases is to query a database using ActiveRecord,
+pivot the results, convert to csv, sort, pivot again,
+then rollup the results to create data visualizations in the form of charts & graphs.
 
