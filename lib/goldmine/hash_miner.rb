@@ -65,14 +65,18 @@ module Goldmine
       end
     end
 
-    def to_tabular
+    def to_tabular(percent_column_name: "percent", count_column_name: "count")
       [].tap do |rows|
         tabular_header_from_key(first.first).tap do |header|
-          rows << header.push("count") unless header.nil?
+          rows << header.push(percent_column_name, count_column_name) unless header.nil?
         end
 
         rollup.each do |key, value|
-          rows << tabular_row_from_key(key).push(value)
+          tabular_row_from_key(key).tap do |row|
+            row << calculate_percentage(value, source_data.size)
+            row << value
+            rows << row
+          end
         end
       end
     end

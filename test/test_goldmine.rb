@@ -62,8 +62,8 @@ class TestGoldmine < PryTest::Test
     data = list.pivot { |i| i < 5 }
 
     expected = [
-      [true, 4],
-      [false, 5]
+      [true, 0.44, 4],
+      [false, 0.56, 5]
     ]
 
     assert data.to_tabular == expected
@@ -101,9 +101,9 @@ class TestGoldmine < PryTest::Test
     data = list.pivot("less than 5") { |i| i < 5 }
 
     expected = [
-      ["less than 5", "count"],
-      [true, 4],
-      [false, 5]
+      ["less than 5", "percent", "count"],
+      [true, 0.44, 4],
+      [false, 0.56, 5]
     ]
 
     assert data.to_tabular == expected
@@ -199,10 +199,10 @@ class TestGoldmine < PryTest::Test
     data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
 
     expected = [
-      [true, false, 2],
-      [true, true, 2],
-      [false, false, 3],
-      [false, true, 2]
+      [true, false, 0.22, 2],
+      [true, true, 0.22, 2],
+      [false, false, 0.33, 3],
+      [false, true, 0.22, 2]
     ]
 
     assert data.to_tabular == expected
@@ -324,11 +324,11 @@ class TestGoldmine < PryTest::Test
     data = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }
 
     expected = [
-      ["less than 5", "divisible by 2", "count"],
-      [true, false, 2],
-      [true, true, 2],
-      [false, false, 3],
-      [false, true, 2]
+      ["less than 5", "divisible by 2", "percent", "count"],
+      [true, false, 0.22, 2],
+      [true, true, 0.22, 2],
+      [false, false, 0.33, 3],
+      [false, true, 0.22, 2]
     ]
 
     assert data.to_tabular == expected
