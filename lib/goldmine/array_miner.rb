@@ -2,7 +2,10 @@ require "delegate"
 
 module Goldmine
   class ArrayMiner < SimpleDelegator
-    def initialize(array=[])
+    attr_reader :source_data
+
+    def initialize(array=[], source_data: [])
+      @source_data = source_data
       super array
     end
 
