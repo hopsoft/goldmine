@@ -14,9 +14,9 @@ Think of __Goldmine__ as `Enumerable#group_by` on steroids.
 
 - Data mining
 - Data transformation
+- Data blending
+- Data visualization prep
 - CSV report generation
-- Prep for data visualization
-- Fact table creation
 
 ---
 
