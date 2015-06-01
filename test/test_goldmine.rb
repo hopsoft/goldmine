@@ -333,4 +333,22 @@ class TestGoldmine < PryTest::Test
 
     assert data.to_tabular == expected
   end
+
+  test "named chained pivots to csv" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }
+    csv = data.to_csv
+
+    assert csv.to_a == data.to_tabular
+
+    expected = ["less than 5", "divisible by 2", "percent", "count"]
+    assert csv.headers == expected
+
+    row = csv.first
+    assert row["less than 5"] == true
+    assert row["divisible by 2"] == false
+    assert row["percent"] == 0.22
+    assert row ["count"] == 2
+  end
 end

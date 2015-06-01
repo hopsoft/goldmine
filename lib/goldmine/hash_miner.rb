@@ -1,4 +1,5 @@
 require "delegate"
+require "csv"
 
 module Goldmine
   class HashMiner < SimpleDelegator
@@ -51,7 +52,7 @@ module Goldmine
       end
     end
 
-    # Returns a new Hash with the pivoted count instead of an array of objects.
+    # Returns a new "rolled up" Hash that contains the pivoted count instead of an array of objects.
     #
     # @param percentage [Boolean] Indicates that a percentage of total should be returned instead of the count.
     # @return [Hash] The rollup Hash of data.
@@ -65,6 +66,12 @@ module Goldmine
       end
     end
 
+    # Returns a tabular representation of a pivot rollup. i.e. An Array of Arrays
+    # Useful for building CSVs & data visualizations.
+    #
+    # @param percent_column_name [String] The name of the percent column (percent of total)
+    # @param count_column_name [String] The name of the count column (number of objects)
+    # @return [Array] The tabular representation of the data.
     def to_tabular(percent_column_name: "percent", count_column_name: "count")
       [].tap do |rows|
         tabular_header_from_key(first.first).tap do |header|
@@ -79,6 +86,18 @@ module Goldmine
           end
         end
       end
+    end
+
+    # Returns an in memory CSV representation of a pivot rollup.
+    # Useful for persisting CSVs & building data visualizations.
+    #
+    # @param percent_column_name [String] The name of the percent column (percent of total)
+    # @param count_column_name [String] The name of the count column (number of objects)
+    # @return [CSV::Table] The CSV representation of the data.
+    def to_csv(percent_column_name: "percent", count_column_name: "count")
+      tabular = to_tabular(percent_column_name: percent_column_name, count_column_name: count_column_name)
+      header = tabular.shift
+      CSV::Table.new tabular.map { |row| CSV::Row.new(header, row) }
     end
 
     # Assigns a key/value pair to the Hash.
@@ -110,7 +129,7 @@ module Goldmine
 
     def tabular_header_from_key(key)
       return nil unless key.is_a?(Hash)
-      key.keys.dup
+      key.keys.map(&:to_s)
     end
 
     def tabular_row_from_key(key)
