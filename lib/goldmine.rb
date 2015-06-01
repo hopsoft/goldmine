@@ -9,15 +9,5 @@ module Goldmine
       return HashMiner.new(object) if object.is_a?(Hash)
       nil
     end
-
-    def sum_rows_on(column, rows)
-      rows.reduce(0) { |sum, row| sum += row[column] }
-    end
-
-    def sum_pivoted_on(column, pivoted)
-      pivoted.each_with_object({}) do |keypair, memo|
-        memo[keypair.first] = sum_rows_on(column, keypair.last)
-      end
-    end
   end
 end
