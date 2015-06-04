@@ -158,7 +158,7 @@ pivoted = list
 # result:
 {
   { :less_than_5 => true, :even => false } => [1, 3],
-  { :less_than_5 => true, :even => true } => [2, 4],
+  { :less_than_5 => true, :even => true }  => [2, 4],
   { :less_than_5 => false, :even => false} => [5, 7, 9],
   { :less_than_5 => false, :even => true } => [6, 8]
 }
@@ -166,10 +166,10 @@ pivoted = list
 rollup = pivoted.rollup(:count) { |matched| matched.size }
 # result:
 {
-  {:less_than_5=>true, :even=>false}=>{:count=>2},
-  {:less_than_5=>true, :even=>true}=>{:count=>2},
-  {:less_than_5=>false, :even=>false}=>{:count=>3},
-  {:less_than_5=>false, :even=>true}=>{:count=>2}
+  { :less_than_5 => true, :even => false }  => { :count => 2 },
+  { :less_than_5 => true, :even => true }   => { :count => 2 },
+  { :less_than_5 => false, :even => false } => { :count => 3 },
+  { :less_than_5 => false, :even => true }  => { :count => 2 }
 }
 
 rollup.to_tabular
