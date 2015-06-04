@@ -1,13 +1,9 @@
 require "delegate"
-require "csv"
 
 module Goldmine
   class HashMiner < SimpleDelegator
-    attr_reader :source_data
-
-    def initialize(hash={}, source_data: [])
-      @source_data = source_data
-      super hash
+    def initialize(hash={})
+      super @hash = hash
     end
 
     attr_accessor :goldmine
@@ -35,7 +31,7 @@ module Goldmine
     def pivot(name=nil, &block)
       return self unless goldmine
 
-      reduce(HashMiner.new(source_data: source_data)) do |memo, item|
+      reduce(HashMiner.new) do |memo, item|
         key = item.first
         value = Goldmine.miner(item.last)
         value.pivot(name, &block).each do |k, v|
@@ -52,45 +48,12 @@ module Goldmine
       end
     end
 
-    # Returns a new "rolled up" Hash based on the return value of the yield.
+    # Returns a HashRollup with summarized data.
     #
-    # @yield [Object] Yields once for each pivoted group.
+    # @yield [Object] Yields once for each pivoted grouping of values.
     # @return [Hash] The rollup Hash of data.
-    def rollup
-      each_with_object({}) do |pair, memo|
-        memo[pair.first] = yield(pair.last)
-      end
-    end
-
-    # Returns a tabular representation of the pivot.
-    # Useful for building CSVs & data visualizations.
-    #
-    # @param percent_column_name [String] The name of the percent column (percent of total)
-    # @param count_column_name [String] The name of the count column (number of objects)
-    # @return [Array] The tabular representation of the data.
-    def to_tabular(percent_column_name: "percent", count_column_name: "count")
-      [].tap do |rows|
-        rows << tabular_header_from_key(first.first) + [percent_column_name, count_column_name]
-        rolled = rollup { |row| row.size }
-        rolled.each do |key, value|
-          tabular_row_from_key(key).tap do |row|
-            rows << row + [calculate_percentage(value, source_data.size), value]
-          end
-        end
-      end
-    end
-
-    # Returns an in memory CSV table representation of the pivot.
-    # Useful for working with data & building data visualizations.
-    #
-    # @param percent_column_name [String] The name of the percent column (percent of total)
-    # @param count_column_name [String] The name of the count column (number of objects)
-    # @return [CSV::Table] The CSV representation of the data.
-    def to_csv(percent_column_name: "percent", count_column_name: "count")
-      tabular = to_tabular(percent_column_name: percent_column_name, count_column_name: count_column_name)
-      header = tabular.shift
-      rows = tabular.map { |row| CSV::Row.new(header, row) }
-      CSV::Table.new rows
+    def rollup(name, &block)
+      HashRollup.new(@hash).rollup(name, &block)
     end
 
     # Assigns a key/value pair to the Hash.
@@ -111,25 +74,6 @@ module Goldmine
     def goldmine_key(name, key)
       goldmine_key = { name => key } if name
       goldmine_key ||= key
-    end
-
-    private
-
-    def calculate_percentage(count, total)
-      return 0.0 unless total > 0
-      sprintf("%.2f", count / total.to_f).to_f
-    end
-
-    def tabular_header_from_key(key)
-      return key.keys.map(&:to_s) if key.is_a?(Hash)
-      key = [key] unless key.is_a?(Array)
-      (0..key.size-1).map { |i| "column#{i}" }
-    end
-
-    def tabular_row_from_key(key)
-      return key.dup if key.is_a?(Array)
-      return [key] unless key.is_a?(Hash)
-      key.values.dup
     end
 
   end

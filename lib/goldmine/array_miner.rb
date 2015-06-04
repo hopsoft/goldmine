@@ -2,10 +2,7 @@ require "delegate"
 
 module Goldmine
   class ArrayMiner < SimpleDelegator
-    attr_reader :source_data
-
-    def initialize(array=[], source_data: [])
-      @source_data = source_data
+    def initialize(array=[])
       super array
     end
 
@@ -48,7 +45,7 @@ module Goldmine
     # @yield [Object] Yields once for each item in the Array
     # @return [Hash] The pivoted Hash of data.
     def pivot(name=nil, &block)
-      reduce(HashMiner.new(source_data: self)) do |memo, item|
+      reduce(HashMiner.new) do |memo, item|
         value = yield(item)
 
         if value.is_a?(Array)

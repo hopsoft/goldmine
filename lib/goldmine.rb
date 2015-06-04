@@ -1,4 +1,5 @@
 $:.unshift File.join(File.dirname(__FILE__), "goldmine")
+require "hash_rollup"
 require "array_miner"
 require "hash_miner"
 
