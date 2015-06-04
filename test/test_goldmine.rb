@@ -60,29 +60,29 @@ class TestGoldmine < PryTest::Test
     assert rolled == expected
   end
 
-  #test "simple pivot to_tabular" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot { |i| i < 5 }
+  test "simple pivot rollup to_tabular" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    rolled = list.pivot { |i| i < 5 }.rollup(:count, &:size)
 
-  #  expected = [
-  #    ["column0", "percent", "count"],
-  #    [true, 0.44, 4],
-  #    [false, 0.56, 5]
-  #  ]
+    expected = [
+      ["column1", "count"],
+      [true, 4],
+      [false, 5]
+    ]
 
-  #  assert data.to_tabular == expected
-  #end
+    assert rolled.to_tabular == expected
+  end
 
-  #test "simple pivot to_csv" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot { |i| i < 5 }
-  #  csv = data.to_csv
+  test "simple pivot rollup to_csv" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    rolled = list.pivot { |i| i < 5 }.rollup(:count, &:size)
+    csv = rolled.to_csv
 
-  #  assert csv.headers == ["column0", "percent", "count"]
-  #  assert csv.to_a == [["column0", "percent", "count"], [true, 0.44, 4], [false, 0.56, 5]]
-  #end
+    assert csv.headers == ["column1", "count"]
+    assert csv.to_a == [["column1", "count"], [true, 4], [false, 5]]
+  end
 
   test "named pivot" do
     list = [1,2,3,4,5,6,7,8,9]
@@ -111,19 +111,19 @@ class TestGoldmine < PryTest::Test
     assert rolled == expected
   end
 
-  #test "named pivot to_tabular" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot("less than 5") { |i| i < 5 }
+  test "named pivot rollup to_tabular" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    rolled = list.pivot("less than 5") { |i| i < 5 }.rollup(:count, &:size)
 
-  #  expected = [
-  #    ["less than 5", "percent", "count"],
-  #    [true, 0.44, 4],
-  #    [false, 0.56, 5]
-  #  ]
+    expected = [
+      ["less than 5", "count"],
+      [true, 4],
+      [false, 5]
+    ]
 
-  #  assert data.to_tabular == expected
-  #end
+    assert rolled.to_tabular == expected
+  end
 
   test "pivot of list values" do
     list = [
@@ -210,21 +210,21 @@ class TestGoldmine < PryTest::Test
     assert rolled == expected
   end
 
-  #test "chained pivots to_tabular" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
+  test "chained pivots rollup to_tabular" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    rolled = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }.rollup(:count, &:size)
 
-  #  expected = [
-  #    ["column0", "column1", "percent", "count"],
-  #    [true, false, 0.22, 2],
-  #    [true, true, 0.22, 2],
-  #    [false, false, 0.33, 3],
-  #    [false, true, 0.22, 2]
-  #  ]
+    expected = [
+      ["column1", "column2", "count"],
+      [true, false, 2],
+      [true, true, 2],
+      [false, false, 3],
+      [false, true, 2]
+    ]
 
-  #  assert data.to_tabular == expected
-  #end
+    assert rolled.to_tabular == expected
+  end
 
   test "deep chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
@@ -302,37 +302,36 @@ class TestGoldmine < PryTest::Test
     assert rolled == expected
   end
 
-  #test "named chained pivots to tabular" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }
+  test "named chained pivots rollup to tabular" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    rolled = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }.rollup(:count, &:size)
 
-  #  expected = [
-  #    ["less than 5", "divisible by 2", "percent", "count"],
-  #    [true, false, 0.22, 2],
-  #    [true, true, 0.22, 2],
-  #    [false, false, 0.33, 3],
-  #    [false, true, 0.22, 2]
-  #  ]
+    expected = [
+      ["less than 5", "divisible by 2", "count"],
+      [true, false, 2],
+      [true, true, 2],
+      [false, false, 3],
+      [false, true, 2]
+    ]
 
-  #  assert data.to_tabular == expected
-  #end
+    assert rolled.to_tabular == expected
+  end
 
-  #test "named chained pivots to csv" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }
-  #  csv = data.to_csv
+  test "named chained pivots rollup to csv" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    rolled = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }.rollup(:count, &:size)
+    csv = rolled.to_csv
 
-  #  assert csv.to_a == data.to_tabular
+    assert csv.to_a == rolled.to_tabular
 
-  #  expected = ["less than 5", "divisible by 2", "percent", "count"]
-  #  assert csv.headers == expected
+    expected = ["less than 5", "divisible by 2", "count"]
+    assert csv.headers == expected
 
-  #  row = csv.first
-  #  assert row["less than 5"] == true
-  #  assert row["divisible by 2"] == false
-  #  assert row["percent"] == 0.22
-  #  assert row ["count"] == 2
-  #end
+    row = csv.first
+    assert row["less than 5"] == true
+    assert row["divisible by 2"] == false
+    assert row ["count"] == 2
+  end
 end
