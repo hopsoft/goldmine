@@ -143,64 +143,52 @@ end
 }
 ```
 
-## Rollups
+## Rollups, Tabular, & CSV
 
-Sometimes it's useful to roll pivots into a summary.
+Rollups provide a clean way to aggregate pivoted data.
+
+_NOTE: Rollups can also be chained._
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 list = Goldmine::ArrayMiner.new(list)
-pivoted = list.pivot(:less_than_5) { |i| i < 5 }.pivot(:even) { |i| i % 2 == 0 }
-pivoted.rollup { |values| values.size }
+pivoted = list
+  .pivot(:less_than_5) { |i| i < 5 }
+  .pivot(:even) { |i| i % 2 == 0 }
 # result:
 {
-  { :less_than_5 => true, :even => false} => 2,
-  { :less_than_5 => true, :even => true} => 2,
-  { :less_than_5 => false, :even => false} => 3,
-  { :less_than_5 => false, :even => true} => 2
+  { :less_than_5 => true, :even => false } => [1, 3],
+  { :less_than_5 => true, :even => true } => [2, 4],
+  { :less_than_5 => false, :even => false} => [5, 7, 9],
+  { :less_than_5 => false, :even => true } => [6, 8]
 }
-```
 
-## Tabular data
+rollup = pivoted.rollup(:count) { |matched| matched.size }
+# result:
+{
+  {:less_than_5=>true, :even=>false}=>{:count=>2},
+  {:less_than_5=>true, :even=>true}=>{:count=>2},
+  {:less_than_5=>false, :even=>false}=>{:count=>3},
+  {:less_than_5=>false, :even=>true}=>{:count=>2}
+}
 
-Tabular data provides a more streamlined summary view of a pivot.
-
-```ruby
-list = [1,2,3,4,5,6,7,8,9]
-list = Goldmine::ArrayMiner.new(list)
-pivoted = list.pivot(:less_than_5) { |i| i < 5 }.pivot(:even) { |i| i % 2 == 0 }
-pivoted.to_tabular
+rollup.to_tabular
 # result:
 [
-  ["less_than_5", "even", "percent", "count"],
-  [true, false, 0.22, 2],
-  [true, true, 0.22, 2],
-  [false, false, 0.33, 3],
-  [false, true, 0.22, 2]
+  ["less_than_5", "even", "count"],
+  [true, false, 2],
+  [true, true, 2],
+  [false, false, 3],
+  [false, true, 2]
 ]
-```
 
-## CSV table
-
-CSV tables are a formalized version of tabular data.
-They simplify the complexity of working with tabular data.
-
-```ruby
-list = [1,2,3,4,5,6,7,8,9]
-list = Goldmine::ArrayMiner.new(list)
-pivoted = list.pivot(:less_than_5) { |i| i < 5 }.pivot(:even) { |i| i % 2 == 0 }
-csv = pivoted.to_csv
-
-csv.headers # => ["less_than_5", "even", "percent", "count"]
-
-csv.each do |row|
-  puts row["less_than_5"]
-  puts row["even"]
-end
-
-csv.to_csv
+rollup.to_csv_table
 # result:
-"less_than_5,even,percent,count\ntrue,false,0.22,2\ntrue,true,0.22,2\nfalse,false,0.33,3\nfalse,true,0.22,2\n"
+#<CSV::Table mode:col_or_row row_count:5>
+
+rollup.to_csv_table.to_csv
+# result:
+"less_than_5,even,count\ntrue,false,2\ntrue,true,2\nfalse,false,3\nfalse,true,2\n"
 ```
 
 ## Summary

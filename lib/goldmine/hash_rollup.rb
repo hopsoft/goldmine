@@ -23,7 +23,7 @@ module Goldmine
       end
     end
 
-    def to_csv
+    def to_csv_table
       header = tabular_header
       rows = tabular_rows.map { |row| CSV::Row.new(header, row) }
       CSV::Table.new rows

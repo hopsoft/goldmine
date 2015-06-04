@@ -74,11 +74,11 @@ class TestGoldmine < PryTest::Test
     assert rolled.to_tabular == expected
   end
 
-  test "simple pivot rollup to_csv" do
+  test "simple pivot rollup to_csv_table" do
     list = [1,2,3,4,5,6,7,8,9]
     list = Goldmine::ArrayMiner.new(list)
     rolled = list.pivot { |i| i < 5 }.rollup(:count, &:size)
-    csv = rolled.to_csv
+    csv = rolled.to_csv_table
 
     assert csv.headers == ["column1", "count"]
     assert csv.to_a == [["column1", "count"], [true, 4], [false, 5]]
@@ -318,11 +318,11 @@ class TestGoldmine < PryTest::Test
     assert rolled.to_tabular == expected
   end
 
-  test "named chained pivots rollup to csv" do
+  test "named chained pivots rollup to_csv_table" do
     list = [1,2,3,4,5,6,7,8,9]
     list = Goldmine::ArrayMiner.new(list)
     rolled = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }.rollup(:count, &:size)
-    csv = rolled.to_csv
+    csv = rolled.to_csv_table
 
     assert csv.to_a == rolled.to_tabular
 
