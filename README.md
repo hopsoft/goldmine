@@ -145,9 +145,10 @@ end
 
 ## Rollups, Tabular, & CSV
 
-Rollups provide a clean way to aggregate pivoted data.
+Rollups provide a clean way to aggregate pivoted data...
+think computed columns.
 
-_NOTE: Rollups can also be chained._
+_Rollups, like pivots, can be chained._
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
