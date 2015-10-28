@@ -18,6 +18,23 @@ Think of __Goldmine__ as `Enumerable#group_by` on steroids.
 - Data visualization prep
 - CSV report generation
 
+## Examples
+
+Run the New York Wifi Hotspot example.
+
+```
+git clone git@github.com:hopsoft/goldmine.git
+ruby goldmine/examples/new_york_wifi_hotspots/app.rb
+```
+
+```
+curl http://localhost:4567/raw
+curl http://localhost:4567/pivoted
+curl http://localhost:4567/computed
+curl http://localhost:4567/computed_tabular
+curl http://localhost:4567/computed_csv
+```
+
 ## Quick Start
 
 ```
