@@ -20,6 +20,9 @@ Think of __Goldmine__ as `Enumerable#group_by` on steroids.
 
 ## Examples
 
+All examples are simple Sinatra apps.
+They are designed to help communicate what's possible with Goldmine.
+
 ### New York Wifi Hotspots
 
 ```
@@ -209,5 +212,5 @@ Goldmine allows you to combine the power of pivots, rollups, tabular data,
 
 One of our common use cases is to query a database using ActiveRecord,
 pivot the results, convert to csv, sort, pivot again,
-then rollup the results to create data visualizations in the form of charts & graphs.
+then rollup the results to create data visualizations in the form of tables, charts, & graphs.
 
