@@ -65,6 +65,9 @@ def pivoted
     .pivot("Area Code") { |row| row["PHONE"].to_s.gsub(/\W/, "")[0, 3] }
 end
 
+# NOTE: rollup blocks are called once for each pivot
+#       best practice is to cache intermediate rollup results to avoid duplicate computations
+#       leaving caching out for clarity
 def computed
   @computed ||= begin
     value = pivoted.rollup("Total") { |list| list.size }
