@@ -21,7 +21,7 @@ Think of __Goldmine__ as `Enumerable#group_by` on steroids.
 ## Examples
 
 All examples are simple Sinatra apps.
-They are designed to help communicate what's possible with Goldmine.
+They are designed to help communicate Goldmine use-cases.
 
 ### Setup
 
@@ -37,7 +37,7 @@ bundle
 ruby examples/new_york_wifi_hotspots/app.rb
 ```
 
-```
+```sh
 curl http://localhost:3000/raw
 curl http://localhost:3000/pivoted
 curl http://localhost:3000/computed
@@ -47,7 +47,7 @@ curl http://localhost:3000/computed_csv
 
 ## Quick Start
 
-```
+```sh
 gem install goldmine
 ```
 
