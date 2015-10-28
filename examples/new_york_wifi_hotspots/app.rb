@@ -5,6 +5,8 @@ require "json"
 require "benchmark"
 require File.expand_path("../../../lib/goldmine", __FILE__)
 
+set :port, 3000
+
 before do
   content_type "application/json"
 end
@@ -113,4 +115,3 @@ def computed
     end
   end
 end
-

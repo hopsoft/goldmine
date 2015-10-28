@@ -23,19 +23,26 @@ Think of __Goldmine__ as `Enumerable#group_by` on steroids.
 All examples are simple Sinatra apps.
 They are designed to help communicate what's possible with Goldmine.
 
+### Setup
+
+```sh
+git clone git@github.com:hopsoft/goldmine.git
+cd /path/to/goldmine
+bundle
+```
+
 ### [New York Wifi Hotspots](https://github.com/hopsoft/goldmine/tree/master/examples/new_york_wifi_hotspots)
 
-```
-git clone git@github.com:hopsoft/goldmine.git
-ruby goldmine/examples/new_york_wifi_hotspots/app.rb
+```sh
+ruby examples/new_york_wifi_hotspots/app.rb
 ```
 
 ```
-curl http://localhost:4567/raw
-curl http://localhost:4567/pivoted
-curl http://localhost:4567/computed
-curl http://localhost:4567/computed_tabular
-curl http://localhost:4567/computed_csv
+curl http://localhost:3000/raw
+curl http://localhost:3000/pivoted
+curl http://localhost:3000/computed
+curl http://localhost:3000/computed_tabular
+curl http://localhost:3000/computed_csv
 ```
 
 ## Quick Start
