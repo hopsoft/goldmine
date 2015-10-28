@@ -18,13 +18,6 @@ Think of __Goldmine__ as `Enumerable#group_by` on steroids.
 - Data visualization prep
 - CSV report generation
 
----
-
-The [demo project](http://hopsoft.github.io/goldmine/) demonstrates some of Goldmine's uses.
-`TODO: update the demo project to use the latest features`
-
----
-
 ## Quick Start
 
 ```
