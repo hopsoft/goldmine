@@ -23,7 +23,7 @@ Think of __Goldmine__ as `Enumerable#group_by` on steroids.
 All examples are simple Sinatra apps.
 They are designed to help communicate what's possible with Goldmine.
 
-### New York Wifi Hotspots
+### [New York Wifi Hotspots](https://github.com/hopsoft/goldmine/tree/master/examples/new_york_wifi_hotspots)
 
 ```
 git clone git@github.com:hopsoft/goldmine.git
