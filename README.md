@@ -20,7 +20,7 @@ Think of __Goldmine__ as `Enumerable#group_by` on steroids.
 
 ## Examples
 
-Run the New York Wifi Hotspot example.
+### New York Wifi Hotspots
 
 ```
 git clone git@github.com:hopsoft/goldmine.git
