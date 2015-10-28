@@ -72,46 +72,46 @@ end
 #       this example omits caching for simplicity & clarity
 def computed
   @computed ||= begin
-    value = pivoted.rollup("Total") { |list| list.size }
+    value = pivoted.rollup("Total") { |pivoted_list| pivoted_list.size }
 
-    value = value.rollup("Free") do |list|
-      list.select { |row| !(row["TYPE"] =~ /free/i).nil? }.size
+    value = value.rollup("Free") do |pivoted_list|
+      pivoted_list.select { |row| !(row["TYPE"] =~ /free/i).nil? }.size
     end
 
-    value = value.rollup("Free Percentage") do |list|
-      list.select { |row| !(row["TYPE"] =~ /free/i).nil? }.size / list.size.to_f
+    value = value.rollup("Free Percentage") do |pivoted_list|
+      computed("Free").for(pivoted_list) / computed("Total").for(pivoted_list).to_f
     end
 
-    value = value.rollup("Paid") do |list|
-      list.select { |row| (row["TYPE"] =~ /free/i).nil? }.size
+    value = value.rollup("Paid") do |pivoted_list|
+      pivoted_list.select { |row| (row["TYPE"] =~ /free/i).nil? }.size
     end
 
-    value = value.rollup("Paid Percentage") do |list|
-      list.select { |row| (row["TYPE"] =~ /free/i).nil? }.size / list.size.to_f
+    value = value.rollup("Paid Percentage") do |pivoted_list|
+      computed("Paid").for(pivoted_list) / computed("Total").for(pivoted_list).to_f
     end
 
-    value = value.rollup("Library") do |list|
-      list.select { |row| row["NAME"].to_s =~ /library/i }.size
+    value = value.rollup("Library") do |pivoted_list|
+      pivoted_list.select { |row| row["NAME"].to_s =~ /library/i }.size
     end
 
-    value = value.rollup("Library Percentage") do |list|
-      list.select { |row| row["NAME"].to_s =~ /library/i }.size / list.size.to_f
+    value = value.rollup("Library Percentage") do |pivoted_list|
+      computed("Library").for(pivoted_list) / computed("Total").for(pivoted_list).to_f
     end
 
-    value = value.rollup("Starbucks") do |list|
-      list.select { |row| row["NAME"].to_s =~ /starbuck'?s/i }.size
+    value = value.rollup("Starbucks") do |pivoted_list|
+      pivoted_list.select { |row| row["NAME"].to_s =~ /starbuck'?s/i }.size
     end
 
-    value = value.rollup("Starbucks Percentage") do |list|
-      list.select { |row| row["NAME"].to_s =~ /starbuck'?s/i }.size / list.size.to_f
+    value = value.rollup("Starbucks Percentage") do |pivoted_list|
+      computed("Starbucks").for(pivoted_list) / computed("Total").for(pivoted_list).to_f
     end
 
-    value = value.rollup("McDonalds") do |list|
-      list.select { |row| row["NAME"].to_s =~ /McDonald'?s/i }.size
+    value = value.rollup("McDonalds") do |pivoted_list|
+      pivoted_list.select { |row| row["NAME"].to_s =~ /McDonald'?s/i }.size
     end
 
-    value = value.rollup("McDonalds Percentage") do |list|
-      list.select { |row| row["NAME"].to_s =~ /McDonald'?s/i }.size / list.size.to_f
+    value = value.rollup("McDonalds Percentage") do |pivoted_list|
+      computed("McDonalds").for(pivoted_list) / computed("Total").for(pivoted_list).to_f
     end
   end
 end

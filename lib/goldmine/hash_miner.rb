@@ -3,6 +3,7 @@ require "delegate"
 module Goldmine
   class HashMiner < SimpleDelegator
     def initialize(hash={})
+      @rollup_cache = Cache.new
       super @hash = hash
     end
 
@@ -53,7 +54,7 @@ module Goldmine
     # @yield [Object] Yields once for each pivoted grouping of values.
     # @return [Hash] The rollup Hash of data.
     def rollup(name, &block)
-      HashRollup.new(@hash).rollup(name, &block)
+      HashRollup.new(@hash, @rollup_cache).rollup(name, &block)
     end
 
     # Assigns a key/value pair to the Hash.

@@ -3,15 +3,21 @@ require "csv"
 
 module Goldmine
   class HashRollup < SimpleDelegator
-    def initialize(pivoted)
+    def initialize(pivoted, cache=Cache.new)
+      @cache = cache
+      @context = RollupContext.new(@cache)
       @pivoted = pivoted
       super @rolled = {}
     end
 
-    def rollup(name)
+    def rollup(name, &block)
       pivoted.each do |key, value|
-        rolled[key] ||= {}
-        rolled[key][name] = yield(value)
+        puts "value: #{value}" if $NATE
+        @cache.fetch(name, value) do
+          result = @context.instance_exec(value, &block)
+          rolled[key] ||= {}
+          rolled[key][name] = result
+        end
       end
       self
     end
@@ -60,6 +66,7 @@ module Goldmine
       return value if value.is_a?(Array)
       [value]
     end
+
 
   end
 end

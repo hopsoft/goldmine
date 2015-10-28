@@ -1,6 +1,7 @@
 require "pry-test"
 require "coveralls"
 Coveralls.wear!
+SimpleCov.command_name "pry-test"
 require File.expand_path("../../lib/goldmine", __FILE__)
 
 class TestGoldmine < PryTest::Test
@@ -333,5 +334,22 @@ class TestGoldmine < PryTest::Test
     assert row["less than 5"] == true
     assert row["divisible by 2"] == false
     assert row ["count"] == 2
+  end
+
+  test "access to prior-computed rollups" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    rolled = list
+      .pivot("less than 5") { |i| i < 5 }
+      .rollup(:count, &:size)
+      .rollup(:evens) { |pivoted_list| pivoted_list.select { |i| i % 2 == 0 }.size }
+      .rollup(:even_percentage) { |pivoted_list| computed(:evens).for(pivoted_list) / computed(:count).for(pivoted_list).to_f }
+
+    expected = [
+      ["less than 5", "count", "evens", "even_percentage"],
+      [true, 4, 2, 0.5],
+      [false, 5, 2, 0.4]
+    ]
+    assert rolled.to_tabular == expected
   end
 end
