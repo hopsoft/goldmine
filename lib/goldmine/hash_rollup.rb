@@ -12,11 +12,9 @@ module Goldmine
 
     def rollup(name, &block)
       pivoted.each do |key, value|
-        puts "value: #{value}" if $NATE
         @cache.fetch(name, value) do
-          result = @context.instance_exec(value, &block)
           rolled[key] ||= {}
-          rolled[key][name] = result
+          rolled[key][name] = @context.instance_exec(value, &block)
         end
       end
       self
