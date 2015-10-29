@@ -3,7 +3,10 @@ require "csv"
 
 module Goldmine
   class HashRollup < SimpleDelegator
+    attr_reader :names
+
     def initialize(pivoted, cache=Cache.new)
+      @names = []
       @cache = cache
       @context = RollupContext.new(@cache)
       @pivoted = pivoted
@@ -11,6 +14,7 @@ module Goldmine
     end
 
     def rollup(name, &block)
+      names << name
       pivoted.each do |key, value|
         @cache.fetch(name, value) do
           rolled[key] ||= {}
