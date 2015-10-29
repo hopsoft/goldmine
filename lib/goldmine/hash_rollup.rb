@@ -32,9 +32,19 @@ module Goldmine
     end
 
     def to_csv_table
-      header = tabular_header
-      rows = tabular_rows.map { |row| CSV::Row.new(header, row) }
+      rows = to_rows.map { |row| CSV::Row.new(row.keys, row.values) }
       CSV::Table.new rows
+    end
+
+    def to_rows
+      header = tabular_header
+      tabular_rows.map do |tabular_row|
+        {}.tap do |row|
+          header.each_with_index do |header_name, index|
+            row[header_name] = tabular_row[index]
+          end
+        end
+      end
     end
 
     private
@@ -68,7 +78,6 @@ module Goldmine
       return value if value.is_a?(Array)
       [value]
     end
-
 
   end
 end
