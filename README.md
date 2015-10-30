@@ -228,7 +228,7 @@ Goldmine::ArrayMiner.new(list)
 
 ### Tabular
 
-Rollups can be converted into tabular format also.
+Rollups can also be converted into tabular format.
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
@@ -249,7 +249,7 @@ Goldmine::ArrayMiner.new(list)
 
 ### CSV
 
-Goldmine make producing CSV output simple.
+Goldmine makes producing CSV output simple.
 
 ```ruby
 csv_table = Goldmine::ArrayMiner.new(list)
