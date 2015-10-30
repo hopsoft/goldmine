@@ -165,7 +165,7 @@ Goldmine::ArrayMiner.new(list)
 ### Pre-Computed Results
 
 Rollups can be computationally expensive _(depending upon how much logic you stuff into the `block`)_.
-Goldmine caches rollup results & makes the results available to subsequent rollups.
+Goldmine caches rollup results & makes them available to subsequent rollups.
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
@@ -173,7 +173,9 @@ Goldmine::ArrayMiner.new(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .rollup(:count, &:size)
   .rollup(:evens) { |list| list.select { |i| i % 2 == 0 }.size }
-  .rollup(:even_percentage) { |list| computed(:evens).for(list) / computed(:count).for(list).to_f }
+  .rollup(:even_percentage) { |list|
+    computed(:evens).for(list) / computed(:count).for(list).to_f
+  }
 # result:
 {
   { :less_than_5 => true } => { :count => 4, :evens => 2, :even_percentage => 0.5 },
@@ -191,7 +193,9 @@ Goldmine::ArrayMiner.new(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .rollup(:count, &:size)
   .rollup(:evens) { |list| list.select { |i| i % 2 == 0 }.size }
-  .rollup(:even_percentage) { |list| computed(:evens).for(list) / computed(:count).for(list).to_f }
+  .rollup(:even_percentage) { |list|
+    computed(:evens).for(list) / computed(:count).for(list).to_f
+  }
   .to_rows
 # result:
 [
