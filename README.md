@@ -186,6 +186,7 @@ Goldmine::ArrayMiner.new(list)
   { :less_than_5 => false, :even => false } => { :count => 3 },
   { :less_than_5 => false, :even => true }  => { :count => 2 }
 }
+```
 
 ### Pre-Computed Results
 
