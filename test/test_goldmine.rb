@@ -352,4 +352,16 @@ class TestGoldmine < PryTest::Test
     ]
     assert rolled.to_tabular == expected
   end
+
+  test "rollup names" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    data = list.pivot { |i| i < 5 }
+    rolled = data
+      .rollup(:count) { |items| items.size }
+      .rollup(:div_by_3) { |items| items.keep_if { |i| i % 3 == 0 }.size }
+
+    expected = [:count, :div_by_3]
+    assert rolled.names == expected
+  end
 end
