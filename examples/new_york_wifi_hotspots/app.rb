@@ -1,4 +1,3 @@
-require "delegate"
 require "sinatra"
 require "csv"
 require "json"

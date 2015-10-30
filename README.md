@@ -8,7 +8,9 @@
 # Goldmine
 
 Extract a wealth of information from Arrays & Hashes.
-Think of __Goldmine__ as `Enumerable#group_by` on steroids.
+
+Goldmine is especially helpful when working with source data that is difficult to query.
+e.g. CSV files, API results, etc...
 
 ## Uses
 
@@ -17,34 +19,6 @@ Think of __Goldmine__ as `Enumerable#group_by` on steroids.
 - Data blending
 - Data visualization prep
 - CSV report generation
-
-## Examples
-
-All examples are simple Sinatra apps.
-They are designed to help communicate Goldmine use-cases.
-
-### Setup
-
-```sh
-git clone git@github.com:hopsoft/goldmine.git
-cd /path/to/goldmine
-bundle
-```
-
-### [New York Wifi Hotspots](https://github.com/hopsoft/goldmine/tree/master/examples/new_york_wifi_hotspots)
-
-```sh
-ruby examples/new_york_wifi_hotspots/app.rb
-```
-
-```sh
-curl http://localhost:3000/raw
-curl http://localhost:3000/pivoted
-curl http://localhost:3000/rolled_up
-curl http://localhost:3000/rows
-curl http://localhost:3000/tabular
-curl http://localhost:3000/csv
-```
 
 ## Quick Start
 
@@ -263,6 +237,98 @@ csv_table = Goldmine::ArrayMiner.new(list)
 csv_table.to_csv
 # result:
 "less_than_5,even,count\ntrue,false,2\ntrue,true,2\nfalse,false,3\nfalse,true,2\n"
+```
+
+## Examples
+
+All examples are simple Sinatra apps.
+They are designed to help communicate Goldmine use-cases.
+
+### Setup
+
+```sh
+git clone git@github.com:hopsoft/goldmine.git
+cd /path/to/goldmine
+bundle
+```
+
+### [New York Wifi Hotspots](https://github.com/hopsoft/goldmine/tree/master/examples/new_york_wifi_hotspots)
+
+In this example, we mine the following data.
+
+* Total hotspots by city, zip, & area code
+* Free hotspots by city, zip, & area code
+* Paid hotspots by city, zip, & area code
+* Library hotspots by city, zip, & area code
+* Starbucks hotspots by city, zip, & area code
+* McDonalds hotspots by city, zip, & area code
+
+```sh
+ruby examples/new_york_wifi_hotspots/app.rb
+```
+
+```sh
+curl http://localhost:3000/raw
+curl http://localhost:3000/pivoted
+curl http://localhost:3000/rolled_up
+curl http://localhost:3000/rows
+curl http://localhost:3000/tabular
+curl http://localhost:3000/csv
+```
+
+### [Medicare Physician Comparison](#)
+
+In this example, we mine the following data.
+
+* Total doctors by state & specialty
+* Preferred doctors by state & specialty
+* Female doctors by state & specialty
+* Male doctors by state & specialty
+* Preferred female doctors by state & specialty
+* Preferred male doctors by state & specialty
+
+```sh
+ruby examples/medicare_physician_compare/app.rb
+```
+
+```sh
+curl http://localhost:3000/raw
+curl http://localhost:3000/pivoted
+curl http://localhost:3000/rolled_up
+curl http://localhost:3000/rows
+curl http://localhost:3000/tabular
+curl http://localhost:3000/csv
+```
+
+#### Performance
+
+The Medicare dataset is large, so this example works well for performance testing.
+
+My Macbook Pro yields the following benchmarks.
+
+* 3.1 GHz Intel Core i7
+* 16 GB 1867 MHz DDR3
+
+##### 100,000 Records
+
+```
+                      user     system      total        real
+pivoted           1.000000   0.020000   1.020000 (  1.027810)
+rolled_up         1.090000   0.020000   1.110000 (  1.101082)
+rows              0.020000   0.000000   0.020000 (  0.022978)
+tabular           0.010000   0.000000   0.010000 (  0.005423)
+csv               0.030000   0.000000   0.030000 (  0.037245)
+```
+
+##### 1,000,000 Records
+
+```
+                      user     system      total        real
+pivoted          15.700000   0.490000  16.190000 ( 16.886677)
+rolled_up         7.070000   0.350000   7.420000 (  7.544060)
+rows              0.020000   0.000000   0.020000 (  0.028432)
+tabular           0.010000   0.010000   0.020000 (  0.007663)
+csv               0.050000   0.000000   0.050000 (  0.058925)
 ```
 
 ## Summary
