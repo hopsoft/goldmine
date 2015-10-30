@@ -40,9 +40,10 @@ ruby examples/new_york_wifi_hotspots/app.rb
 ```sh
 curl http://localhost:3000/raw
 curl http://localhost:3000/pivoted
-curl http://localhost:3000/computed
-curl http://localhost:3000/computed_tabular
-curl http://localhost:3000/computed_csv
+curl http://localhost:3000/rolled_up
+curl http://localhost:3000/rows
+curl http://localhost:3000/tabular
+curl http://localhost:3000/csv
 ```
 
 ## Quick Start
@@ -170,8 +171,7 @@ Rollups provide a clean way to aggregate pivoted data...
 think computed columns.
 
 Rollup `blocks` are executed once for each pivot.
-
-_Like pivots, they can be chained._
+_Like pivots, rollups can be chained._
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
