@@ -342,6 +342,6 @@ csv               0.050000   0.000000   0.050000 (  0.058925)
 Goldmine allows you to combine the power of pivots, rollups, tabular data,
 & csv to construct deep insights into your data with minimal effort.
 
-One of our common use cases is to query a database using ActiveRecord,
-chain several pivots, chain several rollups, & then output JSON, CSV, & data visualizations.
+A common use case is to query a database using ActiveRecord,
+then chain several pivots & rollups, & output JSON, CSV, & data visualizations.
 
