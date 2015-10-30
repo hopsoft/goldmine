@@ -319,7 +319,7 @@ class TestGoldmine < PryTest::Test
     assert rolled.to_tabular == expected
   end
 
-  test "named chained pivots rollup to_csv_table" do
+  test "named & chained pivots with rollup to_csv_table" do
     list = [1,2,3,4,5,6,7,8,9]
     list = Goldmine::ArrayMiner.new(list)
     rolled = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }.rollup(:count, &:size)
@@ -334,6 +334,40 @@ class TestGoldmine < PryTest::Test
     assert row["less than 5"] == true
     assert row["divisible by 2"] == false
     assert row ["count"] == 2
+  end
+
+  test "unnamed & chained pivots with rollup to rows" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    rolled = list
+      .pivot { |i| i < 5 }
+      .rollup(:count, &:size)
+      .rollup(:evens) { |l| l.select { |i| i % 2 == 0 }.size }
+      .rollup(:even_percentage) { |l| computed(:evens).for(l) / computed(:count).for(l).to_f }
+
+    expected = [
+      {"column1"=>true, "count"=>4, "evens"=>2, "even_percentage"=>0.5},
+      {"column1"=>false, "count"=>5, "evens"=>2, "even_percentage"=>0.4}
+    ]
+
+    assert rolled.to_rows == expected
+  end
+
+  test "named & chained pivots with rollup to rows" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::ArrayMiner.new(list)
+    rolled = list
+      .pivot(:less_than_5) { |i| i < 5 }
+      .rollup(:count, &:size)
+      .rollup(:evens) { |l| l.select { |i| i % 2 == 0 }.size }
+      .rollup(:even_percentage) { |l| computed(:evens).for(l) / computed(:count).for(l).to_f }
+
+    expected = [
+      {"less_than_5"=>true, "count"=>4, "evens"=>2, "even_percentage"=>0.5},
+      {"less_than_5"=>false, "count"=>5, "evens"=>2, "even_percentage"=>0.4}
+    ]
+
+    assert rolled.to_rows == expected
   end
 
   test "access to prior-computed rollups" do
@@ -364,4 +398,5 @@ class TestGoldmine < PryTest::Test
     expected = [:count, :div_by_3]
     assert rolled.names == expected
   end
+
 end

@@ -4,7 +4,7 @@ module Goldmine
   class HashMiner < SimpleDelegator
     def initialize(hash={})
       @rollup_cache = Cache.new
-      super @hash = hash
+      super @hash = hash.to_h
     end
 
     attr_accessor :goldmine

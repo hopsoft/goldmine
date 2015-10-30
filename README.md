@@ -55,8 +55,8 @@ gem install goldmine
 require "goldmine"
 
 list = [1,2,3,4,5,6,7,8,9]
-list = Goldmine::ArrayMiner.new(list)
-list.pivot { |i| i < 5 }
+Goldmine::ArrayMiner.new(list)
+  .pivot { |i| i < 5 }
 # result:
 {
   true  => [1, 2, 3, 4],
@@ -68,8 +68,9 @@ list.pivot { |i| i < 5 }
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
-list = Goldmine::ArrayMiner.new(list)
-list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
+Goldmine::ArrayMiner.new(list)
+  .pivot { |i| i < 5 }
+  .pivot { |i| i % 2 == 0 }
 # result:
 {
   [true, false]  => [1, 3],
@@ -83,8 +84,8 @@ list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
-list = Goldmine::ArrayMiner.new(list)
-list.pivot(:less_than_5) { |i| i < 5 }
+Goldmine::ArrayMiner.new(list)
+  .pivot(:less_than_5) { |i| i < 5 }
 # result:
 {
   { :less_than_5 => true }  => [1, 2, 3, 4],
@@ -163,28 +164,21 @@ end
 }
 ```
 
-## Rollups, Tabular, & CSV
+## Rollups
 
 Rollups provide a clean way to aggregate pivoted data...
 think computed columns.
 
-_Rollups, like pivots, can be chained._
+Rollup `blocks` are executed once for each pivot.
+
+_Like pivots, they can be chained._
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
-list = Goldmine::ArrayMiner.new(list)
-pivoted = list
+Goldmine::ArrayMiner.new(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .pivot(:even) { |i| i % 2 == 0 }
-# result:
-{
-  { :less_than_5 => true, :even => false } => [1, 3],
-  { :less_than_5 => true, :even => true }  => [2, 4],
-  { :less_than_5 => false, :even => false} => [5, 7, 9],
-  { :less_than_5 => false, :even => true } => [6, 8]
-}
-
-rollup = pivoted.rollup(:count) { |matched| matched.size }
+  .rollup(:count) { |matched| matched.size }
 # result:
 {
   { :less_than_5 => true, :even => false }  => { :count => 2 },
@@ -193,7 +187,55 @@ rollup = pivoted.rollup(:count) { |matched| matched.size }
   { :less_than_5 => false, :even => true }  => { :count => 2 }
 }
 
-rollup.to_tabular
+### Pre-Computed Results
+
+Rollups may be computationally expensive.
+Goldmine caches rollup results & makes the results available to subsequent rollups.
+
+```ruby
+list = [1,2,3,4,5,6,7,8,9]
+Goldmine::ArrayMiner.new(list)
+  .pivot(:less_than_5) { |i| i < 5 }
+  .rollup(:count, &:size)
+  .rollup(:evens) { |list| list.select { |i| i % 2 == 0 }.size }
+  .rollup(:even_percentage) { |list| computed(:evens).for(list) / computed(:count).for(list).to_f }
+# result:
+{
+  { :less_than_5 => true } => { :count => 4, :evens => 2, :even_percentage => 0.5 },
+  { :less_than_5 => false } => { :count => 5, :evens => 2, :even_percentage => 0.4 }
+}
+```
+
+### Rows
+
+It's often helpful to flatten rollups into rows.
+
+```ruby
+list = [1,2,3,4,5,6,7,8,9]
+Goldmine::ArrayMiner.new(list)
+  .pivot(:less_than_5) { |i| i < 5 }
+  .rollup(:count, &:size)
+  .rollup(:evens) { |list| list.select { |i| i % 2 == 0 }.size }
+  .rollup(:even_percentage) { |list| computed(:evens).for(list) / computed(:count).for(list).to_f }
+  .to_rows
+# result:
+[
+  { "less_than_5" => true, "count" => 4, "evens" => 2, "even_percentage" => 0.5 },
+  { "less_than_5" => false, "count" => 5, "evens" => 2, "even_percentage" => 0.4 }
+]
+```
+
+### Tabular
+
+Rollups can be converted into tabular format also.
+
+```ruby
+list = [1,2,3,4,5,6,7,8,9]
+Goldmine::ArrayMiner.new(list)
+  .pivot(:less_than_5) { |i| i < 5 }
+  .pivot(:even) { |i| i % 2 == 0 }
+  .rollup(:count) { |matched| matched.size }
+  .to_tabular
 # result:
 [
   ["less_than_5", "even", "count"],
@@ -202,12 +244,22 @@ rollup.to_tabular
   [false, false, 3],
   [false, true, 2]
 ]
+```
 
-rollup.to_csv_table
+### CSV
+
+Goldmine make producing CSV output simple.
+
+```ruby
+csv_table = Goldmine::ArrayMiner.new(list)
+  .pivot(:less_than_5) { |i| i < 5 }
+  .pivot(:even) { |i| i % 2 == 0 }
+  .rollup(:count) { |matched| matched.size }
+  .to_csv_table
 # result:
 #<CSV::Table mode:col_or_row row_count:5>
 
-rollup.to_csv_table.to_csv
+csv_table.to_csv
 # result:
 "less_than_5,even,count\ntrue,false,2\ntrue,true,2\nfalse,false,3\nfalse,true,2\n"
 ```
@@ -218,6 +270,5 @@ Goldmine allows you to combine the power of pivots, rollups, tabular data,
 & csv to construct deep insights into your data with minimal effort.
 
 One of our common use cases is to query a database using ActiveRecord,
-pivot the results, convert to csv, sort, pivot again,
-then rollup the results to create data visualizations in the form of tables, charts, & graphs.
+chain several pivots, chain several rollups, & then output JSON, CSV, & data visualizations.
 

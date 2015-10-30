@@ -3,7 +3,7 @@ require "delegate"
 module Goldmine
   class ArrayMiner < SimpleDelegator
     def initialize(array=[])
-      super array
+      super array.to_a
     end
 
     # Pivots the Array into a Hash of mined data.
