@@ -190,7 +190,7 @@ Goldmine::ArrayMiner.new(list)
 
 ### Pre-Computed Results
 
-Rollups may be computationally expensive.
+Rollups can be computationally expensive _(depending upon how much logic you stuff into the `block`)_.
 Goldmine caches rollup results & makes the results available to subsequent rollups.
 
 ```ruby
