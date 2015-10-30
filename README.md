@@ -280,7 +280,9 @@ curl http://localhost:3000/tabular
 curl http://localhost:3000/csv
 ```
 
-### [Medicare Physician Comparison](#)
+### [Medicare Physician Comparison](https://github.com/hopsoft/goldmine/tree/master/examples/medicare_physician_compare)
+
+Uses data from http://dev.socrata.com/foundry/#/data.medicare.gov/aeay-dfax
 
 In this example, we mine the following data.
 
@@ -306,7 +308,7 @@ curl http://localhost:3000/csv
 
 #### Performance
 
-The Medicare dataset is large, so this example works well for performance testing.
+The Medicare dataset is large & works well for performance testing.
 
 My Macbook Pro yields the following benchmarks.
 
