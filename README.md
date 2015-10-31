@@ -40,24 +40,6 @@ Goldmine::ArrayMiner.new(list).pivot { |i| i < 5 }
 }
 ```
 
-## Chained Pivots
-
-```ruby
-list = [1,2,3,4,5,6,7,8,9]
-Goldmine::ArrayMiner.new(list)
-  .pivot { |i| i < 5 }
-  .pivot { |i| i % 2 == 0 }
-```
-
-```ruby
-{
-  [true, false]  => [1, 3],
-  [true, true]   => [2, 4],
-  [false, false] => [5, 7, 9],
-  [false, true]  => [6, 8]
-}
-```
-
 ## Named Pivots
 
 ```ruby
@@ -72,7 +54,7 @@ Goldmine::ArrayMiner.new(list).pivot(:less_than_5) { |i| i < 5 }
 }
 ```
 
-## Value Pivots
+## Array Value Pivots
 
 ```ruby
 list = [
@@ -112,7 +94,7 @@ list.pivot { |record| record[:favorite_colors] }
 }
 ```
 
-## Stacked pivots
+## Chained pivots
 
 ```ruby
 list = [
@@ -122,13 +104,13 @@ list = [
   { :name => "Emily",   :age => 32 },
   { :name => "Joe",     :age => 18 }
 ]
-list = Goldmine::ArrayMiner.new(list)
-mined = list.pivot("Name has an 'e'") do |record|
-  !!record[:name].match(/e/i)
-end
-mined = mined.pivot(">= 21 years old") do |record|
-  record[:age] >= 21
-end
+Goldmine::ArrayMiner.new(list)
+  .pivot("Name has an 'e'") { |record|
+    !!record[:name].match(/e/i)
+  }
+  .pivot(">= 21 years old") { |record|
+    record[:age] >= 21
+  }
 ```
 
 ```ruby
