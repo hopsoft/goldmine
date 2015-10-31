@@ -28,8 +28,11 @@ gem install goldmine
 
 ```ruby
 require "goldmine"
+```
 
+```ruby
 list = [1,2,3,4,5,6,7,8,9]
+
 Goldmine::ArrayMiner.new(list).pivot { |i| i < 5 }
 ```
 
@@ -44,7 +47,9 @@ Goldmine::ArrayMiner.new(list).pivot { |i| i < 5 }
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
-Goldmine::ArrayMiner.new(list).pivot(:less_than_5) { |i| i < 5 }
+
+Goldmine::ArrayMiner.new(list)
+  .pivot(:less_than_5) { |i| i < 5 }
 ```
 
 ```ruby
@@ -64,8 +69,9 @@ list = [
   { :name => "Emily",   :favorite_colors => [:orange, :green] },
   { :name => "Joe",     :favorite_colors => [:red] }
 ]
-list = Goldmine::ArrayMiner.new(list)
-list.pivot { |record| record[:favorite_colors] }
+
+Goldmine::ArrayMiner.new(list)
+  .pivot { |record| record[:favorite_colors] }
 ```
 
 ```ruby
@@ -104,6 +110,7 @@ list = [
   { :name => "Emily",   :age => 32 },
   { :name => "Joe",     :age => 18 }
 ]
+
 Goldmine::ArrayMiner.new(list)
   .pivot("Name has an 'e'") { |record|
     !!record[:name].match(/e/i)
@@ -139,6 +146,7 @@ _Like pivots, rollups can be chained._
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
+
 Goldmine::ArrayMiner.new(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .pivot(:even) { |i| i % 2 == 0 }
@@ -161,6 +169,7 @@ Goldmine caches rollup results & makes them available to subsequent rollups.
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
+
 Goldmine::ArrayMiner.new(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .rollup(:count, &:size)
@@ -183,6 +192,7 @@ It's often helpful to flatten rollups into rows.
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
+
 Goldmine::ArrayMiner.new(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .rollup(:count, &:size)
@@ -206,6 +216,7 @@ Rollups can also be converted into tabular format.
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
+
 Goldmine::ArrayMiner.new(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .pivot(:even) { |i| i % 2 == 0 }
@@ -228,6 +239,8 @@ Goldmine::ArrayMiner.new(list)
 Goldmine makes producing CSV output simple.
 
 ```ruby
+list = [1,2,3,4,5,6,7,8,9]
+
 csv_table = Goldmine::ArrayMiner.new(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .pivot(:even) { |i| i % 2 == 0 }
