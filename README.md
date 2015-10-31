@@ -275,7 +275,9 @@ bundle
 
 ### [New York Wifi Hotspots](https://github.com/hopsoft/goldmine/tree/master/examples/new_york_wifi_hotspots)
 
-In this example, we mine the following data.
+Uses data from https://github.com/hopsoft/goldmine/blob/master/examples/new_york_wifi_hotspots/DOITT_WIFI_HOTSPOT_01_13SEPT2010.csv
+
+In this example, we mine out the following information.
 
 * Total hotspots by city, zip, & area code
 * Free hotspots by city, zip, & area code
@@ -301,7 +303,7 @@ curl http://localhost:3000/csv
 
 Uses data from http://dev.socrata.com/foundry/#/data.medicare.gov/aeay-dfax
 
-In this example, we mine the following data.
+In this example, we mine out the following information.
 
 * Total doctors by state & specialty
 * Preferred doctors by state & specialty
