@@ -30,8 +30,7 @@ gem install goldmine
 require "goldmine"
 
 list = [1,2,3,4,5,6,7,8,9]
-Goldmine::ArrayMiner.new(list)
-  .pivot { |i| i < 5 }
+Goldmine::ArrayMiner.new(list).pivot { |i| i < 5 }
 # result:
 {
   true  => [1, 2, 3, 4],
@@ -59,8 +58,7 @@ Goldmine::ArrayMiner.new(list)
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
-Goldmine::ArrayMiner.new(list)
-  .pivot(:less_than_5) { |i| i < 5 }
+Goldmine::ArrayMiner.new(list).pivot(:less_than_5) { |i| i < 5 }
 # result:
 {
   { :less_than_5 => true }  => [1, 2, 3, 4],
