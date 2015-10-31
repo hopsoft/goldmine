@@ -34,7 +34,6 @@ Goldmine::ArrayMiner.new(list).pivot { |i| i < 5 }
 ```
 
 ```ruby
-# result:
 {
   true  => [1, 2, 3, 4],
   false => [5, 6, 7, 8, 9]
@@ -48,7 +47,9 @@ list = [1,2,3,4,5,6,7,8,9]
 Goldmine::ArrayMiner.new(list)
   .pivot { |i| i < 5 }
   .pivot { |i| i % 2 == 0 }
-# result:
+```
+
+```ruby
 {
   [true, false]  => [1, 3],
   [true, true]   => [2, 4],
@@ -62,7 +63,9 @@ Goldmine::ArrayMiner.new(list)
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 Goldmine::ArrayMiner.new(list).pivot(:less_than_5) { |i| i < 5 }
-# result:
+```
+
+```ruby
 {
   { :less_than_5 => true }  => [1, 2, 3, 4],
   { :less_than_5 => false } => [5, 6, 7, 8, 9]
@@ -81,7 +84,9 @@ list = [
 ]
 list = Goldmine::ArrayMiner.new(list)
 list.pivot { |record| record[:favorite_colors] }
-# result:
+```
+
+```ruby
 {
   :blue => [
     { :name => "Sally", :favorite_colors => [:blue] },
@@ -124,7 +129,9 @@ end
 mined = mined.pivot(">= 21 years old") do |record|
   record[:age] >= 21
 end
-# result:
+```
+
+```ruby
 {
   { "Name has an 'e'" => false, ">= 21 years old" => true } => [
     { :name => "Sally", :age => 21 },
@@ -154,7 +161,9 @@ Goldmine::ArrayMiner.new(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .pivot(:even) { |i| i % 2 == 0 }
   .rollup(:count) { |matched| matched.size }
-# result:
+```
+
+```ruby
 {
   { :less_than_5 => true, :even => false }  => { :count => 2 },
   { :less_than_5 => true, :even => true }   => { :count => 2 },
@@ -177,7 +186,9 @@ Goldmine::ArrayMiner.new(list)
   .rollup(:even_percentage) { |list|
     computed(:evens).for(list) / computed(:count).for(list).to_f
   }
-# result:
+```
+
+```ruby
 {
   { :less_than_5 => true } => { :count => 4, :evens => 2, :even_percentage => 0.5 },
   { :less_than_5 => false } => { :count => 5, :evens => 2, :even_percentage => 0.4 }
@@ -198,7 +209,9 @@ Goldmine::ArrayMiner.new(list)
     computed(:evens).for(list) / computed(:count).for(list).to_f
   }
   .to_rows
-# result:
+```
+
+```ruby
 [
   { "less_than_5" => true, "count" => 4, "evens" => 2, "even_percentage" => 0.5 },
   { "less_than_5" => false, "count" => 5, "evens" => 2, "even_percentage" => 0.4 }
@@ -216,7 +229,9 @@ Goldmine::ArrayMiner.new(list)
   .pivot(:even) { |i| i % 2 == 0 }
   .rollup(:count) { |matched| matched.size }
   .to_tabular
-# result:
+```
+
+```ruby
 [
   ["less_than_5", "even", "count"],
   [true, false, 2],
@@ -236,11 +251,17 @@ csv_table = Goldmine::ArrayMiner.new(list)
   .pivot(:even) { |i| i % 2 == 0 }
   .rollup(:count) { |matched| matched.size }
   .to_csv_table
-# result:
-#<CSV::Table mode:col_or_row row_count:5>
+```
 
+```ruby
+#<CSV::Table mode:col_or_row row_count:5>
+```
+
+```ruby
 csv_table.to_csv
-# result:
+```
+
+```ruby
 "less_than_5,even,count\ntrue,false,2\ntrue,true,2\nfalse,false,3\nfalse,true,2\n"
 ```
 
