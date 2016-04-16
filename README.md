@@ -12,6 +12,11 @@ Extract a wealth of information from Arrays & Hashes.
 Goldmine is especially helpful when working with source data that is difficult to query.
 e.g. CSV files, API results, etc...
 
+## TODO
+
+- [ ] Change pivots to evaluate lazily
+- [ ] Change rollups to evaluate lazily
+
 ## Uses
 
 - Data mining
