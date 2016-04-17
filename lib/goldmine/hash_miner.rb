@@ -69,7 +69,7 @@ module Goldmine
     end
 
     # Creates a key for a pivot-name/key combo.
-    # @param name [String] The name of a pivot (can be null).
+    # @param name [String] The name of a pivot (can be nil).
     # @param key [Object] The key to use.
     # @return [Object] The constructed key.
     def goldmine_key(name, key)
