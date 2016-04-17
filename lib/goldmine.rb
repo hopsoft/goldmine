@@ -1,7 +1,8 @@
 $:.unshift File.join(File.dirname(__FILE__), "goldmine")
 require "rollup"
+require "pivot_result"
 require "pivot"
-require "array_miner"
+require "miner"
 
 module Goldmine
 end

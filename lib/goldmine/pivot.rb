@@ -14,12 +14,12 @@ module Goldmine
     end
 
     def result
-      {}.tap do |pivoted|
+      PivotResult.new.tap do |pivot_result|
         array_miner.each do |item|
           keys = array_miner.pivots.each_with_object([]) do |pivot, memo|
             memo << key_for(pivot.name, pivot.proc.call(item))
           end
-          (pivoted[keys] ||= []) << item
+          (pivot_result[keys] ||= []) << item
         end
       end
     end

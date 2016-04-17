@@ -8,7 +8,7 @@ class TestGoldmine < PryTest::Test
 
   test "simple pivot" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::ArrayMiner.new(list)
+    list = Goldmine::Miner.new(list)
     pivot = list.pivot { |i| i < 5 }
 
     expected = {
@@ -16,7 +16,7 @@ class TestGoldmine < PryTest::Test
       [false] => [5, 6, 7, 8, 9]
     }
 
-    assert pivot.result == expected
+    assert pivot.result.to_h == expected
   end
 
   #test "simple pivot rollup" do
@@ -75,7 +75,7 @@ class TestGoldmine < PryTest::Test
 
   test "named pivot" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::ArrayMiner.new(list)
+    list = Goldmine::Miner.new(list)
     pivot = list.pivot("less than 5") { |i| i < 5 }
 
     expected = {
@@ -83,7 +83,7 @@ class TestGoldmine < PryTest::Test
       [["less than 5", false]] => [5, 6, 7, 8, 9]
     }
 
-    assert pivot.result == expected
+    assert pivot.result.to_h == expected
   end
 
   #test "named pivot rollup" do
@@ -170,7 +170,7 @@ class TestGoldmine < PryTest::Test
 
   test "chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::ArrayMiner.new(list)
+    list = Goldmine::Miner.new(list)
     pivot = list
       .pivot { |i| i < 5 }
       .pivot { |i| i % 2 == 0 }
@@ -182,7 +182,7 @@ class TestGoldmine < PryTest::Test
       [false, true]  => [6, 8]
     }
 
-    assert pivot.result == expected
+    assert pivot.result.to_h == expected
   end
 
   #test "chained pivots rollup" do
@@ -219,7 +219,7 @@ class TestGoldmine < PryTest::Test
 
   test "deep chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::ArrayMiner.new(list)
+    list = Goldmine::Miner.new(list)
     pivot = list
       .pivot { |i| i < 3 }
       .pivot { |i| i < 6 }
@@ -239,12 +239,12 @@ class TestGoldmine < PryTest::Test
       [false, false, false, false, true]  => [9]
     }
 
-    assert pivot.result == expected
+    assert pivot.result.to_h == expected
   end
 
   test "named chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::ArrayMiner.new(list)
+    list = Goldmine::Miner.new(list)
     pivot = list
       .pivot("less than 5") { |i| i < 5 }
       .pivot("divisible by 2") { |i| i % 2 == 0 }
@@ -256,12 +256,12 @@ class TestGoldmine < PryTest::Test
       [["less than 5", false], ["divisible by 2", true]]  => [6, 8]
     }
 
-    assert pivot.result == expected
+    assert pivot.result.to_h == expected
   end
 
   test "named deep chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::ArrayMiner.new(list)
+    list = Goldmine::Miner.new(list)
     pivot = list
       .pivot("a") { |i| i < 3 }
       .pivot("b") { |i| i < 6 }
@@ -281,7 +281,7 @@ class TestGoldmine < PryTest::Test
       [["a", false], ["b", false], ["c", false], ["d", false], ["e", true]]  => [9]
     }
 
-    assert pivot.result == expected
+    assert pivot.result.to_h == expected
   end
 
   #test "named chained pivots rollup" do

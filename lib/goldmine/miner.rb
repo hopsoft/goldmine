@@ -1,17 +1,15 @@
+require "forwardable"
+
 module Goldmine
-  class ArrayMiner
+  class Miner
+    extend Forwardable
     include Enumerable
+    def_delegators :@array, :each
     attr_reader :pivots
 
     def initialize(array=[])
       @pivots = []
       @array = array.to_a
-    end
-
-    def each
-      @array.each do |item|
-        yield item
-      end
     end
 
     def pivot(name=nil, &block)
