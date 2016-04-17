@@ -1,6 +1,7 @@
 module Goldmine
   class Pivot
-    attr_reader :array_miner, :name, :proc
+    attr_reader :name, :proc
+
     def initialize(array_miner, name=nil, block)
       @array_miner = array_miner
       @name = name
@@ -13,28 +14,26 @@ module Goldmine
     end
 
     def result
-      data = {}
-      array_miner.each do |item|
-        keys = []
-
-        array_miner.pivots.each_with_index do |pivot, index|
-          value = pivot.proc.call(item)
-
-          if pivot.name.nil?
-            key = value
-          else
-            key = Array.new(2)
-            key[0] = pivot.name
-            key[1] = value
+      {}.tap do |pivoted|
+        array_miner.each do |item|
+          keys = array_miner.pivots.each_with_object([]) do |pivot, memo|
+            memo << key_for(pivot.name, pivot.proc.call(item))
           end
-
-          keys << key
+          (pivoted[keys] ||= []) << item
         end
-
-        data[keys] ||= []
-        data[keys] << item
       end
-      data
+    end
+
+    private
+
+    attr_accessor :array_miner
+
+    def key_for(name, value)
+      return value if name.nil?
+      Array.new(2).tap do |key|
+        key[0] = name
+        key[1] = value
+      end
     end
   end
 end

@@ -6,18 +6,6 @@ require File.expand_path("../../lib/goldmine", __FILE__)
 
 class TestGoldmine < PryTest::Test
 
-  test "miner from array" do
-    assert Goldmine.miner([]).is_a?(Goldmine::ArrayMiner)
-  end
-
-  #test "miner from hash" do
-  #  assert Goldmine.miner({}).is_a?(Goldmine::HashMiner)
-  #end
-
-  test "miner from usupported object" do
-    assert Goldmine.miner(Object.new).nil?
-  end
-
   test "simple pivot" do
     list = [1,2,3,4,5,6,7,8,9]
     list = Goldmine::ArrayMiner.new(list)
