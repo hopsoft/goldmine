@@ -1,11 +1,17 @@
-require "delegate"
-
 module Goldmine
-  class ArrayMiner < SimpleDelegator
+  class ArrayMiner
+    include Enumerable
     attr_reader :pivots
+
     def initialize(array=[])
       @pivots = []
-      super array.to_a
+      @array = array.to_a
+    end
+
+    def each
+      @array.each do |item|
+        yield item
+      end
     end
 
     # Pivots the Array into a Hash of mined data.
@@ -47,9 +53,7 @@ module Goldmine
     # @yield [Object] Yields once for each item in the Array
     # @return [Hash] The pivoted Hash of data.
     def pivot(name=nil, &block)
-      pivot = Pivot.new(self, name, block)
-      pivots << pivot
-      return pivot
+      return Pivot.new(self, name, block)
 
       reduce(HashMiner.new) do |memo, item|
         value = yield(item)
