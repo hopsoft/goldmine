@@ -11,6 +11,22 @@ module Goldmine
     end
 
     def to_rows
+      pivot_result.each_with_object([]) do |pair, memo|
+        memo << pair.first + pair.last
+      end
+    end
+
+    def to_hash_rows
+      pivot_result.each_with_object([]) do |pair, memo|
+        memo << (pair.first + pair.last).to_h
+      end
+    end
+
+    def to_tabular
+      rows = to_rows
+      values = rows.map { |r| r.map(&:last) }
+      values.unshift (rows.first || []).map(&:first)
+      values
     end
 
     private
