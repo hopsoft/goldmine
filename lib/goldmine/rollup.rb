@@ -14,13 +14,13 @@ module Goldmine
     end
 
     def result
-      {}.tap do |rolled|
+      RollupResult.new.tap do |rollup_result|
         pivot_result.each do |pivot_key, pivot_entries|
           pivot_result.rollups.each do |rollup|
             Array.new(2).tap do |computed_value|
               computed_value[0] = rollup.name
               computed_value[1] = rollup.proc.call(pivot_entries)
-              (rolled[pivot_key] ||= []) << computed_value
+              (rollup_result[pivot_key] ||= []) << computed_value
             end
           end
         end

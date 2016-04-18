@@ -31,8 +31,18 @@ class TestGoldmine < PryTest::Test
       [false] => [[:count, 5]]
     }
 
-    assert rollup.result == expected
+    assert rollup.result.to_h == expected
   end
+
+  #test "simple pivot rollup to_rows" do
+  #  list = [1,2,3,4,5,6,7,8,9]
+  #  list = Goldmine::Miner.new(list)
+  #  pivot = list.pivot { |i| i < 5 }
+  #  rollup = pivot.result
+  #    .rollup(:count) { |items| items.size }
+
+  #  assert rollup.result.to_rows == []
+  #end
 
   test "pivot with chained rollup" do
     list = [1,2,3,4,5,6,7,8,9]
@@ -47,7 +57,7 @@ class TestGoldmine < PryTest::Test
       [false] => [[:count, 5], [:div_by_3, 2]]
     }
 
-    assert rolled.result == expected
+    assert rolled.result.to_h == expected
   end
 
   #test "simple pivot rollup to_tabular" do
@@ -98,7 +108,7 @@ class TestGoldmine < PryTest::Test
       [["less than 5", false]] => [[:count, 5]]
     }
 
-    assert rolled.result == expected
+    assert rolled.result.to_h == expected
   end
 
   #test "named pivot rollup to_tabular" do
@@ -122,8 +132,8 @@ class TestGoldmine < PryTest::Test
   #    { :name => "three", :list => [1, 2, 3] },
   #    { :name => "four",  :list => [1, 2, 3, 4] },
   #  ]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot { |record| record[:list] }
+  #  list = Goldmine::Miner.new(list)
+  #  pivot = list.pivot { |record| record[:list] }
 
   #  expected = {
   #    1 => [ { :name => "one",   :list => [1] },
@@ -138,7 +148,7 @@ class TestGoldmine < PryTest::Test
   #    4 => [ { :name => "four",  :list => [1, 2, 3, 4] } ]
   #  }
 
-  #  assert data == expected
+  #  assert pivot.result.to_h == expected
   #end
 
   #test "pivot of list values with empty list" do
@@ -199,7 +209,7 @@ class TestGoldmine < PryTest::Test
       [false, true]  => [[:count, 2]]
     }
 
-    assert rolled.result == expected
+    assert rolled.result.to_h == expected
   end
 
   #test "chained pivots rollup to_tabular" do
@@ -301,7 +311,7 @@ class TestGoldmine < PryTest::Test
       [["less than 5", false], ["divisible by 2", true]]  => [[:count, 2]]
     }
 
-    assert rolled.result == expected
+    assert rolled.result.to_h == expected
   end
 
   #test "named chained pivots rollup to tabular" do
