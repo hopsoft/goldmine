@@ -1,4 +1,5 @@
 require "forwardable"
+require "csv"
 
 module Goldmine
   class RollupResult
@@ -27,6 +28,13 @@ module Goldmine
       values = rows.map { |r| r.map(&:last) }
       values.unshift (rows.first || []).map(&:first)
       values
+    end
+
+    def to_csv_table
+      rows = to_tabular
+      header = rows.shift
+      csv_rows = rows.map { |row| CSV::Row.new(header, row) }
+      CSV::Table.new csv_rows
     end
 
     private

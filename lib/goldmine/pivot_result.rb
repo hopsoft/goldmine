@@ -1,4 +1,5 @@
 require "forwardable"
+require "rollup"
 
 module Goldmine
   class PivotResult

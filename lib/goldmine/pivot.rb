@@ -1,3 +1,5 @@
+require "pivot_result"
+
 module Goldmine
   class Pivot
     attr_reader :name, :proc

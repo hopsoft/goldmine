@@ -1,3 +1,5 @@
+require "rollup_result"
+
 module Goldmine
   class Rollup
     attr_reader :name, :proc

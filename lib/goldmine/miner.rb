@@ -1,4 +1,5 @@
 require "forwardable"
+require "pivot"
 
 module Goldmine
   class Miner
