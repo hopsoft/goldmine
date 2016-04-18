@@ -12,7 +12,7 @@ module Goldmine
       @array = array.to_a
     end
 
-    def pivot(name=nil, &block)
+    def pivot(name, &block)
       Pivot.new(name, self, block)
     end
   end
