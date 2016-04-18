@@ -4,7 +4,7 @@ module Goldmine
   class Miner
     extend Forwardable
     include Enumerable
-    def_delegators :@array, :each
+    def_delegators :@array, :each, :to_a
     attr_reader :pivots
 
     def initialize(array=[])
@@ -13,7 +13,7 @@ module Goldmine
     end
 
     def pivot(name=nil, &block)
-      Pivot.new(self, name, block)
+      Pivot.new(name, self, block)
     end
   end
 end

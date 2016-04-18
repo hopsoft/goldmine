@@ -2,7 +2,7 @@ module Goldmine
   class Pivot
     attr_reader :name, :proc
 
-    def initialize(array_miner, name=nil, block)
+    def initialize(name=nil, array_miner, block)
       @array_miner = array_miner
       @name = name
       @proc = block
@@ -10,7 +10,7 @@ module Goldmine
     end
 
     def pivot(name=nil, &block)
-      self.class.new(array_miner, name, block)
+      self.class.new(name, array_miner, block)
     end
 
     def result
@@ -26,7 +26,7 @@ module Goldmine
 
     private
 
-    attr_accessor :array_miner
+    attr_reader :array_miner
 
     def key_for(name, value)
       return value if name.nil?

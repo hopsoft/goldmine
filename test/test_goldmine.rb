@@ -19,35 +19,36 @@ class TestGoldmine < PryTest::Test
     assert pivot.result.to_h == expected
   end
 
-  #test "simple pivot rollup" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot { |i| i < 5 }
-  #  rolled = data.rollup(:count) { |items| items.size }
+  test "simple pivot rollup" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::Miner.new(list)
+    pivot = list.pivot { |i| i < 5 }
+    rollup = pivot.result
+      .rollup(:count) { |items| items.size }
 
-  #  expected = {
-  #    true => { count: 4 },
-  #    false => { count: 5 }
-  #  }
+    expected = {
+      [true]  => [[:count, 4]],
+      [false] => [[:count, 5]]
+    }
 
-  #  assert rolled == expected
-  #end
+    assert rollup.result == expected
+  end
 
-  #test "pivot with chained rollup" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot { |i| i < 5 }
-  #  rolled = data
-  #    .rollup(:count) { |items| items.size }
-  #    .rollup(:div_by_3) { |items| items.keep_if { |i| i % 3 == 0 }.size }
+  test "pivot with chained rollup" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::Miner.new(list)
+    pivot = list.pivot { |i| i < 5 }
+    rolled = pivot.result
+      .rollup(:count) { |items| items.size }
+      .rollup(:div_by_3) { |items| items.keep_if { |i| i % 3 == 0 }.size }
 
-  #  expected = {
-  #    true  => {:count=>4, :div_by_3=>1},
-  #    false => {:count=>5, :div_by_3=>2}
-  #  }
+    expected = {
+      [true]  => [[:count, 4], [:div_by_3, 1]],
+      [false] => [[:count, 5], [:div_by_3, 2]]
+    }
 
-  #  assert rolled == expected
-  #end
+    assert rolled.result == expected
+  end
 
   #test "simple pivot rollup to_tabular" do
   #  list = [1,2,3,4,5,6,7,8,9]
@@ -86,19 +87,19 @@ class TestGoldmine < PryTest::Test
     assert pivot.result.to_h == expected
   end
 
-  #test "named pivot rollup" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot("less than 5") { |i| i < 5 }
-  #  rolled = data.rollup(:count) { |row| row.size }
+  test "named pivot rollup" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::Miner.new(list)
+    pivot = list.pivot("less than 5") { |i| i < 5 }
+    rolled = pivot.result.rollup(:count) { |row| row.size }
 
-  #  expected = {
-  #    { "less than 5" => true }  => { count: 4 },
-  #    { "less than 5" => false } => { count: 5 }
-  #  }
+    expected = {
+      [["less than 5", true]]  => [[:count, 4]],
+      [["less than 5", false]] => [[:count, 5]]
+    }
 
-  #  assert rolled == expected
-  #end
+    assert rolled.result == expected
+  end
 
   #test "named pivot rollup to_tabular" do
   #  list = [1,2,3,4,5,6,7,8,9]
@@ -185,21 +186,21 @@ class TestGoldmine < PryTest::Test
     assert pivot.result.to_h == expected
   end
 
-  #test "chained pivots rollup" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
-  #  rolled = data.rollup(:count) { |row| row.size }
+  test "chained pivots rollup" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::Miner.new(list)
+    pivot = list.pivot { |i| i < 5 }.pivot { |i| i % 2 == 0 }
+    rolled = pivot.result.rollup(:count) { |row| row.size }
 
-  #  expected = {
-  #    [true, false]  => { count: 2 },
-  #    [true, true]   => { count: 2 },
-  #    [false, false] => { count: 3 },
-  #    [false, true]  => { count: 2 }
-  #  }
+    expected = {
+      [true, false]  => [[:count, 2]],
+      [true, true]   => [[:count, 2]],
+      [false, false] => [[:count, 3]],
+      [false, true]  => [[:count, 2]]
+    }
 
-  #  assert rolled == expected
-  #end
+    assert rolled.result == expected
+  end
 
   #test "chained pivots rollup to_tabular" do
   #  list = [1,2,3,4,5,6,7,8,9]
@@ -284,21 +285,24 @@ class TestGoldmine < PryTest::Test
     assert pivot.result.to_h == expected
   end
 
-  #test "named chained pivots rollup" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot("less than 5") { |i| i < 5 }.pivot("divisible by 2") { |i| i % 2 == 0 }
-  #  rolled = data.rollup(:count) { |row| row.size }
+  test "named chained pivots rollup" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::Miner.new(list)
+    pivot = list
+      .pivot("less than 5") { |i| i < 5 }
+      .pivot("divisible by 2") { |i| i % 2 == 0 }
+    rolled = pivot.result
+      .rollup(:count) { |row| row.size }
 
-  #  expected = {
-  #    { "less than 5" => true, "divisible by 2" => false }  => { count: 2 },
-  #    { "less than 5" => true, "divisible by 2" => true }   => { count: 2 },
-  #    { "less than 5" => false, "divisible by 2" => false } => { count: 3 },
-  #    { "less than 5" => false, "divisible by 2" => true }  => { count: 2 }
-  #  }
+    expected = {
+      [["less than 5", true],  ["divisible by 2", false]] => [[:count, 2]],
+      [["less than 5", true],  ["divisible by 2", true]]  => [[:count, 2]],
+      [["less than 5", false], ["divisible by 2", false]] => [[:count, 3]],
+      [["less than 5", false], ["divisible by 2", true]]  => [[:count, 2]]
+    }
 
-  #  assert rolled == expected
-  #end
+    assert rolled.result == expected
+  end
 
   #test "named chained pivots rollup to tabular" do
   #  list = [1,2,3,4,5,6,7,8,9]
@@ -365,35 +369,6 @@ class TestGoldmine < PryTest::Test
   #  ]
 
   #  assert rolled.to_rows == expected
-  #end
-
-  #test "access to prior-computed rollups" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  rolled = list
-  #    .pivot("less than 5") { |i| i < 5 }
-  #    .rollup(:count, &:size)
-  #    .rollup(:evens) { |pivoted_list| pivoted_list.select { |i| i % 2 == 0 }.size }
-  #    .rollup(:even_percentage) { |pivoted_list| computed(:evens).for(pivoted_list) / computed(:count).for(pivoted_list).to_f }
-
-  #  expected = [
-  #    ["less than 5", "count", "evens", "even_percentage"],
-  #    [true, 4, 2, 0.5],
-  #    [false, 5, 2, 0.4]
-  #  ]
-  #  assert rolled.to_tabular == expected
-  #end
-
-  #test "rollup names" do
-  #  list = [1,2,3,4,5,6,7,8,9]
-  #  list = Goldmine::ArrayMiner.new(list)
-  #  data = list.pivot { |i| i < 5 }
-  #  rolled = data
-  #    .rollup(:count) { |items| items.size }
-  #    .rollup(:div_by_3) { |items| items.keep_if { |i| i % 3 == 0 }.size }
-
-  #  expected = [:count, :div_by_3]
-  #  assert rolled.names == expected
   #end
 
 end
