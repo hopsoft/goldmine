@@ -1,3 +1,5 @@
+require "rollup_cache"
+require "rollup_clean_room"
 require "rollup_result"
 
 module Goldmine
@@ -16,12 +18,15 @@ module Goldmine
     end
 
     def result
+      cache = RollupCache.new
       RollupResult.new.tap do |rollup_result|
-        pivot_result.each do |pivot_key, pivot_entries|
+        pivot_result.each do |pivot_key, pivoted_list|
           pivot_result.rollups.each do |rollup|
             Array.new(2).tap do |computed_value|
-              computed_value[0] = rollup.name
-              computed_value[1] = rollup.proc.call(pivot_entries)
+              key = rollup.name
+              value = RollupCleanRoom.new(key, cache).rollup(pivoted_list, &rollup.proc)
+              computed_value[0] = key
+              computed_value[1] = value
               (rollup_result[pivot_key] ||= []) << computed_value
             end
           end
@@ -32,6 +37,7 @@ module Goldmine
     private
 
     attr_reader :pivot_result
+
   end
 end
 

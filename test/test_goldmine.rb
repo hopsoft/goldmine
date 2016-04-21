@@ -265,4 +265,22 @@ class TestGoldmine < PryTest::Test
     assert csv.to_s == "< 5,count\ntrue,4\nfalse,5\n"
   end
 
+  # pivot_result cache ..........................................................
+
+  test "pivot_result cache is available to rollups" do
+    list = [1,2,3,4,5,6,7,8,9]
+    list = Goldmine::Miner.new(list)
+    cached_counts = []
+    list
+      .pivot("< 5") { |i| i < 5 }
+      .result
+      .rollup(:count, &:size)
+      .rollup(:cached_count) { |hits| cached_counts << cache.read(:count, hits) }
+      .result
+
+    assert cached_counts.size == 2
+    assert cached_counts.first == 4
+    assert cached_counts.last == 5
+  end
+
 end

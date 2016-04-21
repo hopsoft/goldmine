@@ -84,41 +84,31 @@ def rolled_up
         list.select { |row| !(row["TYPE"] =~ /free/i).nil? }.size
       }
       .rollup("Free Percentage") { |list|
-        total = list.size
-        free = list.select { |row| !(row["TYPE"] =~ /free/i).nil? }.size
-        free / total.to_f
+        cache.read("Free", list) / cache.read("Total", list).to_f
       }
       .rollup("Paid") { |list|
         list.select { |row| (row["TYPE"] =~ /free/i).nil? }.size
       }
       .rollup("Paid Percentage") { |list|
-        total = list.size
-        paid = list.select { |row| (row["TYPE"] =~ /free/i).nil? }.size
-        paid / total.to_f
+        cache.read("Paid", list) / cache.read("Total", list).to_f
       }
       .rollup("Library") { |list|
         list.select { |row| row["NAME"].to_s =~ /library/i }.size
       }
       .rollup("Library Percentage") { |list|
-        total = list.size
-        library = list.select { |row| row["NAME"].to_s =~ /library/i }.size
-        library / total.to_f
+        cache.read("Library", list) / cache.read("Total", list).to_f
       }
       .rollup("Starbucks") { |list|
         list.select { |row| row["NAME"].to_s =~ /starbuck'?s/i }.size
       }
       .rollup("Starbucks Percentage") { |list|
-        total = list.size
-        starbucks = list.select { |row| row["NAME"].to_s =~ /starbuck'?s/i }.size
-        starbucks / total.to_f
+        cache.read("Starbucks", list) / cache.read("Total", list).to_f
       }
       .rollup("McDonalds") { |list|
         list.select { |row| row["NAME"].to_s =~ /McDonald'?s/i }.size
       }
       .rollup("McDonalds Percentage") { |list|
-        total = list.size
-        mcdonalds = list.select { |row| row["NAME"].to_s =~ /McDonald'?s/i }.size
-        mcdonalds / total.to_f
+        cache.read("McDonalds", list) / cache.read("Total", list).to_f
       }
       .result
   end
