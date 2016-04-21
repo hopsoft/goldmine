@@ -276,7 +276,7 @@ class TestGoldmine < PryTest::Test
       .result
       .rollup(:count, &:size)
       .rollup(:cached_count) { |hits| cached_counts << cache.read(:count, hits) }
-      .result
+      .result(cache: true)
 
     assert cached_counts.size == 2
     assert cached_counts.first == 4

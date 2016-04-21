@@ -17,14 +17,15 @@ module Goldmine
       self.class.new(name, pivot_result, block)
     end
 
-    def result
-      cache = RollupCache.new
+    def result(cache: false)
+      cache = RollupCache.new if cache
       RollupResult.new.tap do |rollup_result|
         pivot_result.each do |pivot_key, pivoted_list|
           pivot_result.rollups.each do |rollup|
             Array.new(2).tap do |computed_value|
               key = rollup.name
-              value = RollupCleanRoom.new(key, cache).rollup(pivoted_list, &rollup.proc)
+              value = RollupCleanRoom.new(key, cache).rollup(pivoted_list, &rollup.proc) if cache
+              value ||= rollup.proc.call(pivoted_list)
               computed_value[0] = key
               computed_value[1] = value
               (rollup_result[pivot_key] ||= []) << computed_value

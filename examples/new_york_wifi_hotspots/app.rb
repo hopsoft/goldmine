@@ -110,6 +110,6 @@ def rolled_up
       .rollup("McDonalds Percentage") { |list|
         cache.read("McDonalds", list) / cache.read("Total", list).to_f
       }
-      .result
+      .result(cache: true)
   end
 end
