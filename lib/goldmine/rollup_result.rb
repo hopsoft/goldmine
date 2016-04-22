@@ -26,7 +26,8 @@ module Goldmine
     def to_tabular
       rows = to_rows
       values = rows.map { |r| r.map(&:last) }
-      values.unshift (rows.first || []).map(&:first)
+      sample = rows.first || []
+      values.unshift sample.map(&:first)
       values
     end
 
@@ -40,6 +41,5 @@ module Goldmine
     private
 
     attr_reader :pivot_result
-
   end
 end

@@ -77,7 +77,7 @@ end
 def pivoted
   @pivoted ||= begin
     Goldmine::Miner.new(raw)
-      .pivot(:state) { |row| row["st"] }
+      .pivot(:state)             { |row| row["st"] }
       .pivot(:medical_specialty) { |row| row["pri_spec"] }
       .result
   end
@@ -127,6 +127,6 @@ def rolled_up
           0
         end
       }
-      .result
+      .result(cache: true)
   end
 end

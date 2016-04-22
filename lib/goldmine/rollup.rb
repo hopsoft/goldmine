@@ -37,7 +37,5 @@ module Goldmine
     private
 
     attr_reader :pivot_result
-
   end
 end
-

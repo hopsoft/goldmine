@@ -19,6 +19,5 @@ module Goldmine
       eigen.instance_eval { define_method(:do_rollup, &block) }
       @cache.write name, pivoted_list, do_rollup(pivoted_list)
     end
-
   end
 end

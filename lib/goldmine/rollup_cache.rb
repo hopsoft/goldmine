@@ -1,6 +1,5 @@
 module Goldmine
   class RollupCache
-
     def initialize(cache={})
       @cache = cache
     end
@@ -18,6 +17,5 @@ module Goldmine
     def cache_key(name, list)
       "#{name}/#{list.object_id}"
     end
-
   end
 end

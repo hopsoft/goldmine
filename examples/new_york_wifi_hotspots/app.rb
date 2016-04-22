@@ -13,12 +13,12 @@ end
 get "/" do
   start = Time.now
   Benchmark.bm(15) do |x|
-    x.report("raw") { raw }
-    x.report("pivoted") { pivoted }
+    x.report("raw")       { raw }
+    x.report("pivoted")   { pivoted }
     x.report("rolled_up") { rolled_up }
-    x.report("rows") { rolled_up.to_rows }
-    x.report("tabular") { rolled_up.to_tabular }
-    x.report("csv") { rolled_up.to_tabular.to_csv }
+    x.report("rows")      { rolled_up.to_rows }
+    x.report("tabular")   { rolled_up.to_tabular }
+    x.report("csv")       { rolled_up.to_tabular.to_csv }
   end
 
   JSON.dump(
@@ -70,8 +70,8 @@ end
 
 def pivoted
   @pivoted ||= Goldmine::Miner.new(raw)
-    .pivot("City") { |row| row["CITY"] }
-    .pivot("Zip Code") { |row| row["ZIP"] }
+    .pivot("City")      { |row| row["CITY"] }
+    .pivot("Zip Code")  { |row| row["ZIP"] }
     .pivot("Area Code") { |row| row["PHONE"].to_s.gsub(/\W/, "")[0, 3] }
     .result
 end
@@ -79,37 +79,17 @@ end
 def rolled_up
   @rolled_up ||= begin
     pivoted
-      .rollup("Total") { |list| list.size }
-      .rollup("Free") { |list|
-        list.select { |row| !(row["TYPE"] =~ /free/i).nil? }.size
-      }
-      .rollup("Free Percentage") { |list|
-        cache.read("Free", list) / cache.read("Total", list).to_f
-      }
-      .rollup("Paid") { |list|
-        list.select { |row| (row["TYPE"] =~ /free/i).nil? }.size
-      }
-      .rollup("Paid Percentage") { |list|
-        cache.read("Paid", list) / cache.read("Total", list).to_f
-      }
-      .rollup("Library") { |list|
-        list.select { |row| row["NAME"].to_s =~ /library/i }.size
-      }
-      .rollup("Library Percentage") { |list|
-        cache.read("Library", list) / cache.read("Total", list).to_f
-      }
-      .rollup("Starbucks") { |list|
-        list.select { |row| row["NAME"].to_s =~ /starbuck'?s/i }.size
-      }
-      .rollup("Starbucks Percentage") { |list|
-        cache.read("Starbucks", list) / cache.read("Total", list).to_f
-      }
-      .rollup("McDonalds") { |list|
-        list.select { |row| row["NAME"].to_s =~ /McDonald'?s/i }.size
-      }
-      .rollup("McDonalds Percentage") { |list|
-        cache.read("McDonalds", list) / cache.read("Total", list).to_f
-      }
-      .result
+      .rollup("Total", &:size)
+      .rollup("Free")                 { |list| list.select { |row| !(row["TYPE"] =~ /free/i).nil? }.size }
+      .rollup("Free Percentage")      { |list| cache.read("Free", list) / cache.read("Total", list).to_f }
+      .rollup("Paid")                 { |list| list.select { |row| (row["TYPE"] =~ /free/i).nil? }.size }
+      .rollup("Paid Percentage")      { |list| cache.read("Paid", list) / cache.read("Total", list).to_f }
+      .rollup("Library")              { |list| list.select { |row| row["NAME"].to_s =~ /library/i }.size }
+      .rollup("Library Percentage")   { |list| cache.read("Library", list) / cache.read("Total", list).to_f }
+      .rollup("Starbucks")            { |list| list.select { |row| row["NAME"].to_s =~ /starbuck'?s/i }.size }
+      .rollup("Starbucks Percentage") { |list| cache.read("Starbucks", list) / cache.read("Total", list).to_f }
+      .rollup("McDonalds")            { |list| list.select { |row| row["NAME"].to_s =~ /McDonald'?s/i }.size }
+      .rollup("McDonalds Percentage") { |list| cache.read("McDonalds", list) / cache.read("Total", list).to_f }
+      .result(cache: true)
   end
 end
