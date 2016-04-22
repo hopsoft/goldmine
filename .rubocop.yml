@@ -1,2 +1,2 @@
 inherit_from:
-  - https://cdn.rawgit.com/hopsoft/dotfiles/master/.rubocop.yml
+  - https://cdn.rawgit.com/hopsoft/dotfiles/master/.rubocop.yml?v=72E95DF8E4334B03AE7E1464EA431552
