@@ -66,7 +66,7 @@ def raw
   @raw ||= begin
     [].tap do |rows|
       limit_per_page = 50_000
-      (1..100_000).step(limit_per_page) do |offset|
+      (1..1_000_000).step(limit_per_page) do |offset|
         url = "https://data.medicare.gov/resource/aeay-dfax.json?$limit=#{limit_per_page}&$offset=#{offset - 1}"
         rows.concat JSON.parse(open(url).read)
       end
