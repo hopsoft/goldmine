@@ -75,10 +75,10 @@ class TestGoldmine < PryTest::Test
       .pivot("list value") { |record| record[:list] }
 
     expected = {
-      [["list value", 1]]                                                          => [{:name => "one",   :list => [1]}],
-      [["list value", 1], ["list value", 2]]                                       => [{:name => "two",   :list => [1, 2]}],
-      [["list value", 1], ["list value", 2], ["list value", 3]]                    => [{:name => "three", :list => [1, 2, 3]}],
-      [["list value", 1], ["list value", 2], ["list value", 3], ["list value", 4]] => [{:name => "four",  :list => [1, 2, 3, 4]}]
+      ["list value", 1] => [{:name=>"one", :list=>[1]}, {:name=>"two", :list=>[1, 2]}, {:name=>"three", :list=>[1, 2, 3]}, {:name=>"four", :list=>[1, 2, 3, 4]}],
+      ["list value", 2] => [{:name=>"two", :list=>[1, 2]}, {:name=>"three", :list=>[1, 2, 3]}, {:name=>"four", :list=>[1, 2, 3, 4]}],
+      ["list value", 3] => [{:name=>"three", :list=>[1, 2, 3]}, {:name=>"four", :list=>[1, 2, 3, 4]}],
+      ["list value", 4] => [{:name=>"four", :list=>[1, 2, 3, 4]}]
     }
 
     assert pivot.result.to_h == expected
@@ -97,11 +97,11 @@ class TestGoldmine < PryTest::Test
       .pivot("list value") { |record| record[:list] }
 
     expected = {
-      [["list value", nil]]                                                        => [{:name => "empty", :list => []}],
-      [["list value", 1]]                                                          => [{:name => "one",   :list => [1]}],
-      [["list value", 1], ["list value", 2]]                                       => [{:name => "two",   :list => [1, 2]}],
-      [["list value", 1], ["list value", 2], ["list value", 3]]                    => [{:name => "three", :list => [1, 2, 3]}],
-      [["list value", 1], ["list value", 2], ["list value", 3], ["list value", 4]] => [{:name => "four",  :list => [1, 2, 3, 4]}]
+      [["list value", nil]] => [{:name=>"empty", :list=>[]}],
+      ["list value", 1]     => [{:name=>"one", :list=>[1]}, {:name=>"two", :list=>[1, 2]}, {:name=>"three", :list=>[1, 2, 3]}, {:name=>"four", :list=>[1, 2, 3, 4]}],
+      ["list value", 2]     => [{:name=>"two", :list=>[1, 2]}, {:name=>"three", :list=>[1, 2, 3]}, {:name=>"four", :list=>[1, 2, 3, 4]}],
+      ["list value", 3]     => [{:name=>"three", :list=>[1, 2, 3]}, {:name=>"four", :list=>[1, 2, 3, 4]}],
+      ["list value", 4]     => [{:name=>"four", :list=>[1, 2, 3, 4]}]
     }
 
     assert pivot.result.to_h == expected

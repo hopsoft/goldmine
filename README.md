@@ -7,15 +7,10 @@
 
 # Goldmine
 
-Extract a wealth of information from Arrays & Hashes.
+Extract a wealth of information from Arrays.
 
 Goldmine is especially helpful when working with source data that is difficult to query.
 e.g. CSV files, API results, etc...
-
-## TODO
-
-- [ ] Change pivots to evaluate lazily
-- [ ] Change rollups to evaluate lazily
 
 ## Uses
 
@@ -38,36 +33,23 @@ require "goldmine"
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 
-Goldmine::ArrayMiner.new(list).pivot { |i| i < 5 }
+Goldmine::Miner.new(list)
+  .pivot("< 5") { |i| i < 5 }
+  .result
+  .to_h
 ```
 
 ```ruby
 {
-  true  => [1, 2, 3, 4],
-  false => [5, 6, 7, 8, 9]
-}
-```
-
-## Named Pivots
-
-```ruby
-list = [1,2,3,4,5,6,7,8,9]
-
-Goldmine::ArrayMiner.new(list)
-  .pivot(:less_than_5) { |i| i < 5 }
-```
-
-```ruby
-{
-  { :less_than_5 => true }  => [1, 2, 3, 4],
-  { :less_than_5 => false } => [5, 6, 7, 8, 9]
+  [["< 5", true]]  => [1, 2, 3, 4],
+  [["< 5", false]] => [5, 6, 7, 8, 9]
 }
 ```
 
 ## Array Value Pivots
 
 ```ruby
-list = [
+users = [
   { :name => "Sally",   :favorite_colors => [:blue] },
   { :name => "John",    :favorite_colors => [:blue, :green] },
   { :name => "Stephen", :favorite_colors => [:red, :pink, :purple] },
@@ -75,40 +57,27 @@ list = [
   { :name => "Joe",     :favorite_colors => [:red] }
 ]
 
-Goldmine::ArrayMiner.new(list)
-  .pivot { |record| record[:favorite_colors] }
+Goldmine::Miner.new(users)
+  .pivot(:favorite_color) { |record| record[:favorite_colors] }
+  .result
+  .to_h
 ```
 
 ```ruby
 {
-  :blue => [
-    { :name => "Sally", :favorite_colors => [:blue] },
-    { :name => "John",  :favorite_colors => [:blue, :green] }
-  ],
-  :green => [
-    { :name => "John",  :favorite_colors => [:blue, :green] },
-    { :name => "Emily", :favorite_colors => [:orange, :green] }
-  ],
-  :red => [
-    { :name => "Stephen", :favorite_colors => [:red, :pink, :purple] },
-    { :name => "Joe",     :favorite_colors => [:red] }
-  ],
-  :pink => [
-    { :name => "Stephen", :favorite_colors => [:red, :pink, :purple] }
-  ],
-  :purple => [
-    { :name => "Stephen", :favorite_colors => [:red, :pink, :purple] }
-  ],
-  :orange => [
-    { :name => "Emily", :favorite_colors => [:orange, :green] }
-  ]
+  [:favorite_color, :blue]   => [{:name=>"Sally", :favorite_colors=>[:blue]}, {:name=>"John", :favorite_colors=>[:blue, :green]}],
+  [:favorite_color, :green]  => [{:name=>"John", :favorite_colors=>[:blue, :green]}, {:name=>"Emily", :favorite_colors=>[:orange, :green]}],
+  [:favorite_color, :red]    => [{:name=>"Stephen", :favorite_colors=>[:red, :pink, :purple]}, {:name=>"Joe", :favorite_colors=>[:red]}],
+  [:favorite_color, :pink]   => [{:name=>"Stephen", :favorite_colors=>[:red, :pink, :purple]}],
+  [:favorite_color, :purple] => [{:name=>"Stephen", :favorite_colors=>[:red, :pink, :purple]}],
+  [:favorite_color, :orange] => [{:name=>"Emily", :favorite_colors=>[:orange, :green]}]
 }
 ```
 
 ## Chained pivots
 
 ```ruby
-list = [
+users = [
   { :name => "Sally",   :age => 21 },
   { :name => "John",    :age => 28 },
   { :name => "Stephen", :age => 37 },
@@ -116,28 +85,18 @@ list = [
   { :name => "Joe",     :age => 18 }
 ]
 
-Goldmine::ArrayMiner.new(list)
-  .pivot("Name has an 'e'") { |record|
-    !!record[:name].match(/e/i)
-  }
-  .pivot(">= 21 years old") { |record|
-    record[:age] >= 21
-  }
+Goldmine::Miner.new(users).
+  pivot("'e' in name") { |user| !!user[:name].match(/e/i) }.
+  pivot("21 or over") { |user| user[:age] >= 21 }.
+  result.
+  to_h
 ```
 
 ```ruby
 {
-  { "Name has an 'e'" => false, ">= 21 years old" => true } => [
-    { :name => "Sally", :age => 21 },
-    { :name => "John",  :age => 28 }
-  ],
-  { "Name has an 'e'" => true, ">= 21 years old" => true } => [
-    { :name => "Stephen", :age => 37 },
-    { :name => "Emily",   :age => 32 }
-  ],
-  { "Name has an 'e'" => true, ">= 21 years old" => false } => [
-    { :name => "Joe", :age => 18 }
-  ]
+  [["'e' in name", false], ["21 or over", true]]  => [{:name=>"Sally", :age=>21}, {:name=>"John", :age=>28}],
+  [["'e' in name", true],  ["21 or over", true]]  => [{:name=>"Stephen", :age=>37}, {:name=>"Emily", :age=>32}],
+  [["'e' in name", true],  ["21 or over", false]] => [{:name=>"Joe", :age=>18}]
 }
 ```
 
