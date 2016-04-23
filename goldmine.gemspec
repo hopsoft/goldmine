@@ -7,8 +7,7 @@ Gem::Specification.new do |gem|
   gem.authors     = ["Nathan Hopkins"]
   gem.email       = ["natehop@gmail.com"]
   gem.homepage    = "https://github.com/hopsoft/goldmine"
-  gem.summary     = "Extract a wealth of information from Arrays and Hashes"
-  gem.description = "Extract a wealth of information from Arrays and Hashes"
+  gem.summary     = "Extract a wealth of information from Arrays"
 
   gem.files       = Dir["lib/**/*.rb", "bin/*", "[A-Z]*"]
   gem.test_files  = Dir["test/**/*.rb"]
