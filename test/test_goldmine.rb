@@ -10,8 +10,7 @@ class TestGoldmine < PryTest::Test
 
   test "simple pivot" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    pivot = list.pivot("< 5") { |i| i < 5 }
+    pivot = Goldmine(list).pivot("< 5") { |i| i < 5 }
 
     expected = {
       [["< 5", true]]  => [1, 2, 3, 4],
@@ -23,8 +22,7 @@ class TestGoldmine < PryTest::Test
 
   test "chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    pivot = list
+    pivot = Goldmine(list)
       .pivot("< 5") { |i| i < 5 }
       .pivot("even") { |i| i % 2 == 0 }
 
@@ -40,8 +38,7 @@ class TestGoldmine < PryTest::Test
 
   test "deep chained pivots" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    pivot = list
+    pivot = Goldmine(list)
       .pivot("< 3") { |i| i < 3 }
       .pivot("< 6") { |i| i < 6 }
       .pivot("< 9") { |i| i < 9 }
@@ -70,8 +67,7 @@ class TestGoldmine < PryTest::Test
       { :name => "three", :list => [1, 2, 3] },
       { :name => "four",  :list => [1, 2, 3, 4] },
     ]
-    list = Goldmine::Miner.new(list)
-    pivot = list
+    pivot = Goldmine(list)
       .pivot("list value") { |record| record[:list] }
 
     expected = {
@@ -92,8 +88,7 @@ class TestGoldmine < PryTest::Test
       { :name => "three", :list => [1, 2, 3] },
       { :name => "four",  :list => [1, 2, 3, 4] },
     ]
-    list = Goldmine::Miner.new(list)
-    pivot = list
+    pivot = Goldmine(list)
       .pivot("list value") { |record| record[:list] }
 
     expected = {
@@ -111,10 +106,9 @@ class TestGoldmine < PryTest::Test
 
   test "simple pivot rollup" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    pivot = list
+    rollup = Goldmine(list)
       .pivot("< 5") { |i| i < 5 }
-    rollup = pivot.result
+      .result
       .rollup(:count) { |items| items.size }
 
     expected = {
@@ -127,11 +121,10 @@ class TestGoldmine < PryTest::Test
 
   test "chained pivots rollup" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    pivot = list
+    rollup = Goldmine(list)
       .pivot("< 5") { |i| i < 5 }
       .pivot("even") { |i| i % 2 == 0 }
-    rolled = pivot.result
+      .result
       .rollup(:count) { |row| row.size }
 
     expected = {
@@ -141,15 +134,15 @@ class TestGoldmine < PryTest::Test
       [["< 5", false], ["even", true]]  => [[:count, 2]]
     }
 
-    assert rolled.result.to_h == expected
+    assert rollup.result.to_h == expected
   end
 
   test "pivot with chained rollup" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    pivot = list
+    list = Goldmine(list)
+    rollup = list
       .pivot("< 5") { |i| i < 5 }
-    rolled = pivot.result
+      .result
       .rollup(:count) { |items| items.size }
       .rollup(:div_by_3) { |items| items.keep_if { |i| i % 3 == 0 }.size }
 
@@ -158,16 +151,16 @@ class TestGoldmine < PryTest::Test
       [["< 5", false]] => [[:count, 5], [:div_by_3, 2]]
     }
 
-    assert rolled.result.to_h == expected
+    assert rollup.result.to_h == expected
   end
 
   # to_rows ...................................................................
 
   test "simple pivot rollup to_rows" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    pivot = list.pivot("< 5") { |i| i < 5 }
-    rollup = pivot.result
+    rollup = Goldmine(list)
+      .pivot("< 5") { |i| i < 5 }
+      .result
       .rollup(:count) { |items| items.size }
 
     expected = [
@@ -180,11 +173,10 @@ class TestGoldmine < PryTest::Test
 
   test "chained pivots rollup to_rows" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    pivot = list
+    rollup = Goldmine(list)
       .pivot("< 5") { |i| i < 5 }
       .pivot("even") { |i| i % 2 == 0 }
-    rolled = pivot.result
+      .result
       .rollup(:count) { |row| row.size }
 
     expected = [
@@ -194,14 +186,14 @@ class TestGoldmine < PryTest::Test
       [["< 5", false], ["even", true],  [:count, 2]]
     ]
 
-    assert rolled.result.to_rows == expected
+    assert rollup.result.to_rows == expected
   end
 
   test "simple pivot rollup to_hash_rows" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    pivot = list.pivot("< 5") { |i| i < 5 }
-    rollup = pivot.result
+    rollup = Goldmine(list)
+      .pivot("< 5") { |i| i < 5 }
+      .result
       .rollup(:count) { |items| items.size }
 
     expected = [
@@ -216,8 +208,7 @@ class TestGoldmine < PryTest::Test
 
   test "simple pivot rollup to_tabular" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    rollup = list
+    rollup = Goldmine(list)
       .pivot("< 5") { |i| i < 5 }
       .result
       .rollup(:count, &:size)
@@ -233,8 +224,7 @@ class TestGoldmine < PryTest::Test
 
   test "chained pivots rollup to_tabular" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    rollup = list
+    rollup = Goldmine(list)
       .pivot("< 5") { |i| i < 5 }
       .pivot(:even) { |i| i % 2 == 0 }
       .result
@@ -255,8 +245,7 @@ class TestGoldmine < PryTest::Test
 
   test "simple pivot rollup to_csv_table" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
-    rollup = list
+    rollup = Goldmine(list)
       .pivot("< 5") { |i| i < 5 }
       .result
       .rollup(:count, &:size)
@@ -269,13 +258,12 @@ class TestGoldmine < PryTest::Test
 
   test "pivot_result cache is available to rollups" do
     list = [1,2,3,4,5,6,7,8,9]
-    list = Goldmine::Miner.new(list)
     cached_counts = []
-    list
+    Goldmine(list)
       .pivot("< 5") { |i| i < 5 }
       .result
       .rollup(:count, &:size)
-      .rollup(:cached_count) { |hits| cached_counts << cache.read(:count, hits) }
+      .rollup(:cached_count) { |_| cached_counts << cache[:count] }
       .result(cache: true)
 
     assert cached_counts.size == 2

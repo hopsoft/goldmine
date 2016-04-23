@@ -4,3 +4,7 @@ require "miner"
 
 module Goldmine
 end
+
+def Goldmine(list)
+  Goldmine::Miner.new(list)
+end

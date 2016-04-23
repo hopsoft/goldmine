@@ -18,11 +18,11 @@ get "/" do
   start = Time.now
 
   Benchmark.bm(15) do |x|
-    x.report("pivoted") { pivoted }
+    x.report("pivoted")   { pivoted }
     x.report("rolled_up") { rolled_up }
-    x.report("rows") { rolled_up.to_rows }
-    x.report("tabular") { rolled_up.to_tabular }
-    x.report("csv") { rolled_up.to_tabular.to_csv }
+    x.report("rows")      { rolled_up.to_rows }
+    x.report("tabular")   { rolled_up.to_tabular }
+    x.report("csv")       { rolled_up.to_tabular.to_csv }
   end
 
   JSON.dump(
@@ -76,7 +76,7 @@ end
 
 def pivoted
   @pivoted ||= begin
-    Goldmine::Miner.new(raw)
+    Goldmine(raw)
       .pivot(:state)             { |row| row["st"] }
       .pivot(:medical_specialty) { |row| row["pri_spec"] }
       .result
@@ -87,46 +87,16 @@ def rolled_up
   @rolled_up ||= begin
     pivoted
       .rollup(:count, &:size)
-      .rollup(:preferred) { |list|
-        list.select { |row| row["assgn"] == "Y" && row["grd_yr"].to_i >= 2005 }.size
-      }
-      .rollup(:preferred_percent) { |list|
-        cache.read(:preferred, list) / cache.read(:count, list).to_f
-      }
-      .rollup(:female) { |list|
-        list.select { |row| row["gndr"] == "F" }.size
-      }
-      .rollup(:female_percent) { |list|
-        cache.read(:female, list) / cache.read(:count, list).to_f
-      }
-      .rollup(:male) { |list|
-        list.select { |row| row["gndr"] == "M" }.size
-      }
-      .rollup(:male_percent) { |list|
-        cache.read(:male, list) / cache.read(:count, list).to_f
-      }
-      .rollup(:female_preferred) { |list|
-        list.select { |row| row["gndr"] == "F" && row["assgn"] == "Y" && row["grd_yr"].to_i >= 2005 }.size
-      }
-      .rollup(:female_preferred_percent) { |list|
-        preferred = cache.read(:preferred, list)
-        if preferred > 0
-          cache.read(:female_preferred, list) / cache.read(:preferred, list).to_f
-        else
-          0
-        end
-      }
-      .rollup(:male_preferred) { |list|
-        list.select { |row| row["gndr"] == "M" && row["assgn"] == "Y" && row["grd_yr"].to_i >= 2005 }.size
-      }
-      .rollup(:male_preferred_percent) { |list|
-        preferred = cache.read(:preferred, list)
-        if preferred > 0
-          cache.read(:male_preferred, list) / cache.read(:preferred, list).to_f
-        else
-          0
-        end
-      }
+      .rollup(:preferred)                { |list| list.select { |row| row["assgn"] == "Y" && row["grd_yr"].to_i >= 2005 }.size }
+      .rollup(:preferred_percent)        { |list| cache[:preferred] / cache[:count].to_f }
+      .rollup(:female)                   { |list| list.select { |row| row["gndr"] == "F" }.size }
+      .rollup(:female_percent)           { |list| cache[:female] / cache[:count].to_f }
+      .rollup(:male)                     { |list| list.select { |row| row["gndr"] == "M" }.size }
+      .rollup(:male_percent)             { |list| cache[:male] / cache[:count].to_f }
+      .rollup(:female_preferred)         { |list| list.select { |row| row["gndr"] == "F" && row["assgn"] == "Y" && row["grd_yr"].to_i >= 2005 }.size }
+      .rollup(:female_preferred_percent) { |list| cache[:preferred] > 0 ? cache[:female_preferred] / cache[:preferred].to_f : 0 }
+      .rollup(:male_preferred)           { |list| list.select { |row| row["gndr"] == "M" && row["assgn"] == "Y" && row["grd_yr"].to_i >= 2005 }.size }
+      .rollup(:male_preferred_percent)   { |list| cache[:preferred] > 0 ? cache[:male_preferred] / cache[:preferred].to_f : 0 }
       .result(cache: true)
   end
 end

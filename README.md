@@ -33,7 +33,7 @@ require "goldmine"
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 
-Goldmine::Miner.new(list)
+Goldmine(list)
   .pivot("< 5") { |i| i < 5 }
   .result
   .to_h
@@ -57,7 +57,7 @@ users = [
   { :name => "Joe",     :favorite_colors => [:red] }
 ]
 
-Goldmine::Miner.new(users)
+Goldmine(users)
   .pivot(:favorite_color) { |record| record[:favorite_colors] }
   .result
   .to_h
@@ -85,7 +85,7 @@ users = [
   { :name => "Joe",     :age => 18 }
 ]
 
-Goldmine::Miner.new(users).
+Goldmine(users).
   pivot("'e' in name") { |user| !!user[:name].match(/e/i) }.
   pivot("21 or over") { |user| user[:age] >= 21 }.
   result.
@@ -102,51 +102,55 @@ Goldmine::Miner.new(users).
 
 ## Rollups
 
-Rollups provide a clean way to aggregate pivoted data...
-think computed columns.
+An intuitive way to aggregate pivoted data...
+i.e. computed columns.
 
-Rollup `blocks` are executed once for each pivot.
-_Like pivots, rollups can be chained._
+Rollups are `blocks` that get executed once for each pivot entry.
+_They can be also be chained._
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 
-Goldmine::ArrayMiner.new(list)
-  .pivot(:less_than_5) { |i| i < 5 }
-  .pivot(:even) { |i| i % 2 == 0 }
-  .rollup(:count) { |matched| matched.size }
+Goldmine(list)
+  .pivot("< 5") { |i| i < 5 }
+  .pivot("even") { |i| i % 2 == 0 }
+  .result
+  .rollup("count", &:count)
+  .result
+  .to_h
 ```
 
 ```ruby
 {
-  { :less_than_5 => true, :even => false }  => { :count => 2 },
-  { :less_than_5 => true, :even => true }   => { :count => 2 },
-  { :less_than_5 => false, :even => false } => { :count => 3 },
-  { :less_than_5 => false, :even => true }  => { :count => 2 }
+  [["< 5", true],  ["even", false]] => [["count", 2]],
+  [["< 5", true],  ["even", true]]  => [["count", 2]],
+  [["< 5", false], ["even", false]] => [["count", 3]],
+  [["< 5", false], ["even", true]]  => [["count", 2]]
 }
 ```
 
-### Pre-Computed Results
+### Rollup Caching
 
-Rollups can be computationally expensive&mdash; depending upon how much logic you stuff into the `block`.
-Goldmine caches rollup results & makes them available to subsequent rollups.
+Rollups can be computationally expensive.
+Optional caching can be used to reduce this computational overhead.
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 
-Goldmine::ArrayMiner.new(list)
+Goldmine(list)
   .pivot(:less_than_5) { |i| i < 5 }
-  .rollup(:count, &:size)
-  .rollup(:evens) { |list| list.select { |i| i % 2 == 0 }.size }
-  .rollup(:even_percentage) { |list|
-    computed(:evens).for(list) / computed(:count).for(list).to_f
-  }
+  .result
+  .rollup(:count, &:count)
+  .rollup(:evens) { |list| list.select { |i| i % 2 == 0 }.count }
+  .rollup(:even_percentage) { |list| cache[:evens] / cache[:count].to_f }
+  .result(cache: true)
+  .to_h
 ```
 
 ```ruby
 {
-  { :less_than_5 => true } => { :count => 4, :evens => 2, :even_percentage => 0.5 },
-  { :less_than_5 => false } => { :count => 5, :evens => 2, :even_percentage => 0.4 }
+  [[:less_than_5, true]]  => [[:count, 4], [:evens, 2], [:even_percentage, 0.5]],
+  [[:less_than_5, false]] => [[:count, 5], [:evens, 2], [:even_percentage, 0.4]]
 }
 ```
 
@@ -157,20 +161,34 @@ It's often helpful to flatten rollups into rows.
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 
-Goldmine::ArrayMiner.new(list)
+rollup = Goldmine(list)
   .pivot(:less_than_5) { |i| i < 5 }
-  .rollup(:count, &:size)
-  .rollup(:evens) { |list| list.select { |i| i % 2 == 0 }.size }
-  .rollup(:even_percentage) { |list|
-    computed(:evens).for(list) / computed(:count).for(list).to_f
-  }
-  .to_rows
+  .result
+  .rollup(:count, &:count)
+  .rollup(:evens) { |list| list.select { |i| i % 2 == 0 }.count }
+  .rollup(:even_percentage) { |list| cache[:evens] / cache[:count].to_f }
+  .result(cache: true)
+```
+
+```ruby
+rollup.to_rows
 ```
 
 ```ruby
 [
-  { "less_than_5" => true, "count" => 4, "evens" => 2, "even_percentage" => 0.5 },
-  { "less_than_5" => false, "count" => 5, "evens" => 2, "even_percentage" => 0.4 }
+  [[:less_than_5, true], [:count, 4], [:evens, 2], [:even_percentage, 0.5]],
+  [[:less_than_5, false], [:count, 5], [:evens, 2], [:even_percentage, 0.4]]
+]
+```
+
+```ruby
+rollup.to_hash_rows
+```
+
+```ruby
+[
+  {:less_than_5=>true, :count=>4, :evens=>2, :even_percentage=>0.5},
+  {:less_than_5=>false, :count=>5, :evens=>2, :even_percentage=>0.4}
 ]
 ```
 
@@ -181,16 +199,18 @@ Rollups can also be converted into tabular format.
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 
-Goldmine::ArrayMiner.new(list)
+Goldmine(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .pivot(:even) { |i| i % 2 == 0 }
-  .rollup(:count) { |matched| matched.size }
+  .result
+  .rollup(:count, &:size)
+  .result
   .to_tabular
 ```
 
 ```ruby
 [
-  ["less_than_5", "even", "count"],
+  [:less_than_5, :even, :count],
   [true, false, 2],
   [true, true, 2],
   [false, false, 3],
@@ -205,28 +225,23 @@ Goldmine makes producing CSV output simple.
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 
-csv_table = Goldmine::ArrayMiner.new(list)
+Goldmine(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .pivot(:even) { |i| i % 2 == 0 }
+  .result
   .rollup(:count) { |matched| matched.size }
+  .result
   .to_csv_table
-```
-
-```ruby
-#<CSV::Table mode:col_or_row row_count:5>
-```
-
-```ruby
-csv_table.to_csv
+  .to_csv
 ```
 
 ```ruby
 "less_than_5,even,count\ntrue,false,2\ntrue,true,2\nfalse,false,3\nfalse,true,2\n"
 ```
 
-## Examples
+## Example Apps
 
-All examples are simple Sinatra apps.
+All examples are small Sinatra apps.
 They are designed to help communicate Goldmine use-cases.
 
 ### Setup
@@ -302,22 +317,22 @@ My Macbook Pro yields the following benchmarks.
 
 ```
                       user     system      total        real
-pivoted           1.000000   0.020000   1.020000 (  1.027810)
-rolled_up         1.090000   0.020000   1.110000 (  1.101082)
-rows              0.020000   0.000000   0.020000 (  0.022978)
-tabular           0.010000   0.000000   0.010000 (  0.005423)
-csv               0.030000   0.000000   0.030000 (  0.037245)
+pivoted           0.630000   0.030000   0.660000 (  0.670409)
+rolled_up         0.570000   0.030000   0.600000 (  0.626413)
+rows              0.010000   0.000000   0.010000 (  0.003258)
+tabular           0.010000   0.000000   0.010000 (  0.010110)
+csv               0.050000   0.000000   0.050000 (  0.057677)
 ```
 
 ##### 1,000,000 Records
 
 ```
                       user     system      total        real
-pivoted          15.700000   0.490000  16.190000 ( 16.886677)
-rolled_up         7.070000   0.350000   7.420000 (  7.544060)
-rows              0.020000   0.000000   0.020000 (  0.028432)
-tabular           0.010000   0.010000   0.020000 (  0.007663)
-csv               0.050000   0.000000   0.050000 (  0.058925)
+pivoted           7.270000   0.300000   7.570000 (  8.053166)
+rolled_up         6.800000   0.830000   7.630000 (  8.051707)
+rows              0.000000   0.000000   0.000000 (  0.003934)
+tabular           0.010000   0.000000   0.010000 (  0.011825)
+csv               0.210000   0.010000   0.220000 (  0.222752)
 ```
 
 ## Summary

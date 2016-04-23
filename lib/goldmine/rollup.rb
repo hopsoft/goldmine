@@ -1,4 +1,3 @@
-require "rollup_cache"
 require "rollup_clean_room"
 require "rollup_result"
 
@@ -18,13 +17,13 @@ module Goldmine
     end
 
     def result(cache: false)
-      cache = RollupCache.new if cache
       RollupResult.new.tap do |rollup_result|
         pivot_result.each do |pivot_key, pivoted_list|
+          stash = {} if cache
           pivot_result.rollups.each do |rollup|
             Array.new(2).tap do |computed_value|
               key = rollup.name
-              value = RollupCleanRoom.new(key, cache).rollup(pivoted_list, &rollup.proc) if cache
+              value = RollupCleanRoom.new(key, stash).rollup(pivoted_list, &rollup.proc) if cache
               value ||= rollup.proc.call(pivoted_list)
               computed_value[0] = key
               computed_value[1] = value

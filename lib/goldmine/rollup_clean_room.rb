@@ -1,12 +1,10 @@
-require "rollup_cache"
-
 module Goldmine
   class RollupCleanRoom
     attr_reader :name, :cache
 
-    def initialize(name, rollup_cache)
+    def initialize(name, cache={})
       @name = name
-      @cache = rollup_cache
+      @cache = cache
     end
 
     def eigen
@@ -17,7 +15,7 @@ module Goldmine
 
     def rollup(pivoted_list, &block)
       eigen.instance_eval { define_method(:do_rollup, &block) }
-      @cache.write name, pivoted_list, do_rollup(pivoted_list)
+      @cache[name] = do_rollup(pivoted_list)
     end
   end
 end
