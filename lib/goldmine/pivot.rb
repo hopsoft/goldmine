@@ -1,24 +1,32 @@
+require "forwardable"
 require "pivot_result"
+require "rollup"
 
 module Goldmine
   class Pivot
-    attr_reader :name, :proc
+    extend Forwardable
+    def_delegators :result, :to_h
+    attr_reader :miner, :name, :proc
 
-    def initialize(name, array_miner, block)
-      @array_miner = array_miner
+    def initialize(name, miner, block)
+      @miner = miner
       @name = name
       @proc = block
-      array_miner.pivots << self
+      miner.pivots << self
     end
 
     def pivot(name, &block)
-      self.class.new(name, array_miner, block)
+      self.class.new(name, miner, block)
+    end
+
+    def rollup(name, &block)
+      Rollup.new(name, result, block)
     end
 
     def result
-      PivotResult.new.tap do |pivot_result|
-        array_miner.each do |item|
-          key_data = array_miner.pivots.each_with_object(key: [], keys: []) do |pivot, memo|
+      PivotResult.new(self).tap do |pivot_result|
+        miner.each do |item|
+          key_data = miner.pivots.each_with_object(key: [], keys: []) do |pivot, memo|
             value = pivot.proc.call(item)
             if value.is_a?(Array)
               if value.empty?
@@ -39,8 +47,6 @@ module Goldmine
     end
 
     private
-
-    attr_reader :array_miner
 
     def key_for(name, value)
       Array.new(2).tap do |key|

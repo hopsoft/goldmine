@@ -5,6 +5,6 @@ require "miner"
 module Goldmine
 end
 
-def Goldmine(list)
-  Goldmine::Miner.new(list)
+def Goldmine(list=[], cache: false)
+  Goldmine::Miner.new(list, cache: cache)
 end

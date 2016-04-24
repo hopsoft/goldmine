@@ -6,12 +6,12 @@ module Goldmine
     extend Forwardable
     include Enumerable
     def_delegators :@hash, :[], :[]=, :each, :to_h
-    attr_reader :rollups, :cache
+    attr_reader :pivot, :rollups
 
-    def initialize(hash={})
-      @rollups = []
+    def initialize(pivot, hash={})
+      @pivot = pivot
       @hash = hash
-      @cache = {}
+      @rollups = []
     end
 
     def rollup(name, &block)

@@ -6,6 +6,7 @@ module Goldmine
     extend Forwardable
     include Enumerable
     def_delegators :@pivot_result, :[], :[]=, :each, :to_h
+    def_delegators :to_csv_table, :to_csv
 
     def initialize(pivot_result={})
       @pivot_result = pivot_result

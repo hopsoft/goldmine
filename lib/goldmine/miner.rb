@@ -6,11 +6,12 @@ module Goldmine
     extend Forwardable
     include Enumerable
     def_delegators :@array, :each, :to_a
-    attr_reader :pivots
+    attr_reader :pivots, :cache
 
-    def initialize(array=[])
+    def initialize(array=[], cache: false)
       @pivots = []
       @array = array.to_a
+      @cache = cache
     end
 
     def pivot(name, &block)
