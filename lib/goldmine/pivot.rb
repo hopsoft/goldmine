@@ -5,7 +5,7 @@ require "rollup"
 module Goldmine
   class Pivot
     extend Forwardable
-    def_delegators :result, :to_h
+    def_delegators :result, :to_h, :rollup
     attr_reader :miner, :name, :proc
 
     def initialize(name, miner, block)
@@ -17,10 +17,6 @@ module Goldmine
 
     def pivot(name, &block)
       self.class.new(name, miner, block)
-    end
-
-    def rollup(name, &block)
-      Rollup.new(name, result, block)
     end
 
     def result
