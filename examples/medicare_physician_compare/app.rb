@@ -76,7 +76,7 @@ end
 
 def pivoted
   @pivoted ||= begin
-    Goldmine(raw)
+    Goldmine(raw, cache: true)
       .pivot(:state)             { |row| row["st"] }
       .pivot(:medical_specialty) { |row| row["pri_spec"] }
       .result
@@ -97,6 +97,6 @@ def rolled_up
       .rollup(:female_preferred_percent) { |list| cache[:preferred] > 0 ? cache[:female_preferred] / cache[:preferred].to_f : 0 }
       .rollup(:male_preferred)           { |list| list.select { |row| row["gndr"] == "M" && row["assgn"] == "Y" && row["grd_yr"].to_i >= 2005 }.size }
       .rollup(:male_preferred_percent)   { |list| cache[:preferred] > 0 ? cache[:male_preferred] / cache[:preferred].to_f : 0 }
-      .result(cache: true)
+      .result
   end
 end

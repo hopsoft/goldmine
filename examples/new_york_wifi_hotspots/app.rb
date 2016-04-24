@@ -69,7 +69,7 @@ def raw
 end
 
 def pivoted
-  @pivoted ||= Goldmine(raw)
+  @pivoted ||= Goldmine(raw, cache: true)
     .pivot("City")      { |row| row["CITY"] }
     .pivot("Zip Code")  { |row| row["ZIP"] }
     .pivot("Area Code") { |row| row["PHONE"].to_s.gsub(/\W/, "")[0, 3] }
@@ -90,6 +90,6 @@ def rolled_up
       .rollup("Starbucks Percentage") { |list| cache["Starbucks"] / cache["Total"].to_f }
       .rollup("McDonalds")            { |list| list.select { |row| row["NAME"].to_s =~ /McDonald'?s/i }.size }
       .rollup("McDonalds Percentage") { |list| cache["McDonalds"] / cache["Total"].to_f }
-      .result(cache: true)
+      .result
   end
 end

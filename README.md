@@ -35,7 +35,6 @@ list = [1,2,3,4,5,6,7,8,9]
 
 Goldmine(list)
   .pivot("< 5") { |i| i < 5 }
-  .result
   .to_h
 ```
 
@@ -59,7 +58,6 @@ users = [
 
 Goldmine(users)
   .pivot(:favorite_color) { |record| record[:favorite_colors] }
-  .result
   .to_h
 ```
 
@@ -85,11 +83,10 @@ users = [
   { :name => "Joe",     :age => 18 }
 ]
 
-Goldmine(users).
-  pivot("'e' in name") { |user| !!user[:name].match(/e/i) }.
-  pivot("21 or over") { |user| user[:age] >= 21 }.
-  result.
-  to_h
+Goldmine(users)
+  .pivot("'e' in name") { |user| !!user[:name].match(/e/i) }
+  .pivot("21 or over") { |user| user[:age] >= 21 }
+  .to_h
 ```
 
 ```ruby
@@ -102,8 +99,8 @@ Goldmine(users).
 
 ## Rollups
 
-An intuitive way to aggregate pivoted data...
-i.e. computed columns.
+Rollups provide an intuitive way to aggregate pivoted data into a report friendly format.
+_Think computed columns._
 
 Rollups are `blocks` that get executed once for each pivot entry.
 _They can be also be chained._
@@ -114,9 +111,7 @@ list = [1,2,3,4,5,6,7,8,9]
 Goldmine(list)
   .pivot("< 5") { |i| i < 5 }
   .pivot("even") { |i| i % 2 == 0 }
-  .result
   .rollup("count", &:count)
-  .result
   .to_h
 ```
 
@@ -137,13 +132,11 @@ Optional caching can be used to reduce this computational overhead.
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 
-Goldmine(list)
+Goldmine(list, cache: true)
   .pivot(:less_than_5) { |i| i < 5 }
-  .result
   .rollup(:count, &:count)
   .rollup(:evens) { |list| list.select { |i| i % 2 == 0 }.count }
   .rollup(:even_percentage) { |list| cache[:evens] / cache[:count].to_f }
-  .result(cache: true)
   .to_h
 ```
 
@@ -161,17 +154,16 @@ It's often helpful to flatten rollups into rows.
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
 
-rollup = Goldmine(list)
+result = Goldmine(list, cache: true)
   .pivot(:less_than_5) { |i| i < 5 }
-  .result
   .rollup(:count, &:count)
   .rollup(:evens) { |list| list.select { |i| i % 2 == 0 }.count }
   .rollup(:even_percentage) { |list| cache[:evens] / cache[:count].to_f }
-  .result(cache: true)
+  .result
 ```
 
 ```ruby
-rollup.to_rows
+result.to_rows
 ```
 
 ```ruby
@@ -182,7 +174,7 @@ rollup.to_rows
 ```
 
 ```ruby
-rollup.to_hash_rows
+result.to_hash_rows
 ```
 
 ```ruby
@@ -202,9 +194,7 @@ list = [1,2,3,4,5,6,7,8,9]
 Goldmine(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .pivot(:even) { |i| i % 2 == 0 }
-  .result
   .rollup(:count, &:size)
-  .result
   .to_tabular
 ```
 
@@ -220,7 +210,7 @@ Goldmine(list)
 
 ### CSV
 
-Goldmine makes producing CSV output simple.
+Rollups can also be converted into CSV format.
 
 ```ruby
 list = [1,2,3,4,5,6,7,8,9]
@@ -228,10 +218,7 @@ list = [1,2,3,4,5,6,7,8,9]
 Goldmine(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .pivot(:even) { |i| i % 2 == 0 }
-  .result
   .rollup(:count) { |matched| matched.size }
-  .result
-  .to_csv_table
   .to_csv
 ```
 
