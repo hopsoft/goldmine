@@ -194,7 +194,7 @@ list = [1,2,3,4,5,6,7,8,9]
 Goldmine(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .pivot(:even) { |i| i % 2 == 0 }
-  .rollup(:count, &:size)
+  .rollup(:count, &:count)
   .to_tabular
 ```
 
@@ -218,7 +218,7 @@ list = [1,2,3,4,5,6,7,8,9]
 Goldmine(list)
   .pivot(:less_than_5) { |i| i < 5 }
   .pivot(:even) { |i| i % 2 == 0 }
-  .rollup(:count) { |matched| matched.size }
+  .rollup(:count, &:count)
   .to_csv
 ```
 
