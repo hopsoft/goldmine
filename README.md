@@ -7,7 +7,7 @@
 
 # Goldmine
 
-Extract a wealth of information from Arrays.
+Extract a wealth of information from lists.
 
 Goldmine is especially helpful when working with source data that is difficult to query.
 e.g. CSV files, API results, etc...
