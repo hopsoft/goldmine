@@ -5,6 +5,8 @@
 [![Coverage Status](https://img.shields.io/coveralls/hopsoft/goldmine.svg?style=flat)](https://coveralls.io/r/hopsoft/goldmine?branch=master)
 [![Downloads](http://img.shields.io/gem/dt/goldmine.svg?style=flat)](http://rubygems.org/gems/goldmine)
 
+[![Sponsor](https://app.codesponsor.io/embed/QMSjMHrtPhvfmCnk5Hbikhhr/hopsoft/goldmine.svg)](https://app.codesponsor.io/link/QMSjMHrtPhvfmCnk5Hbikhhr/hopsoft/goldmine)
+
 # Goldmine
 
 Extract a wealth of information from lists.
